@@ -1449,8 +1449,13 @@ function showTab(btn,id){
 function switchView(s){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   document.querySelectorAll('.sport-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
   document.getElementById('view-'+s).classList.add('on');
   document.getElementById('stab-'+s).classList.add('on');
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    const oc=b.getAttribute('onclick')||'';
+    if(oc.includes("'"+s+"'"))b.classList.add('on');
+  });
 }
 function switchTab(s,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');switchView(s);
@@ -2009,6 +2014,216 @@ const RK_DATA=Object.entries(BB_TEAMS).map(([name,t],i)=>({
 })).sort((a,b)=>b.net-a.net).map((r,i)=>({...r,rk:i+1}));
 
 let rkData=[...RK_DATA];
+let rkSort='rk', rkDir=-1;
+let atsFilter='top10';
+let gamesFilter='all';
+
+/* ══════════════════════════════════════
+   BASKETBALL TAB SWITCHER
+══════════════════════════════════════ */
+function bbTab(btn,tab){
+  document.querySelectorAll('.bb-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.bb-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('bbp-'+tab).classList.add('on');
+}
+
+/* ══════════════════════════════════════
+   TODAY'S GAMES
+══════════════════════════════════════ */
+function filterGames(f,btn){
+  gamesFilter=f;
+  document.querySelectorAll('#bbp-games .ats-filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderGames();
+}
+
+function renderGames(){
+  const c=document.getElementById('games-grid');
+  if(!c)return;
+  const filtered=gamesFilter==='all'?GAMES_DATA:GAMES_DATA.filter(g=>g.status===gamesFilter);
+  if(!filtered.length){
+    c.innerHTML='<div style="padding:2rem;text-align:center;color:var(--ink4);font-family:var(--fm);grid-column:1/-1">No games match this filter.</div>';
+    return;
+  }
+  c.innerHTML=filtered.map(g=>{
+    const isLive=g.status==='live';
+    const awayFav=g.spread.fav==='away';
+    const spreadLine=g.spread.line>0?`+${g.spread.line}`:g.spread.line;
+    const spreadOpen=g.spread.open>0?`+${g.spread.open}`:g.spread.open;
+    const spreadMov=g.spread.line!==g.spread.open?(awayFav&&g.spread.line<g.spread.open?'move-dn':'move-up'):'move-flat';
+    const awayML=g.ml.away>0?`+${g.ml.away}`:g.ml.away;
+    const homeML=g.ml.home>0?`+${g.ml.home}`:g.ml.home;
+    const ouMov=g.ou.line>g.ou.open?'move-up':g.ou.line<g.ou.open?'move-dn':'move-flat';
+    const edge=g.model.edge;
+    const edgeCls=edge>2?'gc-edge-pos':edge<0?'gc-edge-neg':'gc-edge-neu';
+    const edgeSign=edge>0?'+':'';
+    const awayWin=isLive&&g.awayScore>g.homeScore;
+    const homeWin=isLive&&g.homeScore>g.awayScore;
+    return `<div class="game-card${isLive?' live-game':''}">
+      <div class="gc-top">
+        ${isLive
+          ?`<div class="gc-live-badge"><div class="gc-live-dot"></div>LIVE · ${g.liveTime}</div>`
+          :`<div class="gc-time">${g.liveTime}</div>`}
+        <div class="gc-network">${g.network}</div>
+      </div>
+      <div class="gc-matchup">
+        <div class="gc-team-row${awayWin?' winner':''}">
+          <div class="gc-seed-name">
+            <span class="gc-seed">${g.away.seed}</span>
+            <span class="gc-team-name">${g.away.name}</span>
+            <span class="gc-team-rec">${g.away.rec}</span>
+          </div>
+          <div class="gc-score-ml">
+            ${isLive?`<span class="gc-score">${g.awayScore}</span>`:''}
+            <span class="gc-ml${awayFav?' fav':''}">${awayML}</span>
+          </div>
+        </div>
+        <div class="gc-divider"></div>
+        <div class="gc-team-row${homeWin?' winner':''}">
+          <div class="gc-seed-name">
+            <span class="gc-seed">${g.home.seed}</span>
+            <span class="gc-team-name">${g.home.name}</span>
+            <span class="gc-team-rec">${g.home.rec}</span>
+          </div>
+          <div class="gc-score-ml">
+            ${isLive?`<span class="gc-score">${g.homeScore}</span>`:''}
+            <span class="gc-ml${!awayFav?' fav':''}">${homeML}</span>
+          </div>
+        </div>
+      </div>
+      <div class="gc-odds">
+        <div class="gc-odd-item">
+          <div class="gc-odd-lbl">Spread</div>
+          <div class="gc-odd-val">${spreadLine}</div>
+          <div class="gc-odd-move ${spreadMov}">Open ${spreadOpen}</div>
+        </div>
+        <div class="gc-odds-sep"></div>
+        <div class="gc-odd-item">
+          <div class="gc-odd-lbl">Total</div>
+          <div class="gc-odd-val">${g.ou.line}</div>
+          <div class="gc-odd-move ${ouMov}">Open ${g.ou.open}</div>
+        </div>
+        <div class="gc-odds-sep"></div>
+        <div class="gc-odd-item">
+          <div class="gc-odd-lbl">O/U Pick</div>
+          <div class="gc-odd-val" style="font-size:.72rem;color:var(--gr)">${g.model.ouPick.toUpperCase()}</div>
+          <div class="gc-odd-move ${g.model.ouEdge>0?'move-dn':'move-up'}">${g.model.ouEdge>0?'+':''}${g.model.ouEdge.toFixed(1)}</div>
+        </div>
+      </div>
+      <div class="gc-model">
+        <span class="gc-model-lbl">Model Pick</span>
+        <span class="gc-model-pick">${g.model.pick} · ${g.model.score}</span>
+        <span class="gc-edge-pill ${edgeCls}">${edgeSign}${edge.toFixed(1)} pts edge</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════
+   MATCHUP ANALYZER
+══════════════════════════════════════ */
+function swapMatchup(){
+  const a=document.getElementById('ma-team-a');
+  const b=document.getElementById('ma-team-b');
+  const tmp=a.value;a.value=b.value;b.value=tmp;
+  renderMatchup();
+}
+
+function renderMatchup(){
+  const aName=document.getElementById('ma-team-a').value;
+  const bName=document.getElementById('ma-team-b').value;
+  const aS=BB_STATS[aName]||{};
+  const bS=BB_STATS[bName]||{};
+  const aT=BB_TEAMS[aName]||{};
+  const bT=BB_TEAMS[bName]||{};
+
+  const statRows=[
+    {label:'Adj. Off.',  aV:aS.adjO, bV:bS.adjO, max:130, higherBetter:true,  fmt:v=>v.toFixed(1)},
+    {label:'Adj. Def.',  aV:aS.adjD, bV:bS.adjD, max:100, higherBetter:false, fmt:v=>v.toFixed(1)},
+    {label:'Pace',       aV:aS.pace, bV:bS.pace, max:80,  higherBetter:true,  fmt:v=>v.toFixed(1)},
+    {label:'3P%',        aV:aS.threeP,bV:bS.threeP,max:45,higherBetter:true, fmt:v=>v.toFixed(1)+'%'},
+    {label:'FT Rate',    aV:aS.ftr,  bV:bS.ftr,  max:0.5, higherBetter:true,  fmt:v=>v.toFixed(2)},
+    {label:'TO%',        aV:aS.to,   bV:bS.to,   max:20,  higherBetter:false, fmt:v=>v.toFixed(1)+'%'},
+    {label:'Reb%',       aV:aS.reb,  bV:bS.reb,  max:60,  higherBetter:true,  fmt:v=>v.toFixed(1)+'%'},
+  ];
+
+  function teamCard(name,stats,team,accentColor){
+    return `<div class="ma-card">
+      <div class="ma-card-head">
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <span class="ma-seed-badge">${team.seed||'?'}</span>
+          <div>
+            <div class="ma-team-name">${name}</div>
+            <div class="ma-record">${team.rec||''} · SOS ${stats.sos||'—'}</div>
+          </div>
+        </div>
+      </div>
+      ${statRows.map(r=>{
+        const pct=r.max>0?Math.min(100,(r.aV===stats.adjO&&r.label==='Adj. Off.'||r.label==='Adj. Off.'?
+          (name===aName?r.aV:r.bV):
+          name===aName?r.aV:r.bV)/r.max*100):50;
+        const val=name===aName?r.aV:r.bV;
+        const barW=r.max>0?Math.min(100,val/r.max*100):50;
+        return `<div class="ma-stat-row">
+          <div class="ma-stat-label">${r.label}</div>
+          <div class="ma-bar-wrap"><div class="ma-bar-fill" style="width:${barW}%;background:${accentColor}"></div></div>
+          <div class="ma-stat-val">${val!=null?r.fmt(val):'—'}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  document.getElementById('ma-cards').innerHTML=
+    teamCard(aName,aS,aT,'var(--bb)')+
+    teamCard(bName,bS,bT,'var(--gr2)');
+
+  const advantages=statRows.map(r=>{
+    const aV=r.aV||0, bV=r.bV||0;
+    const aWins=r.higherBetter?aV>bV:aV<bV;
+    return{cat:r.label,winner:aWins?aName:bName,isA:aWins,margin:Math.abs(aV-bV).toFixed(1),fmt:r.fmt};
+  });
+
+  document.getElementById('ma-advantages').innerHTML=`
+    <div class="ma-adv-head">Key Advantages</div>
+    ${advantages.map(av=>`<div class="ma-adv-row">
+      <div class="ma-adv-cat">${av.cat}</div>
+      <div class="ma-adv-winner ${av.isA?'ma-adv-win-a':'ma-adv-win-b'}">${av.winner}<span class="ma-adv-margin"> (+${av.margin})</span></div>
+    </div>`).join('')}`;
+
+  const netA=(aS.adjO||0)-(aS.adjD||0);
+  const netB=(bS.adjO||0)-(bS.adjD||0);
+  const diff=netA-netB;
+  const neutral=-(diff*0.4);
+  const homeLine=(neutral-3.5);
+  const awayLine=(neutral+3.5);
+
+  function fmtLine(v,favName,dogName){
+    const n=parseFloat(v.toFixed(1));
+    if(n===0)return'PK';
+    return n<0?`${aName} -${Math.abs(n)}`:`${aName} +${Math.abs(n)}`;
+  }
+
+  document.getElementById('ma-spreads').innerHTML=`
+    <div class="ma-spread-title">Spread Scenarios</div>
+    <div class="ma-spread-scenarios">
+      <div class="ma-scen">
+        <div class="ma-scen-loc">${aName} Home</div>
+        <div class="ma-scen-spread">${fmtLine(homeLine)}</div>
+        <div class="ma-scen-note">+3.5 home edge</div>
+      </div>
+      <div class="ma-scen best">
+        <div class="ma-scen-loc">Neutral Site</div>
+        <div class="ma-scen-spread">${fmtLine(neutral)}</div>
+        <div class="ma-scen-note">Model projection</div>
+      </div>
+      <div class="ma-scen">
+        <div class="ma-scen-loc">${bName} Home</div>
+        <div class="ma-scen-spread">${fmtLine(awayLine)}</div>
+        <div class="ma-scen-note">+3.5 home edge</div>
+      </div>
+    </div>`;
+}
 
 function sortRk(key,th){
   if(rkSort===key)rkDir*=-1;else{rkSort=key;rkDir=key==='adjD'?1:-1;}
