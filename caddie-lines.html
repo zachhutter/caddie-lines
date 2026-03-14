@@ -18,43 +18,43 @@
 
 :root {
     /* Primary Colors */
-    --bg-primary: #faf7f2;
-    --bg-secondary: var(--text-muted);
-    --bg-tertiary: #f3efe7;
-    
-    /* Navy Blue Palette */
-    --masters-green: #1a5276;
-    --masters-green-dark: #0e2d4a;
-    --masters-green-light: #2471a3;
+    --bg-primary: #faf6ee;
+    --bg-secondary: #f5f0e6;
+    --bg-tertiary: #eee8d8;
 
-    /* Blue for accents */
-    --teal-light: rgba(26, 82, 118, 0.04);
-    --teal-medium: rgba(26, 82, 118, 0.09);
-    --teal-border: rgba(26, 82, 118, 0.18);
-    
+    /* Forest Green Palette */
+    --masters-green: #1a3d26;
+    --masters-green-dark: #0f2018;
+    --masters-green-light: #2d7a4a;
+
+    /* Green tint accents */
+    --teal-light: rgba(26, 61, 38, 0.04);
+    --teal-medium: rgba(26, 61, 38, 0.09);
+    --teal-border: rgba(26, 61, 38, 0.18);
+
     /* Accent Colors */
-    --gold-accent: #b8960c;
-    --gold-light: #d4b44a;
-    --pink-accent: #d4739d;
-    --pink-light: rgba(212, 115, 157, 0.15);
-    
+    --gold-accent: #c8a050;
+    --gold-light: #e6c882;
+    --pink-accent: #b87a40;
+    --pink-light: rgba(184, 122, 64, 0.12);
+
     /* Text Colors */
-    --text-primary: #2c3e2d;
-    --text-secondary: #556b55;
-    --text-muted: #8a9aaa;
-    --text-light: #a8b8cc;
-    
+    --text-primary: #1c1810;
+    --text-secondary: #4a4030;
+    --text-muted: #8a8070;
+    --text-light: #b0a090;
+
     /* Functional Colors */
-    --under-par: #c41e3a;
-    --over-par: #1a5276;
-    --even-par: #5a5a5a;
-    
+    --under-par: #8b2020;
+    --over-par: #1a3d26;
+    --even-par: #5a5248;
+
     /* Borders */
-    --border-light: #d4cbb8;
-    --border-medium: #c4b9a4;
-    
+    --border-light: #d8d0c0;
+    --border-medium: #c8c0b0;
+
     /* Page Background */
-    --bg-page: #e8e0d0;
+    --bg-page: #f0ebe0;
 }
 
 * {
@@ -89,11 +89,12 @@ body {
 
 .header h1 {
     margin: 0;
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Bungee', cursive;
     font-size: 36px;
     font-weight: 700;
+    font-style: italic;
     color: #ffffff;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
 }
 
 .header h1 span {
@@ -292,7 +293,7 @@ body {
     font-family: 'Oswald', sans-serif;
     font-size: 13px;
     font-weight: 500;
-    color: var(--text-muted);
+    color: var(--gold-accent);
     margin: 16px 0 8px 0;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--border-light);
@@ -2626,15 +2627,7 @@ nav{
    ============================================ */
 
 body {
-    background-color: #1a2e1f;
-    background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(0,80,45,0.55) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(0,60,35,0.45) 0%, transparent 55%),
-        radial-gradient(ellipse at 60% 85%, rgba(10,50,28,0.4) 0%, transparent 50%),
-        repeating-linear-gradient(
-            120deg, transparent, transparent 38px,
-            rgba(255,255,255,0.018) 38px, rgba(255,255,255,0.018) 40px
-        );
+    background-color: #f0ebe0;
 }
 
 /* ============================================
