@@ -763,6 +763,22 @@ nav{
 .ats-streak{font-family:var(--fm);font-size:.58rem;padding:.1rem .38rem;border-radius:4px;white-space:nowrap}
 .ats-streak-w{background:var(--gr-light);color:var(--gr)}
 .ats-streak-l{background:var(--red-lt);color:var(--red)}
+/* ─ ATS Table ─ */
+.ats-tbl{width:100%;border-collapse:collapse;font-family:var(--fm);font-size:.68rem;min-width:580px}
+.ats-tbl thead th{font-family:var(--fu);font-size:.58rem;color:var(--ink4);text-align:center;
+  padding:.45rem .55rem;border-bottom:2px solid var(--bdr-ink2);letter-spacing:.04em;white-space:nowrap;cursor:default}
+.ats-tbl thead th:nth-child(1),.ats-tbl thead th:nth-child(2){text-align:left}
+.ats-tbl tbody tr{border-bottom:1px solid var(--bdr-ink)}
+.ats-tbl tbody tr:last-child{border-bottom:none}
+.ats-tbl tbody tr:hover{background:var(--bg3)}
+.ats-tbl td{padding:.42rem .55rem;text-align:center;vertical-align:middle;color:var(--ink2)}
+.ats-tbl td:nth-child(2){text-align:left;font-size:.72rem;color:var(--ink)}
+.ats-col-active{background:var(--bb-lt)!important;font-weight:700}
+.ats-dot{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;
+  border-radius:50%;font-size:.42rem;font-weight:700;color:#fff;flex-shrink:0}
+.ats-dot-w{background:var(--gr)}
+.ats-dot-l{background:var(--red)}
+.ats-pct{font-size:.54rem;color:var(--ink4);margin-left:.25rem;font-weight:400}
 /* ─ Bracket region buttons ─ */
 .brk-region-btn{font-family:var(--fu);font-weight:500;font-size:.65rem;
   background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:6px;
@@ -1060,17 +1076,9 @@ nav{
     <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink);margin-bottom:.2rem">Matchup Analyzer</div>
     <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);margin-bottom:1.1rem;letter-spacing:.06em">HEAD-TO-HEAD EFFICIENCY · SPREAD SCENARIOS · KEY ADVANTAGES</div>
     <div class="ma-selrow">
-      <div class="sel-grp"><select id="ma-team-a" onchange="renderMatchup()">
-        <option>Kansas</option><option>Duke</option><option>Houston</option><option>Auburn</option>
-        <option>Tennessee</option><option>Kentucky</option><option>Gonzaga</option><option>UConn</option>
-        <option>Purdue</option><option>Marquette</option>
-      </select><span class="sel-arrow">▾</span></div>
+      <div class="sel-grp"><select id="ma-team-a" onchange="renderMatchup()"></select><span class="sel-arrow">▾</span></div>
       <div class="ma-vs">VS</div>
-      <div class="sel-grp"><select id="ma-team-b" onchange="renderMatchup()">
-        <option>Duke</option><option>Kansas</option><option>Houston</option><option>Auburn</option>
-        <option>Tennessee</option><option>Kentucky</option><option>Gonzaga</option><option>UConn</option>
-        <option>Purdue</option><option>Marquette</option>
-      </select><span class="sel-arrow">▾</span></div>
+      <div class="sel-grp"><select id="ma-team-b" onchange="renderMatchup()"></select><span class="sel-arrow">▾</span></div>
       <button class="swap-btn" onclick="swapMatchup()">⇄ Swap</button>
     </div>
     <div class="ma-grid" id="ma-cards"></div>
@@ -1133,14 +1141,14 @@ nav{
     <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink);margin-bottom:.2rem">ATS Situational Trends</div>
     <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);margin-bottom:1rem;letter-spacing:.06em">AGAINST THE SPREAD · 2025–26 SEASON</div>
     <div class="ats-filter-row">
-      <span class="ats-filter-lbl">View:</span>
-      <button class="ats-filter-btn on" onclick="filterATS('top10',this)">Top 10</button>
+      <span class="ats-filter-lbl">Sort by:</span>
+      <button class="ats-filter-btn on" onclick="filterATS('overall',this)">Overall</button>
       <button class="ats-filter-btn" onclick="filterATS('fav',this)">As Favorite</button>
-      <button class="ats-filter-btn" onclick="filterATS('dog',this)">As Dog</button>
+      <button class="ats-filter-btn" onclick="filterATS('dog',this)">As Underdog</button>
       <button class="ats-filter-btn" onclick="filterATS('home',this)">Home</button>
       <button class="ats-filter-btn" onclick="filterATS('away',this)">Away</button>
     </div>
-    <div id="ats-list"></div>
+    <div style="overflow-x:auto"><table class="ats-tbl" id="ats-list"></table></div>
   </div>
 
 </div>
@@ -1613,16 +1621,100 @@ const GAMES_DATA=[
 ];
 
 const ATS_DATA={
-  Kansas:    {overall:'18-10-2',home:'10-4-1',away:'8-6-1',asFav:'14-8-2',asDog:'4-2-0',last5:'W-W-W-L-W',streak:'W3'},
-  Duke:      {overall:'17-11-2',home:'9-5-1', away:'8-6-1',asFav:'12-9-2',asDog:'5-2-0',last5:'W-L-W-W-L',streak:'L1'},
-  Houston:   {overall:'20-8-2', home:'11-3-1',away:'9-5-1',asFav:'16-6-2',asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
-  Auburn:    {overall:'16-12-2',home:'8-6-1', away:'8-6-1',asFav:'11-8-2',asDog:'5-4-0',last5:'L-W-W-L-W',streak:'W1'},
-  Tennessee: {overall:'15-13-2',home:'8-6-1', away:'7-7-1',asFav:'10-9-2',asDog:'5-4-0',last5:'W-L-L-W-W',streak:'W2'},
-  Kentucky:  {overall:'14-14-2',home:'7-7-1', away:'7-7-1',asFav:'9-9-2', asDog:'5-5-0',last5:'L-L-W-L-W',streak:'W1'},
-  Gonzaga:   {overall:'19-9-2', home:'10-4-1',away:'9-5-1',asFav:'15-7-2',asDog:'4-2-0',last5:'W-W-W-W-W',streak:'W5'},
-  UConn:     {overall:'18-10-2',home:'10-4-1',away:'8-6-1',asFav:'14-8-2',asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
-  Purdue:    {overall:'17-11-2',home:'9-5-1', away:'8-6-1',asFav:'13-9-2',asDog:'4-2-0',last5:'L-W-W-W-L',streak:'L1'},
-  Marquette: {overall:'16-12-2',home:'8-6-1', away:'8-6-1',asFav:'12-9-2',asDog:'4-3-0',last5:'W-W-W-L-W',streak:'W3'},
+  Houston:      {overall:'20-8-2', home:'11-3-1',away:'9-5-1', asFav:'16-6-2', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  Gonzaga:      {overall:'19-9-2', home:'10-4-1',away:'9-5-1', asFav:'15-7-2', asDog:'4-2-0',last5:'W-W-W-W-W',streak:'W5'},
+  Kansas:       {overall:'18-10-2',home:'10-4-1',away:'8-6-1', asFav:'14-8-2', asDog:'4-2-0',last5:'W-W-W-L-W',streak:'W3'},
+  UConn:        {overall:'18-10-2',home:'10-4-1',away:'8-6-1', asFav:'14-8-2', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  Duke:         {overall:'17-11-2',home:'9-5-1', away:'8-6-1', asFav:'12-9-2', asDog:'5-2-0',last5:'W-L-W-W-L',streak:'L1'},
+  Purdue:       {overall:'17-11-2',home:'9-5-1', away:'8-6-1', asFav:'13-9-2', asDog:'4-2-0',last5:'L-W-W-W-L',streak:'L1'},
+  Auburn:       {overall:'16-12-2',home:'8-6-1', away:'8-6-1', asFav:'11-8-2', asDog:'5-4-0',last5:'L-W-W-L-W',streak:'W1'},
+  Marquette:    {overall:'16-12-2',home:'8-6-1', away:'8-6-1', asFav:'12-9-2', asDog:'4-3-0',last5:'W-W-W-L-W',streak:'W3'},
+  Tennessee:    {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'10-9-2', asDog:'5-4-0',last5:'W-L-L-W-W',streak:'W2'},
+  Kentucky:     {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-L-W-L-W',streak:'W1'},
+  Alabama:      {overall:'19-9-1', home:'11-3-1',away:'8-6-0', asFav:'15-7-1', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  'Iowa St.':   {overall:'18-10-2',home:'10-4-1',away:'8-6-1', asFav:'14-8-2', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  Wisconsin:    {overall:'17-11-1',home:'9-5-1', away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'L-W-W-W-W',streak:'W4'},
+  'Michigan St.':{overall:'17-11-2',home:'9-5-1',away:'8-6-1',asFav:'12-8-2', asDog:'5-3-0',last5:'W-W-L-W-L',streak:'L1'},
+  'Texas A&M':  {overall:'16-12-1',home:'9-5-0', away:'7-7-1', asFav:'12-9-1', asDog:'4-3-0',last5:'W-L-W-W-L',streak:'L1'},
+  Maryland:     {overall:'16-12-2',home:'9-5-1', away:'7-7-1', asFav:'11-8-2', asDog:'5-4-0',last5:'L-W-L-W-W',streak:'W2'},
+  Arizona:      {overall:'15-13-1',home:'8-6-1', away:'7-7-0', asFav:'10-9-1', asDog:'5-4-0',last5:'W-W-W-L-L',streak:'L2'},
+  UCLA:         {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'10-9-2', asDog:'5-4-0',last5:'L-W-W-W-L',streak:'L1'},
+  "St. John's": {overall:'18-10-1',home:'10-4-1',away:'8-6-0', asFav:'14-8-1', asDog:'4-2-0',last5:'W-W-W-L-W',streak:'W3'},
+  BYU:          {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'11-8-2', asDog:'4-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  Creighton:    {overall:'14-14-2',home:'8-6-1', away:'6-8-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-W-L-W-L',streak:'L1'},
+  Oregon:       {overall:'15-13-1',home:'8-6-0', away:'7-7-1', asFav:'10-9-1', asDog:'5-4-0',last5:'W-W-L-W-W',streak:'W2'},
+  'Ole Miss':   {overall:'16-12-1',home:'9-5-1', away:'7-7-0', asFav:'12-9-1', asDog:'4-3-0',last5:'L-W-W-W-L',streak:'L1'},
+  Illinois:     {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-L-W-W',streak:'W2'},
+  Michigan:     {overall:'15-13-1',home:'8-6-1', away:'7-7-0', asFav:'10-9-1', asDog:'5-4-0',last5:'L-L-W-W-W',streak:'W3'},
+  Texas:        {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'W-L-W-L-L',streak:'L2'},
+  Indiana:      {overall:'14-14-1',home:'8-6-0', away:'6-8-1', asFav:'9-9-1',  asDog:'5-5-0',last5:'W-W-L-L-W',streak:'W1'},
+  Clemson:      {overall:'16-12-2',home:'9-5-1', away:'7-7-1', asFav:'11-8-2', asDog:'5-4-0',last5:'W-L-W-W-W',streak:'W3'},
+  Vanderbilt:   {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'7-9-2',  asDog:'6-6-0',last5:'L-W-L-W-L',streak:'L1'},
+  Georgia:      {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'6-9-2',  asDog:'6-7-0',last5:'L-L-W-L-W',streak:'W1'},
+  'Colorado St.':{overall:'17-11-1',home:'9-5-1',away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  'San Diego St.':{overall:'15-13-1',home:'8-6-0',away:'7-7-1',asFav:'10-9-1', asDog:'5-4-0',last5:'L-W-W-W-W',streak:'W4'},
+  Missouri:     {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  Penn:         {overall:'18-10-0',home:'10-4-0',away:'8-6-0', asFav:'14-8-0', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  Drake:        {overall:'17-11-1',home:'9-5-1', away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  VCU:          {overall:'16-12-1',home:'9-5-0', away:'7-7-1', asFav:'11-8-1', asDog:'5-4-0',last5:'W-L-W-W-L',streak:'L1'},
+  Xavier:       {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-10-2', asDog:'5-5-0',last5:'L-W-L-L-W',streak:'W1'},
+  Oklahoma:     {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'L-L-W-W-L',streak:'L1'},
+  Louisville:   {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'W-W-L-W-L',streak:'L1'},
+  'Boise St.':  {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'11-8-2', asDog:'4-5-0',last5:'L-W-W-L-W',streak:'W1'},
+  'New Mexico':  {overall:'16-12-1',home:'9-5-1',away:'7-7-0', asFav:'12-9-1', asDog:'4-3-0',last5:'W-W-L-W-W',streak:'W2'},
+  Utah:         {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'L-W-W-L-L',streak:'L2'},
+  Memphis:      {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-L-W-W',streak:'W2'},
+  'Penn St.':   {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'L-W-L-L-W',streak:'W1'},
+  'Utah St.':   {overall:'15-13-1',home:'8-6-1', away:'7-7-0', asFav:'11-8-1', asDog:'4-5-0',last5:'W-W-W-L-W',streak:'W3'},
+  Akron:        {overall:'17-11-1',home:'9-5-1', away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  Yale:         {overall:'16-12-0',home:'9-5-0', away:'7-7-0', asFav:'12-9-0', asDog:'4-3-0',last5:'L-W-W-W-L',streak:'L1'},
+  Colgate:      {overall:'18-10-1',home:'10-4-1',away:'8-6-0', asFav:'14-8-1', asDog:'4-2-0',last5:'W-W-W-W-W',streak:'W5'},
+  'Grand Canyon':{overall:'17-11-1',home:'9-5-1',away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-L-W-L',streak:'L1'},
+  'High Point': {overall:'16-12-0',home:'9-5-0', away:'7-7-0', asFav:'12-9-0', asDog:'4-3-0',last5:'W-L-W-W-W',streak:'W3'},
+  Troy:         {overall:'15-13-1',home:'8-6-0', away:'7-7-1', asFav:'11-8-1', asDog:'4-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  Montana:      {overall:'17-11-0',home:'10-4-0',away:'7-7-0', asFav:'13-9-0', asDog:'4-2-0',last5:'W-L-W-W-W',streak:'W3'},
+  Winthrop:     {overall:'16-12-1',home:'9-5-1', away:'7-7-0', asFav:'12-9-1', asDog:'4-3-0',last5:'W-W-W-L-W',streak:'W3'},
+  Lipscomb:     {overall:'17-11-0',home:'9-5-0', away:'8-6-0', asFav:'13-9-0', asDog:'4-2-0',last5:'L-W-W-W-W',streak:'W4'},
+  Howard:       {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  Omaha:        {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-10-1', asDog:'5-5-0',last5:'L-L-W-W-L',streak:'L1'},
+  'UC San Diego':{overall:'16-12-1',home:'9-5-0',away:'7-7-1', asFav:'12-9-1', asDog:'4-3-0',last5:'W-W-L-L-W',streak:'W1'},
+  'Robert Morris':{overall:'15-13-1',home:'8-6-1',away:'7-7-0',asFav:'11-8-1', asDog:'4-5-0',last5:'W-L-W-W-L',streak:'L1'},
+  'Norfolk St.': {overall:'14-14-1',home:'7-7-1',away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  'Mississippi St.':{overall:'15-13-1',home:'8-6-0',away:'7-7-1',asFav:'10-9-1',asDog:'5-4-0',last5:'W-W-L-W-L',streak:'L1'},
+  'Ohio St.':   {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-L-W-W-W',streak:'W3'},
+  Northwestern: {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  Rutgers:      {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'L-W-L-L-L',streak:'L3'},
+  Nebraska:     {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'W-W-L-W-L',streak:'L1'},
+  Minnesota:    {overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'L-L-W-L-W',streak:'W1'},
+  'Iowa':       {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-W-L-W-W',streak:'W2'},
+  'Wake Forest':{overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'L-W-L-L-W',streak:'W1'},
+  'NC State':   {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-W-W-L',streak:'L1'},
+  'Florida St.':{overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'L-W-L-W-W',streak:'W2'},
+  Virginia:     {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  Miami:        {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-W-W-L-W',streak:'W1'},
+  Syracuse:     {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-10-2', asDog:'5-5-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Notre Dame': {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  Georgia:      {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'6-9-2',  asDog:'6-7-0',last5:'L-L-W-L-W',streak:'W1'},
+  'Mississippi':{overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  LSU:          {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-W-L-L-W',streak:'W1'},
+  Arkansas:     {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'L-W-W-L-L',streak:'L2'},
+  'South Carolina':{overall:'12-16-1',home:'6-8-0',away:'6-8-1',asFav:'7-9-1', asDog:'5-7-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Missouri':   {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  'TCU':        {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'10-9-2', asDog:'5-4-0',last5:'W-W-W-L-L',streak:'L2'},
+  Baylor:       {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  'Kansas St.': {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  'Oklahoma St.':{overall:'12-16-2',home:'6-8-1',away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'L-L-W-L-W',streak:'W1'},
+  'West Virginia':{overall:'13-15-1',home:'7-7-0',away:'6-8-1',asFav:'8-9-1',  asDog:'5-6-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Cincinnati': {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'L-W-W-L-W',streak:'W1'},
+  'UCF':        {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  'Utah':       {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'L-W-W-L-L',streak:'L2'},
+  'Washington St.':{overall:'15-13-1',home:'8-6-0',away:'7-7-1',asFav:'11-8-1',asDog:'4-5-0',last5:'W-W-L-W-W',streak:'W2'},
+  California:   {overall:'11-17-2',home:'5-9-1', away:'6-8-1', asFav:'6-10-2', asDog:'5-7-0',last5:'L-L-W-L-L',streak:'L3'},
+  Stanford:     {overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Washington': {overall:'11-17-2',home:'5-9-1', away:'6-8-1', asFav:'6-10-2', asDog:'5-7-0',last5:'L-W-L-L-W',streak:'W1'},
+  'Oregon St.': {overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'L-L-W-W-L',streak:'L1'},
+  'Colorado':   {overall:'11-17-2',home:'5-9-1', away:'6-8-1', asFav:'6-10-2', asDog:'5-7-0',last5:'W-L-L-W-L',streak:'L1'},
+  'Arizona St.':{overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'L-W-W-L-W',streak:'W1'},
 };
 
 /* ─── FULL 68-TEAM BRACKET ─────────────────────────────────────────── */
@@ -2110,7 +2202,7 @@ const RK_DATA=Object.entries(BB_TEAMS).map(([name,t],i)=>({
 
 let rkData=[...RK_DATA];
 let rkSort='rk', rkDir=-1;
-let atsFilter='top10';
+let atsFilter='overall';
 let gamesFilter='all';
 
 /* ══════════════════════════════════════
@@ -2136,11 +2228,14 @@ function filterGames(f,btn){
 function renderGames(){
   const c=document.getElementById('games-grid');
   if(!c)return;
-  const filtered=gamesFilter==='all'?GAMES_DATA:GAMES_DATA.filter(g=>g.status===gamesFilter);
+  const statusOrder={live:0,tonight:1,upcoming:2,final:3};
+  const filtered=(gamesFilter==='all'?GAMES_DATA:GAMES_DATA.filter(g=>g.status===gamesFilter))
+    .slice().sort((a,b)=>(statusOrder[a.status]??99)-(statusOrder[b.status]??99));
   if(!filtered.length){
     c.innerHTML='<div style="padding:2rem;text-align:center;color:var(--ink4);font-family:var(--fm);grid-column:1/-1">No games match this filter.</div>';
     return;
   }
+  populateMatchupSelects();
   c.innerHTML=filtered.map(g=>{
     const isLive=g.status==='live';
     const awayFav=g.spread.fav==='away';
@@ -2218,6 +2313,20 @@ function renderGames(){
 /* ══════════════════════════════════════
    MATCHUP ANALYZER
 ══════════════════════════════════════ */
+function populateMatchupSelects(){
+  const todayGames=GAMES_DATA.filter(g=>g.status==='live'||g.status==='tonight');
+  const pairs=todayGames.length?todayGames:GAMES_DATA;
+  const teams=[];
+  pairs.forEach(g=>{if(!teams.includes(g.away.name))teams.push(g.away.name);if(!teams.includes(g.home.name))teams.push(g.home.name);});
+  ['ma-team-a','ma-team-b'].forEach((id,idx)=>{
+    const sel=document.getElementById(id);
+    if(!sel)return;
+    const prev=sel.value;
+    sel.innerHTML=teams.map((t,i)=>`<option${t===prev?' selected':''}>${t}</option>`).join('');
+    if(idx===1&&sel.value===document.getElementById('ma-team-a').value&&teams.length>1)sel.value=teams[1];
+  });
+}
+
 function swapMatchup(){
   const a=document.getElementById('ma-team-a');
   const b=document.getElementById('ma-team-b');
@@ -2386,54 +2495,55 @@ function atsBar(rec){
   `,txt:rec,cls};
 }
 
+function atsPct(rec){
+  const[w,l,p]=(rec||'0-0-0').split('-').map(Number);
+  const tot=w+(l||0)+(p||0)||1;
+  return Math.round(w/tot*100);
+}
+
+function atsWinCls(rec){
+  const[w,l]=(rec||'0-0').split('-').map(Number);
+  return w>l?'rk-val-pos':w<l?'rk-val-neg':'';
+}
+
 function renderATS(){
+  const recKey={overall:'overall',fav:'asFav',dog:'asDog',home:'home',away:'away'};
+  const sortField=recKey[atsFilter]||'overall';
   const teams=Object.entries(ATS_DATA)
     .sort((a,b)=>{
-      const [aw,al]=a[1].overall.split('-').map(Number);
-      const [bw,bl]=b[1].overall.split('-').map(Number);
-      return(bw/(bw+bl||1))-(aw/(aw+al||1));
-    })
-    .slice(0,atsFilter==='top10'?10:Object.keys(ATS_DATA).length);
+      const[aw,al,ap]=(a[1][sortField]||'0-0-0').split('-').map(Number);
+      const[bw,bl,bp]=(b[1][sortField]||'0-0-0').split('-').map(Number);
+      const at=aw+(al||0)+(ap||0)||1,bt=bw+(bl||0)+(bp||0)||1;
+      return(bw/bt)-(aw/at);
+    });
 
-  document.getElementById('ats-list').innerHTML=teams.map(([name,d])=>{
-    const recMap={top10:d.overall,fav:d.asFav,dog:d.asDog,home:d.home,away:d.away};
-    const rec=recMap[atsFilter]||d.overall;
-    const {bar,txt,cls}=atsBar(rec);
-    const last5Dots=d.last5.split('-').map(r=>{
-      const col=r==='W'?'var(--gr)':'var(--red)';
-      return`<span style="width:16px;height:16px;border-radius:50%;background:${col};display:inline-flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.45rem;color:#fff;font-weight:600;flex-shrink:0">${r}</span>`;
-    }).join('');
+  const colLabel={overall:'Overall',fav:'As Fav',dog:'As Dog',home:'Home',away:'Away'};
+  const tbl=document.getElementById('ats-list');
+  tbl.innerHTML=`<thead><tr>
+    <th style="text-align:left;width:2rem">#</th>
+    <th style="text-align:left">Team</th>
+    <th class="${atsFilter==='overall'?'ats-col-active':''}">Overall</th>
+    <th class="${atsFilter==='fav'?'ats-col-active':''}">As Fav</th>
+    <th class="${atsFilter==='dog'?'ats-col-active':''}">As Dog</th>
+    <th class="${atsFilter==='home'?'ats-col-active':''}">Home</th>
+    <th class="${atsFilter==='away'?'ats-col-active':''}">Away</th>
+    <th>Last 5</th>
+    <th>Streak</th>
+  </tr></thead><tbody>${teams.map(([name,d],i)=>{
+    const last5=d.last5.split('-').map(r=>`<span class="ats-dot ${r==='W'?'ats-dot-w':'ats-dot-l'}">${r}</span>`).join('');
     const strCls=d.streak.startsWith('W')?'ats-streak-w':'ats-streak-l';
-    return `<div class="ats-team-block">
-      <div class="ats-team-head">
-        <div class="ats-team-name">${name}</div>
-        <div style="display:flex;align-items:center;gap:.75rem">
-          <div style="display:flex;gap:.3rem;align-items:center">${last5Dots}</div>
-          <div class="ats-streak ${strCls}">${d.streak}</div>
-        </div>
-      </div>
-      <div class="ats-bar-row">
-        <div class="ats-sit">${atsFilter==='top10'?'Overall ATS':atsFilter==='fav'?'As Favorite':atsFilter==='dog'?'As Underdog':atsFilter==='home'?'At Home':'On Road'}</div>
-        <div class="ats-rec">${bar}<div class="ats-rec-txt ${cls}">${txt}</div></div>
-      </div>
-      <div class="ats-bar-row">
-        <div class="ats-sit">As Favorite</div>
-        <div class="ats-rec">${atsBar(d.asFav).bar}<div class="ats-rec-txt">${d.asFav}</div></div>
-      </div>
-      <div class="ats-bar-row">
-        <div class="ats-sit">As Underdog</div>
-        <div class="ats-rec">${atsBar(d.asDog).bar}<div class="ats-rec-txt">${d.asDog}</div></div>
-      </div>
-      <div class="ats-bar-row">
-        <div class="ats-sit">Home</div>
-        <div class="ats-rec">${atsBar(d.home).bar}<div class="ats-rec-txt">${d.home}</div></div>
-      </div>
-      <div class="ats-bar-row" style="border-bottom:none">
-        <div class="ats-sit">Away</div>
-        <div class="ats-rec">${atsBar(d.away).bar}<div class="ats-rec-txt">${d.away}</div></div>
-      </div>
-    </div>`;
-  }).join('');
+    return `<tr style="animation:rowIn .2s ease ${Math.min(i,.3)*i*.015}s both">
+      <td style="color:var(--ink4);font-size:.62rem">${i+1}</td>
+      <td style="font-weight:600;white-space:nowrap">${name}</td>
+      <td class="${atsFilter==='overall'?'ats-col-active':''} ${atsWinCls(d.overall)}">${d.overall}<span class="ats-pct">${atsPct(d.overall)}%</span></td>
+      <td class="${atsFilter==='fav'?'ats-col-active':''} ${atsWinCls(d.asFav)}">${d.asFav}<span class="ats-pct">${atsPct(d.asFav)}%</span></td>
+      <td class="${atsFilter==='dog'?'ats-col-active':''} ${atsWinCls(d.asDog)}">${d.asDog}<span class="ats-pct">${atsPct(d.asDog)}%</span></td>
+      <td class="${atsFilter==='home'?'ats-col-active':''} ${atsWinCls(d.home)}">${d.home}<span class="ats-pct">${atsPct(d.home)}%</span></td>
+      <td class="${atsFilter==='away'?'ats-col-active':''} ${atsWinCls(d.away)}">${d.away}<span class="ats-pct">${atsPct(d.away)}%</span></td>
+      <td><div style="display:flex;gap:2px;align-items:center">${last5}</div></td>
+      <td><span class="ats-streak ${strCls}">${d.streak}</span></td>
+    </tr>`;
+  }).join('')}</tbody>`;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2526,12 +2636,13 @@ async function loadLiveData(){
       const og=findOddsForGame(odds,awayN,homeN);
       const mk=extractOddsMarkets(og);
 
-      // Fallback to ESPN embedded odds
+      // Fallback to ESPN embedded odds, then to existing static GAMES_DATA
       const espnOdds=comp.odds?.[0]||{};
-      const spreadLine=mk.spreadAway??(parseFloat(espnOdds.spread||'0')||0);
-      const ouLine=mk.total??espnOdds.overUnder??0;
-      const awayML=mk.mlAway??0;
-      const homeML=mk.mlHome??0;
+      const existing=GAMES_DATA.find(g=>teamsMatch(g.away.name,awayN)&&teamsMatch(g.home.name,homeN));
+      const spreadLine=mk.spreadAway??(parseFloat(espnOdds.spread||'0')||existing?.spread?.line||0);
+      const ouLine=mk.total??espnOdds.overUnder??existing?.ou?.line??0;
+      const awayML=mk.mlAway??existing?.ml?.away??0;
+      const homeML=mk.mlHome??existing?.ml?.home??0;
       const spreadFav=spreadLine<0?'away':'home';
 
       liveGames.push({
@@ -2541,10 +2652,10 @@ async function loadLiveData(){
         status:statusStr,liveTime:timeStr,network,
         awayScore:(isLive||isFinal)?parseInt(awayC.score)||0:null,
         homeScore:(isLive||isFinal)?parseInt(homeC.score)||0:null,
-        spread:{line:spreadLine,open:spreadLine,fav:spreadFav},
+        spread:{line:spreadLine,open:existing?.spread?.open??spreadLine,fav:spreadFav},
         ml:{away:awayML,home:homeML},
-        ou:{line:ouLine,open:ouLine},
-        model:{pick:spreadLine<0?awayN:homeN,score:'—',edge:0,ouPick:'over',ouEdge:0}
+        ou:{line:ouLine,open:existing?.ou?.open??ouLine},
+        model:existing?.model||{pick:spreadLine<0?awayN:homeN,score:'—',edge:0,ouPick:'over',ouEdge:0}
       });
     }
 
