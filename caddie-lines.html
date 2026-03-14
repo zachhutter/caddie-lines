@@ -4285,6 +4285,28 @@ async function fetchLiveGolfScores() {
             espnLookup[_espnNameToLastFirst(c.athlete?.displayName || '')] = c;
         });
 
+        // If the cut has been made (round 3+), override probabilities from ESPN status
+        if (round >= 3) {
+            currentResults.forEach(player => {
+                const c = espnLookup[player.player_name];
+                if (!c) return;
+                const sName = (c.status?.type?.name || '').toUpperCase();
+                const sDet  = (c.status?.type?.shortDetail || '').toUpperCase();
+                const outOfTournament =
+                    sName.includes('MISSED_CUT') || sDet === 'MC' ||
+                    sName.includes('WITHDRAWN')  || sDet === 'WD' ||
+                    sName.includes('DISQUALIFIED') || sDet === 'DQ';
+                if (outOfTournament) {
+                    player.make_cut_probability   = 0;
+                    player.win_probability        = 0;
+                    player.top5_probability       = 0;
+                    player.top10_probability      = 0;
+                } else {
+                    player.make_cut_probability   = 100;
+                }
+            });
+        }
+
         // Update scores in currentResults
         currentResults.forEach(player => {
             const c = espnLookup[player.player_name];
