@@ -832,9 +832,9 @@ nav{
   <div class="tourn-hero">
     <div class="tourn-inner">
       <div>
-        <div class="tourn-eyebrow">PGA Tour · 2025–26 Season</div>
-        <div class="tourn-name">THE PLAYERS Championship</div>
-        <div class="tourn-meta">
+        <div class="tourn-eyebrow" id="tourn-eyebrow">PGA Tour · 2025–26 Season</div>
+        <div class="tourn-name" id="tourn-name">THE PLAYERS Championship</div>
+        <div class="tourn-meta" id="tourn-meta">
           Round 2 of 4
           <span class="tmeta-dot">◆</span>
           TPC Sawgrass
@@ -842,30 +842,30 @@ nav{
           THE PLAYERS Stadium Course
         </div>
       </div>
-      <div class="tourn-badges">
+      <div class="tourn-badges" id="tourn-badges">
         <div class="live-badge"><div class="live-dot-white"></div>LIVE</div>
         <div class="round-badge">R2 In Progress</div>
       </div>
     </div>
-    <div class="tourn-stats">
+    <div class="tourn-stats" id="tourn-stats">
       <div class="ts-item">
-        <div class="ts-label">Leader</div>
-        <div class="ts-val">Schauffele</div>
-        <div class="ts-sub">–10 thru F</div>
+        <div class="ts-label" id="ts-leader-label">Leader</div>
+        <div class="ts-val" id="ts-leader">Schauffele</div>
+        <div class="ts-sub" id="ts-leader-sub">–10 thru F</div>
       </div>
       <div class="ts-item">
-        <div class="ts-label">Projected Cut</div>
-        <div class="ts-val">–1</div>
-        <div class="ts-sub">±1 stroke</div>
+        <div class="ts-label" id="ts-cut-label">Projected Cut</div>
+        <div class="ts-val" id="ts-cut">–1</div>
+        <div class="ts-sub" id="ts-cut-sub">±1 stroke</div>
       </div>
       <div class="ts-item">
         <div class="ts-label">Field Size</div>
-        <div class="ts-val">144</div>
-        <div class="ts-sub">Players</div>
+        <div class="ts-val" id="ts-field">144</div>
+        <div class="ts-sub" id="ts-field-sub">Players</div>
       </div>
       <div class="ts-item">
         <div class="ts-label">Prize Fund</div>
-        <div class="ts-val">$25M</div>
+        <div class="ts-val" id="ts-purse">$25M</div>
         <div class="ts-sub">Total purse</div>
       </div>
     </div>
@@ -2691,9 +2691,169 @@ async function loadLiveData(){
   }catch(e){console.warn('[CaddieLines] Live data failed:',e);}
 }
 
+/* ─── GOLF TOURNAMENT LIVE DATA ─── */
+async function fetchGolfTournament(dateStr){
+  const base='https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard';
+  const url=dateStr?`${base}?dates=${dateStr}`:base;
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('ESPN Golf '+r.status);
+  return r.json();
+}
+
+async function fetchGolfOdds(){
+  // The Odds API – try the PGA Tour weekly event winner market
+  const url=`https://api.the-odds-api.com/v4/sports/golf_pga_tour_winner/odds/?apiKey=${ODDS_KEY}&regions=us&markets=outrights&oddsFormat=american&bookmakers=draftkings,fanduel`;
+  const r=await fetch(url);
+  if(!r.ok)return[];
+  return r.json();
+}
+
+function fmtOdds(ml){
+  if(!ml)return'';
+  return ml>0?'+'+ml:''+ml;
+}
+
+function updateGolfHero(ev,oddsData){
+  if(!ev)return;
+  const comp=ev.competitions?.[0];
+  const statusName=comp?.status?.type?.name||'';
+  const isLive=statusName.includes('IN_PROGRESS');
+  const isFinal=statusName.includes('FINAL');
+  const isUpcoming=!isLive&&!isFinal;
+
+  const tournName=(ev.name||'PGA Tour Event').toUpperCase();
+  const venue=comp?.venue?.fullName||ev.venue?.fullName||'';
+  const round=comp?.status?.period||1;
+  const roundDetail=comp?.status?.type?.shortDetail||`Round ${round}`;
+
+  const nameEl=document.getElementById('tourn-name');
+  if(nameEl)nameEl.textContent=tournName;
+
+  const eyebrowEl=document.getElementById('tourn-eyebrow');
+  if(eyebrowEl){
+    const yr=ev.season?.year||new Date().getFullYear();
+    eyebrowEl.textContent=`PGA Tour · ${yr-1}–${String(yr).slice(2)} Season`;
+  }
+
+  const metaEl=document.getElementById('tourn-meta');
+  if(metaEl){
+    const dot='<span class="tmeta-dot">◆</span>';
+    if(isLive){
+      metaEl.innerHTML=`${roundDetail}${venue?dot+venue:''}`;
+    } else if(ev.date){
+      const d=new Date(ev.date);
+      const ds=d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      metaEl.innerHTML=venue?`${ds}${dot}${venue}`:ds;
+    } else {
+      metaEl.textContent=venue||'';
+    }
+  }
+
+  const badgesEl=document.getElementById('tourn-badges');
+  if(badgesEl){
+    if(isLive){
+      badgesEl.innerHTML=`<div class="live-badge"><div class="live-dot-white"></div>LIVE</div><div class="round-badge">R${round} In Progress</div>`;
+    } else if(isUpcoming){
+      let dateLabel='UPCOMING';
+      if(ev.date){const d=new Date(ev.date);dateLabel=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+      badgesEl.innerHTML=`<div class="round-badge">UPCOMING</div><div class="round-badge">${dateLabel}</div>`;
+    } else {
+      badgesEl.innerHTML=`<div class="round-badge">FINAL</div>`;
+    }
+  }
+
+  const competitors=comp?.competitors||[];
+  if(isLive&&competitors.length){
+    // Sort by score (lowest = leading)
+    const sorted=[...competitors].sort((a,b)=>(parseFloat(a.score)||999)-(parseFloat(b.score)||999));
+    const leader=sorted[0];
+    const leaderLbl=document.getElementById('ts-leader-label');
+    const leaderEl=document.getElementById('ts-leader');
+    const leaderSub=document.getElementById('ts-leader-sub');
+    if(leaderLbl)leaderLbl.textContent='Leader';
+    if(leaderEl&&leader?.athlete){
+      const nm=leader.athlete.displayName||'';
+      leaderEl.textContent=nm.split(' ').pop();
+    }
+    if(leaderSub&&leader){
+      const sc=leader.score;
+      const scFmt=sc==='0'||sc===0?'E':(parseFloat(sc)>0?'+'+sc:sc);
+      const thru=leader.status?.type?.shortDetail||'F';
+      leaderSub.textContent=`${scFmt} thru ${thru}`;
+    }
+    const fieldEl=document.getElementById('ts-field');
+    if(fieldEl)fieldEl.textContent=competitors.length;
+    const fieldSub=document.getElementById('ts-field-sub');
+    if(fieldSub)fieldSub.textContent='Players';
+    const cutLbl=document.getElementById('ts-cut-label');
+    if(cutLbl)cutLbl.textContent='Projected Cut';
+  } else if(isUpcoming){
+    // Show odds favorites if available, otherwise dates
+    const leaderLbl=document.getElementById('ts-leader-label');
+    const leaderEl=document.getElementById('ts-leader');
+    const leaderSub=document.getElementById('ts-leader-sub');
+    const cutLbl=document.getElementById('ts-cut-label');
+    const cutEl=document.getElementById('ts-cut');
+    const cutSub=document.getElementById('ts-cut-sub');
+
+    // Try to get top 2 favorites from odds
+    const events=Array.isArray(oddsData)?oddsData:[];
+    const matchEv=events.find(o=>o.sport_key==='golf_pga_tour_winner')||events[0];
+    const outcomes=matchEv?.bookmakers?.[0]?.markets?.[0]?.outcomes||[];
+    const sorted=[...outcomes].sort((a,b)=>a.price-b.price);
+    if(sorted.length>=2){
+      if(leaderLbl)leaderLbl.textContent='Favorite';
+      if(leaderEl)leaderEl.textContent=sorted[0].name.split(' ').pop();
+      if(leaderSub)leaderSub.textContent=fmtOdds(sorted[0].price);
+      if(cutLbl)cutLbl.textContent='2nd Fav';
+      if(cutEl)cutEl.textContent=sorted[1].name.split(' ').pop();
+      if(cutSub)cutSub.textContent=fmtOdds(sorted[1].price);
+    } else {
+      if(leaderLbl)leaderLbl.textContent='Starts';
+      if(leaderEl&&ev.date){
+        const d=new Date(ev.date);
+        leaderEl.textContent=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+      }
+      if(leaderSub)leaderSub.textContent=venue||'TBD';
+      if(cutLbl)cutLbl.textContent='Venue';
+      if(cutEl)cutEl.textContent=venue||'TBD';
+      if(cutSub)cutSub.textContent='';
+    }
+    const fieldEl=document.getElementById('ts-field');
+    if(fieldEl&&competitors.length)fieldEl.textContent=competitors.length;
+  }
+}
+
+async function loadGolfData(){
+  try{
+    let data=await fetchGolfTournament();
+    let ev=data?.events?.[0];
+    const status=ev?.competitions?.[0]?.status?.type?.name||'';
+    // If most recent tournament is final, look ahead for next event
+    if(!ev||(status.includes('FINAL')&&!status.includes('IN_PROGRESS'))){
+      for(let daysAhead=1;daysAhead<=28;daysAhead+=7){
+        const d=new Date();d.setDate(d.getDate()+daysAhead);
+        const ds=d.toISOString().slice(0,10).replace(/-/g,'');
+        try{
+          const next=await fetchGolfTournament(ds);
+          const nextEv=next?.events?.[0];
+          const nextStatus=nextEv?.competitions?.[0]?.status?.type?.name||'';
+          if(nextEv&&!nextStatus.includes('FINAL')){ev=nextEv;break;}
+        }catch(e){}
+      }
+    }
+    // Fetch odds in parallel (non-blocking)
+    let oddsData=[];
+    try{oddsData=await fetchGolfOdds();}catch(e){}
+    updateGolfHero(ev,oddsData);
+  }catch(e){console.warn('[CaddieLines] Golf data failed:',e);}
+}
+
 function startLiveRefresh(){
   loadLiveData();
+  loadGolfData();
   liveRefreshTimer=setInterval(loadLiveData,45000); // refresh every 45s
+  setInterval(loadGolfData,300000); // refresh golf every 5 min
 }
 
 /* ─── INIT ALL ─── */
