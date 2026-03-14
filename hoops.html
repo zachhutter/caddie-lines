@@ -1,0 +1,3180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caddie Lines - College Hoops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════
+   TOKENS
+═══════════════════════════════ */
+:root{
+  /* surfaces */
+  --bg:       #f5f2eb;
+  --bg2:      #faf8f3;
+  --bg3:      #ffffff;
+  --bg4:      #ede9df;
+  --bg5:      #e5e0d4;
+
+  /* brand blues */
+  --gr:       #1a5276;
+  --gr2:      #2471a3;
+  --gr3:      #2e86c1;
+  --gr-light: #ebf5fb;
+  --gr-mid:   #aed6f1;
+
+  /* gold accent */
+  --gold:     #b8892a;
+  --gold2:    #d4a843;
+  --gold-lt:  #fdf3e0;
+
+  /* status */
+  --red:      #c0392b;
+  --red-lt:   #fdecea;
+  --yellow:   #d97706;
+  --yel-lt:   #fef3c7;
+
+  /* type */
+  --ink:      #1a1a16;
+  --ink2:     #4a4a3f;
+  --ink3:     #7a7a6e;
+  --ink4:     #aba99d;
+  --ink5:     #c8c5ba;
+
+  /* borders */
+  --bdr:      rgba(26,82,118,0.10);
+  --bdr2:     rgba(26,82,118,0.18);
+  --bdr3:     rgba(26,82,118,0.32);
+  --bdr-ink:  rgba(26,26,22,0.08);
+  --bdr-ink2: rgba(26,26,22,0.14);
+
+  /* type families */
+  --fd: 'Playfair Display', Georgia, serif;
+  --fu: 'DM Sans', sans-serif;
+  --fm: 'DM Mono', 'Menlo', monospace;
+
+  --r:  8px;
+  --r2: 12px;
+  --r3: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:    0 4px 12px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.09), 0 2px 6px rgba(0,0,0,.05);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.11), 0 4px 12px rgba(0,0,0,.06);
+}
+
+/* ═══════════════════════════════
+   RESET & BASE
+═══════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--fu);
+  min-height:100vh;
+  line-height:1.5;
+  /* subtle linen texture */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 50% at 50% -5%, rgba(26,82,118,.04) 0%, transparent 60%);
+}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg4)}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--gr)}
+
+/* ═══════════════════════════════
+   ANIMATIONS
+═══════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.97) translateY(4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes rowIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
+
+/* ═══════════════════════════════
+   NAV
+═══════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  height:54px;padding:0 2rem;
+  background:rgba(245,242,235,.94);
+  backdrop-filter:blur(20px) saturate(1.6);
+  border-bottom:1px solid var(--bdr2);
+  box-shadow:0 1px 0 var(--bdr), var(--shadow-sm);
+}
+
+.logo-wrap{display:flex;align-items:baseline;gap:.45rem}
+.logo{
+  font-family:var(--fd);font-weight:900;font-size:1.35rem;letter-spacing:-.01em;
+  background:linear-gradient(135deg, var(--gr) 0%, var(--gr2) 40%, var(--gold) 100%);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:shimmer 5s ease infinite;
+}
+.logo-tag{
+  font-family:var(--fm);font-size:.5rem;letter-spacing:.18em;color:var(--ink4);
+  text-transform:uppercase;margin-bottom:.1rem;
+}
+
+.nav-links{display:flex;gap:.2rem;align-items:center}
+.nav-btn{
+  font-family:var(--fu);font-weight:500;font-size:.72rem;letter-spacing:.04em;
+  color:var(--ink3);background:none;border:none;padding:.38rem .85rem;
+  border-radius:6px;cursor:pointer;transition:all .18s;
+}
+.nav-btn:hover{color:var(--gr);background:var(--gr-light)}
+.nav-btn.on{color:var(--gr);background:var(--gr-light);box-shadow:inset 0 0 0 1px var(--bdr2)}
+.nav-live{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:var(--fm);font-size:.58rem;letter-spacing:.1em;
+  color:var(--gr2);background:var(--gr-light);border:1px solid var(--bdr2);
+  border-radius:100px;padding:.25rem .7rem;margin-right:.5rem;
+}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--gr2);animation:pulse 1.8s ease infinite}
+
+/* ═══════════════════════════════
+   SPORT TABS
+═══════════════════════════════ */
+.sport-tabs{
+  position:sticky;top:54px;z-index:200;
+  display:flex;padding:0 2rem;
+  background:rgba(245,242,235,.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bdr-ink);
+}
+.sport-tab{
+  font-family:var(--fu);font-weight:500;font-size:.68rem;letter-spacing:.08em;
+  color:var(--ink4);background:none;border:none;
+  border-bottom:2px solid transparent;padding:.65rem 1.1rem;
+  margin-bottom:-1px;cursor:pointer;transition:all .18s;
+}
+.sport-tab:hover{color:var(--ink2)}
+.sport-tab.on{color:var(--gr);border-bottom-color:var(--gr);font-weight:600}
+
+/* ═══════════════════════════════
+   VIEWS
+═══════════════════════════════ */
+.view{display:none;position:relative;z-index:2}
+.view.on{display:block;animation:fadeUp .3s cubic-bezier(.16,1,.3,1) both}
+
+/* ═══════════════════════════════
+   CARDS
+═══════════════════════════════ */
+.card{
+  background:var(--bg3);
+  border:1px solid var(--bdr-ink2);
+  border-radius:var(--r3);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:box-shadow .2s, border-color .2s;
+}
+.card:hover{box-shadow:var(--shadow-md);border-color:var(--bdr2)}
+.card-head{
+  display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+  padding:.8rem 1.2rem;border-bottom:1px solid var(--bdr-ink);
+  background:linear-gradient(to bottom, var(--bg2), var(--bg3));
+}
+.card-title{
+  font-family:var(--fu);font-weight:600;font-size:.62rem;
+  letter-spacing:.12em;color:var(--ink3);text-transform:uppercase;
+}
+
+/* ═══════════════════════════════
+   TOURNAMENT HERO
+═══════════════════════════════ */
+.tourn-hero{
+  position:relative;margin:1.5rem 2rem 0;border-radius:var(--r3);
+  overflow:hidden;border:1px solid var(--bdr2);
+  box-shadow:var(--shadow-md);
+  background:linear-gradient(135deg, #154360 0%, #1a5276 45%, #0e2d4a 100%);
+}
+/* Fairway texture lines */
+.tourn-hero::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    90deg,
+    transparent,transparent 60px,
+    rgba(255,255,255,.018) 60px, rgba(255,255,255,.018) 61px
+  ),
+  radial-gradient(ellipse 60% 100% at 100% 50%, rgba(212,168,67,.12) 0%, transparent 60%),
+  radial-gradient(ellipse 40% 60% at 0% 50%, rgba(255,255,255,.04) 0%, transparent 50%);
+}
+.tourn-inner{
+  position:relative;z-index:1;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:1.6rem 1.75rem;gap:1rem;
+}
+.tourn-eyebrow{
+  font-family:var(--fm);font-size:.58rem;letter-spacing:.16em;
+  color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:.5rem;
+}
+.tourn-name{
+  font-family:var(--fd);font-weight:900;font-size:1.9rem;
+  letter-spacing:-.01em;line-height:1;margin-bottom:.55rem;
+  color:#fff;
+  text-shadow:0 2px 20px rgba(0,0,0,.3);
+}
+.tourn-meta{
+  display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;
+  font-size:.72rem;color:rgba(255,255,255,.55);
+}
+.tmeta-dot{color:rgba(255,255,255,.25);font-size:.35rem}
+.tourn-badges{display:flex;flex-direction:column;align-items:flex-end;gap:.5rem;flex-shrink:0}
+.live-badge{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:var(--fm);font-size:.58rem;letter-spacing:.12em;
+  color:#fff;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);border-radius:100px;
+  padding:.3rem .8rem;backdrop-filter:blur(8px);
+  box-shadow:0 0 16px rgba(255,255,255,.06);
+}
+.live-dot-white{width:5px;height:5px;border-radius:50%;background:#fff;animation:pulse 1.6s ease infinite;box-shadow:0 0 6px #fff}
+.round-badge{
+  font-family:var(--fu);font-weight:600;font-size:.62rem;
+  color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);border-radius:6px;
+  padding:.22rem .7rem;
+}
+/* stat strip */
+.tourn-stats{
+  display:flex;border-top:1px solid rgba(255,255,255,.1);
+}
+.ts-item{
+  flex:1;padding:.75rem 1.75rem;border-right:1px solid rgba(255,255,255,.07);
+  position:relative;z-index:1;
+}
+.ts-item:last-child{border-right:none}
+.ts-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.12em;color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:.2rem}
+.ts-val{font-family:var(--fd);font-weight:700;font-size:1.15rem;color:#fff}
+.ts-sub{font-family:var(--fu);font-size:.6rem;color:rgba(255,255,255,.5);margin-top:.05rem}
+
+/* ═══════════════════════════════
+   GOLF LAYOUT
+═══════════════════════════════ */
+.golf-wrap{padding:1.25rem 2rem 3rem;display:grid;grid-template-columns:1fr 400px;gap:1.25rem;align-items:start}
+
+/* ═══════════════════════════════
+   LEADERBOARD
+═══════════════════════════════ */
+.lb-scroll{overflow-x:auto}
+.lb{width:100%;border-collapse:collapse}
+.lb thead th{
+  font-family:var(--fu);font-weight:600;font-size:.6rem;letter-spacing:.1em;
+  color:var(--ink4);text-transform:uppercase;padding:.6rem .7rem;
+  text-align:right;border-bottom:1px solid var(--bdr-ink);white-space:nowrap;
+  background:var(--bg2);transition:color .15s;
+}
+.lb thead th:nth-child(1),.lb thead th:nth-child(2){text-align:left}
+.lb thead th.sortable{cursor:pointer}
+.lb thead th.sortable:hover{color:var(--gr)}
+.lb thead th.sorted{color:var(--gr)!important}
+.lb tbody tr{
+  border-bottom:1px solid rgba(26,26,22,.05);
+  transition:background .12s;cursor:default;
+}
+.lb tbody tr:hover{background:rgba(26,82,118,.04)}
+.lb tbody tr.r1{background:linear-gradient(90deg,rgba(184,137,42,.06) 0%,transparent 55%)}
+.lb tbody tr.r1:hover{background:linear-gradient(90deg,rgba(184,137,42,.1) 0%,transparent 55%)}
+.lb tbody tr.r2{background:linear-gradient(90deg,rgba(160,165,170,.04) 0%,transparent 50%)}
+.lb tbody tr.r3{background:linear-gradient(90deg,rgba(163,107,59,.04) 0%,transparent 50%)}
+.lb tbody td{
+  font-family:var(--fm);font-size:.68rem;padding:.54rem .7rem;
+  text-align:right;color:var(--ink3);
+}
+.lb tbody td:nth-child(1){text-align:left;font-family:var(--fu);font-weight:600;font-size:.64rem;color:var(--ink4);min-width:36px}
+.lb tbody td:nth-child(2){text-align:left;font-family:var(--fu);font-weight:500;font-size:.78rem;color:var(--ink)}
+.lb tbody tr.r1 td:nth-child(2){color:var(--gold);font-weight:600}
+.sn{color:var(--gr)!important;font-weight:600}
+.sp{color:var(--red)!important;font-weight:500}
+.se{color:var(--yellow)!important}
+
+/* ═══════════════════════════════
+   RIGHT COL
+═══════════════════════════════ */
+.rcol{display:flex;flex-direction:column;gap:1.1rem}
+.chead{cursor:pointer;user-select:none}
+.chead:hover .card-title{color:var(--gr)}
+.cico{font-size:.52rem;color:var(--ink5);transition:transform .22s;flex-shrink:0}
+.collapsed .cico{transform:rotate(-90deg)}
+.cbody{overflow:hidden;max-height:2000px;transition:max-height .35s ease}
+.collapsed .cbody{max-height:0}
+
+/* ═══════════════════════════════
+   TOGGLE GROUP
+═══════════════════════════════ */
+.tg{display:flex;background:var(--bg4);border:1px solid var(--bdr-ink);border-radius:7px;padding:2px;gap:2px}
+.tgb{
+  font-family:var(--fu);font-weight:500;font-size:.6rem;letter-spacing:.05em;
+  color:var(--ink3);background:none;border:none;border-radius:5px;
+  padding:.28rem .65rem;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.tgb.on{background:var(--bg3);color:var(--gr);box-shadow:var(--shadow-sm);font-weight:600}
+
+/* ═══════════════════════════════
+   SLIDER
+═══════════════════════════════ */
+.sl-pad{padding:1rem 1.2rem}
+.sl-row{display:flex;justify-content:space-between;margin-bottom:.65rem}
+.sl-lbl{font-family:var(--fu);font-weight:500;font-size:.63rem;letter-spacing:.05em}
+.slider{
+  -webkit-appearance:none;width:100%;height:4px;border-radius:2px;outline:none;
+  background:linear-gradient(to right,#15803d,#65a30d,#ca8a04,#ea580c,#dc2626);
+  cursor:pointer;
+}
+.slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--bg3);border:2px solid var(--gr);cursor:pointer;
+  box-shadow:0 0 0 3px rgba(26,82,118,.15), var(--shadow);
+  transition:transform .14s,box-shadow .14s;
+}
+.slider::-webkit-slider-thumb:hover{transform:scale(1.18);box-shadow:0 0 0 5px rgba(26,82,118,.12),var(--shadow)}
+.sl-val{
+  text-align:center;font-family:var(--fm);font-size:.65rem;margin-top:.65rem;
+  font-weight:500;transition:color .25s;
+}
+
+/* ═══════════════════════════════
+   INNER TABS
+═══════════════════════════════ */
+.itabs{
+  display:flex;gap:0;padding:0 1rem;
+  border-bottom:1px solid var(--bdr-ink);
+  background:linear-gradient(to bottom,var(--bg2),var(--bg3));
+  overflow-x:auto;
+}
+.itabs::-webkit-scrollbar{height:0}
+.itab{
+  font-family:var(--fu);font-weight:500;font-size:.62rem;letter-spacing:.06em;
+  color:var(--ink4);background:none;border:none;border-bottom:2px solid transparent;
+  padding:.58rem .8rem;margin-bottom:-1px;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.itab:hover{color:var(--ink2)}
+.itab.on{color:var(--gr);border-bottom-color:var(--gr);font-weight:600}
+.ipanel{display:none}
+.ipanel.on{display:block;animation:fadeUp .2s ease both}
+
+/* ═══════════════════════════════
+   DISTRIBUTION CHART
+═══════════════════════════════ */
+.dist-pad{padding:.9rem 1rem .8rem}
+#bars-wrap{display:flex;align-items:flex-end;gap:2px;height:80px}
+.dbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:crosshair;position:relative}
+.dbar-f{
+  width:100%;border-radius:2px 2px 0 0;
+  transition:height .28s cubic-bezier(.16,1,.3,1),background .28s,opacity .15s,filter .15s;
+}
+.dbar:hover .dbar-f{opacity:1!important;filter:brightness(1.15) saturate(1.3)!important}
+.dbar-lbl{font-family:var(--fm);font-size:.4rem;color:var(--ink4);height:9px;text-align:center;margin-bottom:1px}
+.dist-xrow{display:flex;margin-top:3px;padding-top:3px;border-top:1px solid var(--bdr-ink)}
+.dist-xl{flex:1;font-family:var(--fm);font-size:.4rem;color:var(--ink5);text-align:center}
+.dist-hint{text-align:center;font-family:var(--fu);font-size:.58rem;color:var(--ink4);margin-top:4px;letter-spacing:.03em}
+
+/* ═══════════════════════════════
+   TOOLTIP
+═══════════════════════════════ */
+#tt{
+  position:fixed;z-index:999;pointer-events:none;
+  background:var(--bg3);border:1px solid var(--bdr2);
+  border-radius:var(--r3);padding:.85rem 1.05rem;min-width:205px;
+  box-shadow:var(--shadow-lg);
+  opacity:0;transform:translateY(5px) scale(.97);
+  transition:opacity .13s,transform .13s;
+}
+#tt.show{opacity:1;transform:translateY(0) scale(1)}
+.tt-title{font-family:var(--fd);font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.06rem}
+.tt-sub{font-family:var(--fm);font-size:.5rem;letter-spacing:.12em;color:var(--gr);margin-bottom:.55rem;text-transform:uppercase}
+.tt-row{display:flex;align-items:center;gap:.45rem;padding:.18rem 0}
+.tt-n{font-family:var(--fu);font-weight:600;font-size:.62rem;color:var(--ink4);width:15px}
+.tt-name{font-family:var(--fu);font-size:.72rem;color:var(--ink);flex:1}
+.tt-pct{font-family:var(--fm);font-size:.68rem;color:var(--ink3)}
+.tt-pct.hi{color:var(--gr);font-weight:500}
+
+/* ═══════════════════════════════
+   HOLE STATS TABLE
+═══════════════════════════════ */
+.htbl{width:100%;border-collapse:collapse}
+.htbl thead th{
+  font-family:var(--fu);font-weight:600;font-size:.57rem;letter-spacing:.09em;
+  color:var(--ink4);text-transform:uppercase;padding:.44rem .4rem;
+  text-align:center;border-bottom:1px solid var(--bdr-ink);white-space:nowrap;
+  background:var(--bg2);
+}
+.htbl thead th:first-child{text-align:left;padding-left:.9rem}
+.htbl tbody tr{border-bottom:1px solid rgba(26,26,22,.04);transition:background .1s}
+.htbl tbody tr:hover{background:rgba(26,82,118,.03)}
+.htbl tbody td{font-family:var(--fm);font-size:.63rem;padding:.3rem .4rem;text-align:center;color:var(--ink3)}
+.htbl tbody td:first-child{text-align:left;padding-left:.9rem;font-family:var(--fu);font-weight:600;font-size:.67rem;color:var(--ink4)}
+.htbl tfoot td{font-family:var(--fm);font-size:.63rem;padding:.38rem .4rem;text-align:center;border-top:1px solid var(--bdr-ink2);background:var(--bg2)}
+.htbl tfoot td:first-child{text-align:right;padding-right:.6rem;font-family:var(--fu);color:var(--ink4)}
+.vp{color:var(--gr)!important;font-weight:500}
+.vn{color:var(--red)!important;font-weight:500}
+.bhi{color:var(--gr);font-weight:500}
+.blo{color:var(--red)}
+
+/* ═══════════════════════════════
+   STROKES GAINED
+═══════════════════════════════ */
+.sg-row{
+  display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;
+  border-bottom:1px solid rgba(26,26,22,.04);transition:background .1s;
+}
+.sg-row:hover{background:rgba(26,82,118,.03)}
+.sg-pos{font-family:var(--fu);font-weight:600;font-size:.62rem;color:var(--ink5);width:20px;flex-shrink:0}
+.sg-nameblock{min-width:88px;flex-shrink:0}
+.sg-name{font-family:var(--fu);font-weight:500;font-size:.7rem;color:var(--ink)}
+.sg-tot{font-family:var(--fm);font-size:.54rem;margin-top:1px}
+.sg-bars{display:flex;flex-direction:column;gap:3px;flex:1}
+.sg-bar-row{display:flex;align-items:center;gap:.38rem}
+.sg-cat{font-family:var(--fm);font-size:.46rem;color:var(--ink4);width:26px;flex-shrink:0}
+.sg-track{flex:1;height:3px;background:var(--bg5);border-radius:2px;overflow:hidden}
+.sg-fill{height:100%;border-radius:2px;transition:width .7s cubic-bezier(.16,1,.3,1)}
+.sg-val{font-family:var(--fm);font-size:.5rem;width:30px;text-align:right}
+
+/* ═══════════════════════════════
+   MARKET EDGE
+═══════════════════════════════ */
+.edge-hdr{display:flex;padding:.35rem .9rem;border-bottom:1px solid var(--bdr-ink);background:var(--bg2);gap:.5rem}
+.edge-hdr div{font-family:var(--fu);font-weight:600;font-size:.57rem;color:var(--ink4)}
+.edge-row{display:flex;align-items:center;gap:.5rem;padding:.52rem .9rem;border-bottom:1px solid rgba(26,26,22,.04);transition:background .1s}
+.edge-row:hover{background:rgba(26,26,22,.02)}
+.edge-row.positive{background:rgba(26,82,118,.04)}
+.edge-row.positive:hover{background:rgba(26,82,118,.07)}
+.edge-name{font-family:var(--fu);font-weight:500;font-size:.72rem;color:var(--ink);flex:1.2}
+.edge-model{font-family:var(--fm);font-size:.64rem;color:var(--ink);width:48px;text-align:right}
+.edge-book{font-family:var(--fm);font-size:.64rem;color:var(--ink4);width:48px;text-align:right}
+.edge-ev{font-family:var(--fm);font-size:.64rem;font-weight:500;width:48px;text-align:right}
+.ev-pos{color:var(--gr)}
+.ev-neg{color:var(--red)}
+.edge-pill{
+  font-family:var(--fu);font-size:.54rem;font-weight:600;
+  padding:.13rem .4rem;border-radius:100px;flex-shrink:0;width:34px;text-align:center;
+}
+.ep-bet{background:var(--gr-light);color:var(--gr);border:1px solid var(--gr-mid)}
+.ep-pass{background:var(--bg4);color:var(--ink4);border:1px solid var(--bdr-ink)}
+
+/* ═══════════════════════════════
+   H2H
+═══════════════════════════════ */
+.h2h-sel-row{display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem}
+.h2h-vs{font-family:var(--fd);font-weight:700;font-size:1.1rem;color:var(--ink4);flex-shrink:0}
+.h2h-sel{
+  flex:1;background:var(--bg4);border:1px solid var(--bdr-ink2);border-radius:var(--r);
+  color:var(--ink);font-family:var(--fu);font-size:.75rem;padding:.5rem .7rem;
+  appearance:none;cursor:pointer;outline:none;transition:border-color .15s;
+}
+.h2h-sel:focus{border-color:var(--gr);box-shadow:0 0 0 2px rgba(26,82,118,.12)}
+.h2h-result{padding:1rem;text-align:center;border-top:1px solid var(--bdr-ink)}
+.h2h-names{display:flex;justify-content:space-between;margin-bottom:.75rem}
+.h2h-player{font-family:var(--fu);font-weight:600;font-size:.75rem}
+.h2h-pct-row{display:flex;align-items:center;height:28px;border-radius:100px;overflow:hidden;margin-bottom:.55rem}
+.h2h-pct-a{display:flex;align-items:center;justify-content:flex-start;padding-left:.8rem;
+  font-family:var(--fm);font-size:.68rem;font-weight:500;color:var(--gr);
+  background:linear-gradient(90deg,rgba(26,82,118,.18),rgba(26,82,118,.09));
+  transition:flex .6s cubic-bezier(.16,1,.3,1)}
+.h2h-pct-b{display:flex;align-items:center;justify-content:flex-end;padding-right:.8rem;
+  font-family:var(--fm);font-size:.68rem;font-weight:500;color:var(--red);
+  background:linear-gradient(90deg,rgba(192,57,43,.08),rgba(192,57,43,.16));
+  transition:flex .6s cubic-bezier(.16,1,.3,1)}
+.h2h-odds{display:flex;justify-content:space-between;font-family:var(--fm);font-size:.62rem;color:var(--ink4)}
+
+/* ═══════════════════════════════
+   CUT LINE
+═══════════════════════════════ */
+.cut-hero{display:flex;align-items:center;justify-content:center;gap:2rem;padding:1.1rem;border-bottom:1px solid var(--bdr-ink)}
+.cut-big{font-family:var(--fd);font-weight:900;font-size:2.4rem;line-height:1;color:var(--gr)}
+.cut-lbl{font-family:var(--fu);font-size:.58rem;letter-spacing:.12em;color:var(--ink4);margin-top:.2rem;text-transform:uppercase}
+.cut-band{font-family:var(--fm);font-size:.76rem;color:var(--ink2);margin-bottom:.15rem}
+.cut-progress{height:4px;background:var(--bg5);border-radius:2px;overflow:hidden;width:100px;margin:0 auto}
+.cut-fill{height:100%;background:linear-gradient(90deg,var(--gr3),var(--gr));border-radius:2px}
+.cut-ci{font-family:var(--fm);font-size:.55rem;color:var(--ink4);margin-top:.2rem}
+.bubble-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem .9rem;border-bottom:1px solid rgba(26,26,22,.04);transition:background .1s}
+.bubble-row:hover{background:rgba(26,26,22,.02)}
+.bubble-row.on-cut{background:rgba(26,82,118,.04)}
+.bubble-row.bubble{background:rgba(217,119,6,.04)}
+.bubble-row.miss{background:rgba(192,57,43,.04)}
+.bubble-name{font-family:var(--fu);font-weight:500;font-size:.72rem;color:var(--ink)}
+.bubble-score{font-family:var(--fm);font-size:.68rem}
+.bubble-status{font-family:var(--fu);font-size:.54rem;font-weight:600;padding:.12rem .42rem;border-radius:100px}
+.bs-make{background:var(--gr-light);color:var(--gr)}
+.bs-bubble{background:var(--yel-lt);color:var(--yellow)}
+.bs-miss{background:var(--red-lt);color:var(--red)}
+
+/* ═══════════════════════════════
+   COURSE FIT
+═══════════════════════════════ */
+.fit-row{display:flex;align-items:center;gap:.55rem;padding:.45rem .9rem;border-bottom:1px solid rgba(26,26,22,.04);transition:background .1s}
+.fit-row:hover{background:rgba(26,26,22,.02)}
+.fit-rank{font-family:var(--fu);font-weight:600;font-size:.62rem;color:var(--ink5);width:22px}
+.fit-name{font-family:var(--fu);font-weight:500;font-size:.72rem;color:var(--ink);flex:1}
+.fit-score-wrap{display:flex;align-items:center;gap:.5rem}
+.fit-bar-bg{width:72px;height:4px;background:var(--bg5);border-radius:2px;overflow:hidden}
+.fit-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gr3),var(--gr2));transition:width .6s cubic-bezier(.16,1,.3,1)}
+.fit-val{font-family:var(--fm);font-size:.62rem;color:var(--ink3);width:26px;text-align:right}
+.fit-badge{font-family:var(--fu);font-size:.5rem;font-weight:600;padding:.1rem .38rem;border-radius:100px}
+.fb-elite{background:var(--gold-lt);color:var(--gold)}
+.fb-good{background:var(--gr-light);color:var(--gr)}
+.fb-avg{background:var(--bg4);color:var(--ink4)}
+
+/* ═══════════════════════════════
+   HOOPS — complete rewrite
+═══════════════════════════════ */
+:root{
+  --bb:#e8621a;--bb2:#c4501a;--bb-lt:#fef0e8;--bb-mid:#f5c9a8;
+}
+
+/* shared utils */
+.sel-grp{position:relative;flex:1}
+.sel-grp select{width:100%;background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r);
+  color:var(--ink);font-family:var(--fu);font-size:.8rem;padding:.6rem 2rem .6rem .85rem;
+  appearance:none;cursor:pointer;outline:none;transition:border-color .15s;box-shadow:var(--shadow-sm)}
+.sel-grp select:focus{border-color:var(--gr);box-shadow:0 0 0 3px rgba(26,82,118,.1)}
+.sel-arrow{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);color:var(--ink4);pointer-events:none;font-size:.6rem}
+.section-label{display:flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-bottom:1px solid var(--bdr-ink);background:var(--bg2)}
+.sl-text{font-family:var(--fm);font-size:.54rem;letter-spacing:.1em;color:var(--ink4)}
+.leg-strip{display:flex;flex-wrap:wrap;gap:.55rem;padding:.65rem 1rem;border-top:1px solid var(--bdr-ink)}
+.leg{display:flex;align-items:center;gap:.3rem;font-family:var(--fu);font-size:.6rem;color:var(--ink3)}
+.leg-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ─ BB hero banner ─ */
+.bb-banner{
+  position:relative;margin:1.4rem 2rem 0;border-radius:var(--r3);overflow:hidden;
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  border:1px solid rgba(232,98,26,.25);box-shadow:var(--shadow-md);
+}
+.bb-banner::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 90% 50%,rgba(232,98,26,.15) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 60% at 10% 30%,rgba(255,255,255,.04) 0%,transparent 50%),
+  repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(232,98,26,.025) 40px,rgba(232,98,26,.025) 41px)}
+.bb-banner-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.75rem}
+.bb-banner-left{}
+.bb-eyebrow{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:rgba(232,98,26,.8);text-transform:uppercase;margin-bottom:.4rem}
+.bb-title{font-family:var(--fd);font-weight:900;font-size:1.85rem;color:#fff;line-height:1;margin-bottom:.45rem}
+.bb-sub{font-family:var(--fu);font-size:.72rem;color:rgba(255,255,255,.45)}
+.bb-stats-row{display:flex;gap:1.5rem;margin-top:.7rem}
+.bb-stat{text-align:center}
+.bb-stat-n{font-family:var(--fd);font-weight:700;font-size:1.1rem;color:#fff}
+.bb-stat-l{font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.1rem}
+.bb-ball{font-size:3.5rem;opacity:.18;flex-shrink:0;transform:rotate(15deg)}
+
+/* ─ BB section tabs ─ */
+.bb-tabs{position:sticky;top:100px;z-index:150;display:flex;padding:0 2rem;
+  background:rgba(245,242,235,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr-ink2)}
+.bb-tab{font-family:var(--fu);font-weight:500;font-size:.68rem;letter-spacing:.06em;
+  color:var(--ink4);background:none;border:none;border-bottom:2px solid transparent;
+  padding:.65rem 1rem;margin-bottom:-1px;cursor:pointer;transition:all .17s;white-space:nowrap}
+.bb-tab:hover{color:var(--bb)}
+.bb-tab.on{color:var(--bb);border-bottom-color:var(--bb);font-weight:600}
+.bb-panel{display:none;padding:1.25rem 2rem 3rem;animation:fadeUp .25s ease both}
+.bb-panel.on{display:block}
+
+/* ─ TODAY'S GAMES ─ */
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.game-card{
+  background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r3);
+  box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s,transform .18s;cursor:default;
+}
+.game-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.game-card.live-game{border-color:rgba(232,98,26,.35);box-shadow:0 0 0 1px rgba(232,98,26,.12),var(--shadow)}
+.gc-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.55rem .85rem;background:var(--bg2);border-bottom:1px solid var(--bdr-ink);
+}
+.gc-time{font-family:var(--fm);font-size:.65rem;letter-spacing:.06em;color:var(--ink3);font-weight:500}
+.gc-live-badge{display:flex;align-items:center;gap:.3rem;font-family:var(--fm);font-size:.65rem;
+  letter-spacing:.1em;color:var(--bb);background:var(--bb-lt);border:1px solid var(--bb-mid);
+  border-radius:100px;padding:.18rem .6rem;font-weight:600}
+.gc-live-dot{width:6px;height:6px;border-radius:50%;background:var(--bb);animation:pulse 1.6s ease infinite}
+.gc-network{font-family:var(--fm);font-size:.62rem;color:var(--ink3);font-weight:500}
+
+/* matchup row */
+.gc-matchup{padding:.85rem .9rem;border-bottom:1px solid var(--bdr-ink)}
+.gc-team-row{display:flex;align-items:center;justify-content:space-between;padding:.3rem 0}
+.gc-team-row.winner .gc-team-name{font-weight:800;color:var(--ink)}
+.gc-seed-name{display:flex;align-items:center;gap:.5rem}
+.gc-seed{font-family:var(--fm);font-size:.68rem;color:var(--ink4);width:14px;text-align:right;flex-shrink:0;font-weight:600}
+.gc-team-name{font-family:var(--fu);font-weight:600;font-size:1.02rem;color:var(--ink);transition:color .15s}
+.gc-team-rec{font-family:var(--fm);font-size:.6rem;color:var(--ink4);margin-left:.35rem}
+.gc-score-ml{display:flex;align-items:center;gap:.6rem}
+.gc-score{font-family:var(--fd);font-weight:800;font-size:1.35rem;color:var(--ink)}
+.gc-ml{font-family:var(--fm);font-size:.78rem;color:var(--ink3);font-weight:500}
+.gc-ml.fav{color:var(--gr);font-weight:700;font-size:.84rem}
+.gc-divider{height:1px;background:var(--bdr-ink);margin:.35rem 0}
+
+/* odds strip */
+.gc-odds{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;padding:.75rem .9rem;gap:0;border-bottom:1px solid var(--bdr-ink)}
+.gc-odds-sep{background:var(--bdr-ink2)}
+.gc-odd-item{text-align:center;padding:0 .6rem}
+.gc-odd-lbl{font-family:var(--fm);font-size:.62rem;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin-bottom:.3rem;font-weight:500}
+.gc-odd-val{font-family:var(--fd);font-weight:700;font-size:1.35rem;color:var(--ink);line-height:1}
+.gc-odd-move{font-family:var(--fm);font-size:.6rem;margin-top:.25rem;font-weight:500}
+.move-up{color:var(--red)}
+.move-dn{color:var(--gr)}
+.move-flat{color:var(--ink5)}
+
+/* model pick */
+.gc-model{display:flex;align-items:center;justify-content:space-between;padding:.65rem .9rem;background:var(--bg2)}
+.gc-model-lbl{font-family:var(--fm);font-size:.6rem;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;font-weight:500}
+.gc-model-pick{font-family:var(--fu);font-weight:700;font-size:.88rem;color:var(--gr)}
+.gc-edge-pill{font-family:var(--fm);font-size:.65rem;font-weight:600;padding:.2rem .65rem;
+  border-radius:100px;border:1px solid}
+.gc-edge-pos{background:var(--gr-light);color:var(--gr);border-color:var(--gr-mid)}
+.gc-edge-neg{background:var(--red-lt);color:var(--red);border-color:rgba(192,57,43,.2)}
+.gc-edge-neu{background:var(--bg4);color:var(--ink4);border-color:var(--bdr-ink)}
+
+/* ─ MATCHUP ANALYZER ─ */
+.ma-selrow{display:flex;align-items:center;gap:.85rem;margin-bottom:1.2rem}
+.ma-vs{font-family:var(--fd);font-weight:900;font-size:1.6rem;color:var(--ink5);flex-shrink:0;line-height:1}
+.swap-btn{background:var(--bg4);border:1px solid var(--bdr-ink2);border-radius:var(--r);
+  color:var(--gr);font-family:var(--fm);font-size:.58rem;padding:.45rem .85rem;cursor:pointer;transition:all .15s}
+.swap-btn:hover{background:var(--gr-light);border-color:var(--bdr2)}
+.ma-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.ma-card{background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);box-shadow:var(--shadow-sm);overflow:hidden}
+.ma-card-head{padding:.7rem 1rem;border-bottom:1px solid var(--bdr-ink);
+  background:linear-gradient(135deg,var(--bg2),var(--bg3))}
+.ma-team-name{font-family:var(--fd);font-weight:900;font-size:1.25rem;color:var(--ink);line-height:1}
+.ma-record{font-family:var(--fm);font-size:.58rem;color:var(--ink4);margin-top:.2rem}
+.ma-seed-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+  background:var(--bg);border:1px solid var(--bdr-ink2);border-radius:4px;
+  font-family:var(--fm);font-size:.58rem;color:var(--ink3);margin-right:.4rem}
+.ma-stat-row{display:flex;align-items:center;padding:.35rem .9rem;border-bottom:1px solid rgba(26,26,22,.04)}
+.ma-stat-label{font-family:var(--fm);font-size:.58rem;color:var(--ink4);width:68px;flex-shrink:0}
+.ma-bar-wrap{flex:1;height:6px;background:var(--bg5);border-radius:3px;overflow:hidden;margin:0 .5rem}
+.ma-bar-fill{height:100%;border-radius:3px;transition:width .7s cubic-bezier(.16,1,.3,1)}
+.ma-stat-val{font-family:var(--fm);font-size:.62rem;font-weight:500;width:38px;text-align:right}
+.ma-advantages{background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);
+  box-shadow:var(--shadow-sm);margin-bottom:1rem}
+.ma-adv-head{padding:.65rem 1rem;border-bottom:1px solid var(--bdr-ink);background:var(--bg2);
+  font-family:var(--fu);font-weight:600;font-size:.62rem;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase}
+.ma-adv-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem 1rem;border-bottom:1px solid rgba(26,26,22,.04)}
+.ma-adv-cat{font-family:var(--fu);font-size:.7rem;color:var(--ink2);flex:1}
+.ma-adv-winner{font-family:var(--fu);font-weight:600;font-size:.7rem}
+.ma-adv-win-a{color:var(--bb)}
+.ma-adv-win-b{color:var(--gr2)}
+.ma-adv-margin{font-family:var(--fm);font-size:.58rem;color:var(--ink4);margin-left:.4rem}
+.ma-spread-box{background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);
+  box-shadow:var(--shadow-sm);padding:1rem}
+.ma-spread-title{font-family:var(--fu);font-weight:600;font-size:.62rem;letter-spacing:.1em;
+  color:var(--ink3);text-transform:uppercase;margin-bottom:.75rem}
+.ma-spread-scenarios{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.ma-scen{border:1px solid var(--bdr-ink2);border-radius:var(--r);padding:.75rem;text-align:center;background:var(--bg2)}
+.ma-scen.best{border-color:var(--gr-mid);background:var(--gr-light)}
+.ma-scen-loc{font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;color:var(--ink4);text-transform:uppercase;margin-bottom:.35rem}
+.ma-scen-spread{font-family:var(--fd);font-weight:700;font-size:1rem;color:var(--ink)}
+.ma-scen-note{font-family:var(--fm);font-size:.52rem;color:var(--gr);margin-top:.2rem}
+
+/* ─ BRACKET ─ */
+.bracket-wrap{overflow-x:auto;padding-bottom:.5rem}
+.bracket-title{font-family:var(--fd);font-weight:900;font-size:1.5rem;color:var(--ink);margin-bottom:.25rem}
+.bracket-sub{font-family:var(--fm);font-size:.6rem;color:var(--ink4);margin-bottom:1.25rem;letter-spacing:.08em}
+.bracket{display:flex;gap:0;align-items:center;min-width:700px}
+.bracket-round{display:flex;flex-direction:column;flex-shrink:0}
+.bracket-round-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.12em;color:var(--ink5);
+  text-align:center;padding:.3rem 0 .55rem;text-transform:uppercase}
+.bracket-slots{display:flex;flex-direction:column;gap:0;flex:1}
+.bracket-slot{
+  position:relative;display:flex;flex-direction:column;justify-content:center;
+  padding:.45rem .65rem;margin:.25rem .15rem;
+  background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r);
+  box-shadow:var(--shadow-sm);cursor:pointer;transition:all .16s;min-width:155px;
+}
+.bracket-slot:hover{border-color:var(--bdr2);box-shadow:var(--shadow)}
+.bracket-slot.eliminated{opacity:.45;cursor:default}
+.bracket-slot.winner{border-color:var(--bb-mid);background:linear-gradient(135deg,var(--bb-lt),var(--bg3))}
+.bracket-slot.champion{border-color:var(--gold2);background:linear-gradient(135deg,var(--gold-lt),var(--bg3));box-shadow:0 0 20px rgba(184,137,42,.15),var(--shadow)}
+.bs-seed{font-family:var(--fm);font-size:.52rem;color:var(--ink5);width:12px;flex-shrink:0;display:inline-block;vertical-align:middle;margin-right:.35rem}
+.bs-name{font-family:var(--fu);font-weight:600;font-size:.75rem;color:var(--ink);display:inline}
+.bs-rec{font-family:var(--fm);font-size:.5rem;color:var(--ink5);margin-top:.1rem}
+.bs-prob{font-family:var(--fm);font-size:.55rem;font-weight:500;margin-top:.12rem}
+.prob-hi{color:var(--bb)}
+.prob-mid{color:var(--yellow)}
+.prob-lo{color:var(--ink4)}
+/* connector lines between rounds */
+.bracket-connector{display:flex;flex-direction:column;justify-content:space-around;padding:0 2px;flex-shrink:0}
+.bc-line{width:14px;border-top:1.5px solid var(--bdr-ink2);align-self:center}
+.bc-group{display:flex;flex-direction:column;align-items:flex-end}
+
+/* spacer slot (empty) */
+.bracket-spacer{min-width:155px;min-height:58px;margin:.25rem .15rem;opacity:0;pointer-events:none}
+
+/* champion box */
+.champ-box{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.65rem 1rem;margin:.25rem .15rem;text-align:center;
+  background:linear-gradient(135deg,var(--gold-lt),#fff9ee);
+  border:2px solid var(--gold2);border-radius:var(--r2);
+  box-shadow:0 0 24px rgba(184,137,42,.2),var(--shadow);min-width:155px;
+}
+.champ-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+.champ-name{font-family:var(--fd);font-weight:900;font-size:1.05rem;color:var(--ink)}
+.champ-prob{font-family:var(--fm);font-size:.6rem;color:var(--gold2);margin-top:.15rem;font-weight:500}
+
+/* ─ RANKINGS TABLE ─ */
+.rk-tbl{width:100%;border-collapse:collapse}
+.rk-tbl thead th{font-family:var(--fu);font-weight:600;font-size:.6rem;letter-spacing:.09em;
+  color:var(--ink4);text-transform:uppercase;padding:.55rem .7rem;text-align:right;
+  border-bottom:2px solid var(--bdr-ink2);white-space:nowrap;background:var(--bg2);cursor:pointer;transition:color .14s}
+.rk-tbl thead th:nth-child(1){text-align:center;width:36px}
+.rk-tbl thead th:nth-child(2){text-align:left}
+.rk-tbl thead th:hover{color:var(--bb)}
+.rk-tbl thead th.sorted{color:var(--bb)!important}
+.rk-tbl tbody tr{border-bottom:1px solid rgba(26,26,22,.05);transition:background .1s}
+.rk-tbl tbody tr:hover{background:rgba(232,98,26,.03)}
+.rk-tbl tbody td{font-family:var(--fm);font-size:.68rem;padding:.5rem .7rem;text-align:right;color:var(--ink3)}
+.rk-tbl tbody td:nth-child(1){text-align:center;font-weight:600;color:var(--ink4);font-size:.65rem}
+.rk-tbl tbody td:nth-child(2){text-align:left;font-family:var(--fu);font-weight:600;font-size:.78rem;color:var(--ink)}
+.rk-tbl tbody td:nth-child(3){font-family:var(--fu);font-size:.68rem;color:var(--ink3)}
+.rk-badge{display:inline-block;font-size:.5rem;font-family:var(--fu);font-weight:700;
+  padding:.1rem .38rem;border-radius:100px;vertical-align:middle;margin-left:.3rem}
+.rb-t10{background:var(--bb-lt);color:var(--bb)}
+.rb-t25{background:var(--yel-lt);color:var(--yellow)}
+.rb-t5{background:linear-gradient(135deg,var(--gold-lt),#fff9ee);color:var(--gold);border:1px solid rgba(184,137,42,.3)}
+.rk-val-pos{color:var(--gr);font-weight:500}
+.rk-val-neg{color:var(--red);font-weight:500}
+
+/* ─ ATS TRENDS ─ */
+.ats-filter-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap}
+.ats-filter-lbl{font-family:var(--fm);font-size:.6rem;letter-spacing:.08em;color:var(--ink4);text-transform:uppercase}
+.ats-filter-btn{font-family:var(--fu);font-weight:500;font-size:.65rem;
+  background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:6px;
+  color:var(--ink3);padding:.3rem .7rem;cursor:pointer;transition:all .15s;box-shadow:var(--shadow-sm)}
+.ats-filter-btn:hover{border-color:var(--bb-mid);color:var(--bb)}
+.ats-filter-btn.on{background:var(--bb-lt);border-color:var(--bb-mid);color:var(--bb);font-weight:600}
+.ats-team-block{background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);
+  box-shadow:var(--shadow-sm);margin-bottom:.9rem;overflow:hidden}
+.ats-team-head{display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem 1rem;border-bottom:1px solid var(--bdr-ink);background:var(--bg2)}
+.ats-team-name{font-family:var(--fd);font-weight:700;font-size:1rem;color:var(--ink)}
+.ats-overall{font-family:var(--fm);font-size:.62rem;font-weight:500}
+.ats-wins{color:var(--gr)}
+.ats-bar-row{display:flex;align-items:center;gap:.7rem;padding:.45rem 1rem;border-bottom:1px solid rgba(26,26,22,.04)}
+.ats-sit{font-family:var(--fu);font-size:.68rem;color:var(--ink3);width:130px;flex-shrink:0}
+.ats-rec{display:flex;align-items:center;gap:.4rem;flex:1}
+.ats-rec-bar{flex:1;height:7px;background:var(--bg5);border-radius:4px;overflow:hidden;display:flex}
+.ats-rec-win{height:100%;background:var(--gr);border-radius:4px 0 0 4px;transition:width .7s cubic-bezier(.16,1,.3,1)}
+.ats-rec-push{height:100%;background:var(--yellow)}
+.ats-rec-loss{height:100%;background:var(--red);border-radius:0 4px 4px 0}
+.ats-rec-txt{font-family:var(--fm);font-size:.6rem;color:var(--ink3);white-space:nowrap;min-width:48px}
+.ats-streak{font-family:var(--fm);font-size:.58rem;padding:.1rem .38rem;border-radius:4px;white-space:nowrap}
+.ats-streak-w{background:var(--gr-light);color:var(--gr)}
+.ats-streak-l{background:var(--red-lt);color:var(--red)}
+/* ─ ATS Table ─ */
+.ats-tbl{width:100%;border-collapse:collapse;font-family:var(--fm);font-size:.68rem;min-width:580px}
+.ats-tbl thead th{font-family:var(--fu);font-size:.58rem;color:var(--ink4);text-align:center;
+  padding:.45rem .55rem;border-bottom:2px solid var(--bdr-ink2);letter-spacing:.04em;white-space:nowrap;cursor:default}
+.ats-tbl thead th:nth-child(1),.ats-tbl thead th:nth-child(2){text-align:left}
+.ats-tbl tbody tr{border-bottom:1px solid var(--bdr-ink)}
+.ats-tbl tbody tr:last-child{border-bottom:none}
+.ats-tbl tbody tr:hover{background:var(--bg3)}
+.ats-tbl td{padding:.42rem .55rem;text-align:center;vertical-align:middle;color:var(--ink2)}
+.ats-tbl td:nth-child(2){text-align:left;font-size:.72rem;color:var(--ink)}
+.ats-col-active{background:var(--bb-lt)!important;font-weight:700}
+.ats-dot{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;
+  border-radius:50%;font-size:.42rem;font-weight:700;color:#fff;flex-shrink:0}
+.ats-dot-w{background:var(--gr)}
+.ats-dot-l{background:var(--red)}
+.ats-pct{font-size:.54rem;color:var(--ink4);margin-left:.25rem;font-weight:400}
+/* ─ Bracket region buttons ─ */
+.brk-region-btn{font-family:var(--fu);font-weight:500;font-size:.65rem;
+  background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:6px;
+  color:var(--ink3);padding:.32rem .78rem;cursor:pointer;transition:all .15s;box-shadow:var(--shadow-sm)}
+.brk-region-btn:hover{border-color:var(--bb-mid);color:var(--bb)}
+.brk-region-btn.on{background:var(--bb-lt);border-color:var(--bb-mid);color:var(--bb);font-weight:600}
+/* live data badge */
+.live-data-badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--fm);font-size:.62rem;
+  letter-spacing:.08em;color:var(--gr);background:var(--gr-light);border:1px solid var(--gr-mid);
+  border-radius:100px;padding:.2rem .65rem;font-weight:600}
+.live-dot-sm{width:6px;height:6px;border-radius:50%;background:var(--gr);animation:pulse 1.6s ease infinite;flex-shrink:0}
+/* odds view leaderboard cells */
+.odds-cell{font-family:var(--fm);font-weight:700;font-size:.82rem;color:var(--ink2)}
+.odds-cell.pos-odds{color:var(--gr)}
+.odds-cell.neg-odds{color:var(--red)}
+/* O/U pick chip in game card */
+.gc-ou-chip{display:inline-block;padding:.15rem .55rem;border-radius:100px;font-family:var(--fm);font-weight:700;font-size:.82rem;letter-spacing:.04em}
+.gc-ou-over{background:var(--gr-light);color:var(--gr);border:1px solid var(--gr-mid)}
+.gc-ou-under{background:var(--red-lt);color:var(--red);border:1px solid rgba(192,57,43,.2)}
+
+/* ─── MOBILE GAME PICKER ────────────────────────────────────── */
+.mgp-wrap{display:none}
+#mgp-detail{display:none}
+@media(max-width:680px){
+  .games-grid{display:none!important}
+  .mgp-wrap{display:block;margin-bottom:.9rem}
+  #mgp-detail{display:block}
+
+  /* Dropdown */
+  .mgp-select-wrap{position:relative;background:var(--bg3);border:1.5px solid var(--bdr-ink2);border-radius:var(--r2);box-shadow:var(--shadow)}
+  .mgp-select{width:100%;appearance:none;-webkit-appearance:none;background:transparent;border:none;padding:.9rem 2.8rem .9rem 1rem;font-family:var(--fu);font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer}
+  .mgp-select:focus{outline:2px solid var(--gr);outline-offset:-2px;border-radius:var(--r2)}
+  .mgp-arrow{position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:var(--gr);font-size:1.1rem;pointer-events:none;font-weight:700}
+
+  /* Detail cards */
+  .mgd-section{background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r3);box-shadow:var(--shadow);overflow:hidden;margin-bottom:.75rem}
+  .mgd-section.live-game{border-color:rgba(26,82,118,.35);box-shadow:0 0 0 1px rgba(26,82,118,.12),var(--shadow)}
+
+  /* Game header */
+  .mgd-head{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:var(--bg2);border-bottom:1px solid var(--bdr-ink)}
+  .mgd-team-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem}
+  .mgd-divider{height:1px;background:var(--bdr-ink);margin:0 1rem}
+  .mgd-seed-name{display:flex;align-items:center;gap:.45rem}
+  .mgd-seed{font-family:var(--fm);font-size:.68rem;color:var(--ink4);font-weight:600;width:14px;text-align:right;flex-shrink:0}
+  .mgd-tname{font-family:var(--fu);font-weight:700;font-size:1.1rem;color:var(--ink)}
+  .mgd-trec{font-family:var(--fm);font-size:.6rem;color:var(--ink4);margin-left:.25rem}
+  .mgd-score-ml{display:flex;align-items:center;gap:.65rem}
+  .mgd-score{font-family:var(--fd);font-weight:800;font-size:1.5rem;color:var(--ink)}
+  .mgd-ml{font-family:var(--fm);font-size:.82rem;color:var(--ink3);font-weight:500}
+  .mgd-ml.fav{color:var(--gr);font-weight:700;font-size:.9rem}
+  .mgd-winner .mgd-tname{font-weight:800;color:var(--ink)}
+
+  /* Odds strip */
+  .mgd-odds{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;padding:.75rem 0;border-top:1px solid var(--bdr-ink)}
+  .mgd-odds-sep{background:var(--bdr-ink2)}
+  .mgd-odd-item{text-align:center;padding:.25rem .5rem}
+  .mgd-odd-lbl{font-family:var(--fm);font-size:.58rem;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin-bottom:.3rem;font-weight:500}
+  .mgd-odd-val{font-family:var(--fd);font-weight:700;font-size:1.4rem;color:var(--ink);line-height:1}
+  .mgd-odd-move{font-family:var(--fm);font-size:.58rem;margin-top:.25rem;font-weight:500}
+
+  /* Model recommendation */
+  .mgd-model{background:var(--gr-light);border-top:2px solid var(--gr-mid);padding:1rem 1rem .9rem}
+  .mgd-model-label{font-family:var(--fm);font-size:.58rem;letter-spacing:.12em;color:var(--gr2);text-transform:uppercase;font-weight:600;margin-bottom:.4rem}
+  .mgd-model-pick{font-family:var(--fd);font-weight:900;font-size:1.45rem;color:var(--gr);line-height:1;margin-bottom:.25rem}
+  .mgd-model-sub{font-family:var(--fu);font-size:.78rem;color:var(--ink3);margin-bottom:.65rem}
+  .mgd-model-chips{display:flex;gap:.5rem;flex-wrap:wrap}
+  .mgd-chip{font-family:var(--fm);font-size:.65rem;font-weight:600;padding:.3rem .8rem;border-radius:100px;border:1.5px solid}
+  .mgd-chip-edge{background:var(--gr-light);color:var(--gr);border-color:var(--gr-mid)}
+  .mgd-chip-ou{background:var(--gold-lt);color:var(--gold);border-color:rgba(184,137,42,.28)}
+
+  /* Section title */
+  .mgd-section-title{font-family:var(--fu);font-weight:600;font-size:.62rem;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;padding:.75rem 1rem .5rem;border-bottom:1px solid var(--bdr-ink)}
+
+  /* Stats comparison */
+  .mgd-stats-head{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem .5rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;border-bottom:1px solid var(--bdr-ink)}
+  .mgd-stats-away{color:var(--gr);font-weight:700}
+  .mgd-stats-home{color:var(--gold);font-weight:700}
+  .mgd-stat-row{display:flex;align-items:center;padding:.5rem 1rem;gap:.5rem;border-bottom:1px solid rgba(26,26,22,.04)}
+  .mgd-stat-lbl{font-family:var(--fm);font-size:.6rem;color:var(--ink4);width:60px;flex-shrink:0}
+  .mgd-stat-bars{flex:1;display:flex;flex-direction:column;gap:4px}
+  .mgd-bar-row{display:flex;align-items:center;gap:.4rem}
+  .mgd-bar-team{font-family:var(--fm);font-size:.55rem;color:var(--ink4);width:54px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+  .mgd-bar-wrap{flex:1;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden}
+  .mgd-bar-fill-a{height:100%;border-radius:3px;background:var(--gr);transition:width .7s cubic-bezier(.16,1,.3,1)}
+  .mgd-bar-fill-b{height:100%;border-radius:3px;background:var(--gold);transition:width .7s cubic-bezier(.16,1,.3,1)}
+  .mgd-stat-val{font-family:var(--fm);font-size:.62rem;font-weight:600;width:34px;text-align:right;color:var(--ink2)}
+
+  /* ATS records */
+  .mgd-ats-grid{display:grid;grid-template-columns:1fr 1px 1fr;padding:.75rem 1rem}
+  .mgd-ats-sep{background:var(--bdr-ink2);margin:0 .25rem}
+  .mgd-ats-team{padding:.2rem 0}
+  .mgd-ats-tname{font-family:var(--fu);font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.35rem}
+  .mgd-ats-row{display:flex;align-items:center;gap:.3rem;margin-bottom:.2rem}
+  .mgd-ats-lbl{font-family:var(--fm);font-size:.56rem;color:var(--ink4);width:44px;flex-shrink:0}
+  .mgd-ats-val{font-family:var(--fm);font-size:.62rem;font-weight:600;color:var(--ink2)}
+  .mgd-ats-dots{display:flex;gap:3px;margin-top:.45rem}
+  .mgd-ats-r{padding-left:.6rem}
+
+  /* Spread scenarios */
+  .mgd-scen-grid{display:grid;grid-template-columns:1fr 1fr 1fr;padding:.75rem 1rem}
+  .mgd-scen{text-align:center}
+  .mgd-scen-loc{font-family:var(--fm);font-size:.52rem;letter-spacing:.08em;color:var(--ink4);text-transform:uppercase;margin-bottom:.3rem}
+  .mgd-scen-line{font-family:var(--fd);font-weight:700;font-size:.95rem;color:var(--ink)}
+  .mgd-scen-note{font-family:var(--fm);font-size:.5rem;color:var(--ink4);margin-top:.15rem}
+  .mgd-scen.best .mgd-scen-line{color:var(--gr)}
+  .mgd-scen.best .mgd-scen-note{color:var(--gr2)}
+}
+</style>
+</head>
+<body>
+
+<!-- Floating tooltip -->
+<div id="tt"></div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="logo-wrap">
+    <div class="logo">Caddie Lines</div>
+    <div class="logo-tag">Beta</div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-live"><div class="live-dot"></div>Live Data</div>
+    <a class="nav-btn" href="/">Golf</a>
+    <button class="nav-btn on" onclick="switchTab('hoops',this)">Hoops</button>
+  </div>
+</nav>
+
+<div class="sport-tabs">
+  <a class="sport-tab" id="stab-golf" href="/">⛳ &nbsp;PGA Golf</a>
+  <button class="sport-tab on" id="stab-hoops" onclick="switchView('hoops')">🏀 &nbsp;College Hoops</button>
+</div>
+
+<!-- ══════════════════════════════
+     GOLF VIEW
+══════════════════════════════ -->
+<div class="view" id="view-golf">
+
+  <!-- Hero -->
+  <div class="tourn-hero">
+    <div class="tourn-inner">
+      <div>
+        <div class="tourn-eyebrow" id="tourn-eyebrow">PGA Tour · 2025–26 Season</div>
+        <div class="tourn-name" id="tourn-name">THE PLAYERS Championship</div>
+        <div class="tourn-meta" id="tourn-meta">
+          Round 2 of 4
+          <span class="tmeta-dot">◆</span>
+          TPC Sawgrass
+          <span class="tmeta-dot">◆</span>
+          THE PLAYERS Stadium Course
+        </div>
+      </div>
+      <div class="tourn-badges" id="tourn-badges">
+        <div class="live-badge"><div class="live-dot-white"></div>LIVE</div>
+        <div class="round-badge">R2 In Progress</div>
+      </div>
+    </div>
+    <div class="tourn-stats" id="tourn-stats">
+      <div class="ts-item">
+        <div class="ts-label" id="ts-leader-label">Leader</div>
+        <div class="ts-val" id="ts-leader">Schauffele</div>
+        <div class="ts-sub" id="ts-leader-sub">–10 thru F</div>
+      </div>
+      <div class="ts-item">
+        <div class="ts-label" id="ts-cut-label">Projected Cut</div>
+        <div class="ts-val" id="ts-cut">–1</div>
+        <div class="ts-sub" id="ts-cut-sub">±1 stroke</div>
+      </div>
+      <div class="ts-item">
+        <div class="ts-label">Field Size</div>
+        <div class="ts-val" id="ts-field">144</div>
+        <div class="ts-sub" id="ts-field-sub">Players</div>
+      </div>
+      <div class="ts-item">
+        <div class="ts-label">Prize Fund</div>
+        <div class="ts-val" id="ts-purse">$25M</div>
+        <div class="ts-sub">Total purse</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="golf-wrap">
+
+    <!-- LEADERBOARD -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Leaderboard</div>
+        <div class="tg">
+          <button class="tgb on" onclick="setLbV(this)">Round Leader</button>
+          <button class="tgb" onclick="setLbV(this)">Odds View</button>
+        </div>
+      </div>
+      <div class="lb-scroll">
+        <table class="lb">
+          <thead><tr>
+            <th>POS</th><th>PLAYER</th>
+            <th class="sortable" onclick="sortLb('score',this)">SCORE</th>
+            <th>TODAY</th><th>THRU</th>
+            <th class="sortable" onclick="sortLb('win',this)">WIN%</th>
+            <th class="sortable" onclick="sortLb('top5',this)">TOP 5</th>
+            <th class="sortable" onclick="sortLb('top10',this)">TOP 10</th>
+            <th>CUT%</th>
+          </tr></thead>
+          <tbody id="lb-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RIGHT COL -->
+    <div class="rcol">
+
+      <!-- Course Conditions -->
+      <div class="card">
+        <div class="card-head chead" onclick="toggleC(this)">
+          <span class="card-title">Course Conditions</span><span class="cico">▼</span>
+        </div>
+        <div class="cbody sl-pad">
+          <div class="sl-row">
+            <span class="sl-lbl" style="color:#15803d">Easier</span>
+            <span class="sl-lbl" style="color:#dc2626">Harder</span>
+          </div>
+          <input type="range" class="slider" id="cslider" min="-3" max="3" step="0.1" value="-0.3" oninput="onSlider(this)">
+          <div class="sl-val" id="slval" style="color:var(--gr)">Easier (–0.3)</div>
+        </div>
+      </div>
+
+      <!-- Analytics Tabs -->
+      <div class="card">
+        <div class="itabs">
+          <button class="itab on" onclick="showTab(this,'dist')">Distribution</button>
+          <button class="itab" onclick="showTab(this,'sg')">Strokes Gained</button>
+          <button class="itab" onclick="showTab(this,'edge')">Market Edge</button>
+          <button class="itab" onclick="showTab(this,'h2h')">H2H</button>
+          <button class="itab" onclick="showTab(this,'cut')">Cut Line</button>
+          <button class="itab" onclick="showTab(this,'fit')">Course Fit</button>
+        </div>
+
+        <!-- DISTRIBUTION -->
+        <div class="ipanel on" id="panel-dist">
+          <div class="dist-pad">
+            <div id="bars-wrap"></div>
+            <div class="dist-xrow" id="dist-xrow"></div>
+            <div class="dist-hint">Hover a bar to see top‑5 projections at that winning score</div>
+          </div>
+        </div>
+
+        <!-- STROKES GAINED -->
+        <div class="ipanel" id="panel-sg">
+          <div class="section-label">
+            <span class="sl-text">TEE · APPROACH · SHORT GAME · PUTTING</span>
+            <span style="margin-left:auto;font-family:var(--fm);font-size:.54rem;color:var(--ink4)">R2 Strokes Gained</span>
+          </div>
+          <div id="sg-list"></div>
+        </div>
+
+        <!-- MARKET EDGE -->
+        <div class="ipanel" id="panel-edge">
+          <div style="padding:.65rem .9rem;border-bottom:1px solid var(--bdr-ink)">
+            <div class="card-title">+EV Opportunities vs. Sportsbook</div>
+          </div>
+          <div class="edge-hdr">
+            <div style="flex:1.2">Player</div>
+            <div style="width:48px;text-align:right">Model</div>
+            <div style="width:48px;text-align:right">Book</div>
+            <div style="width:48px;text-align:right">Edge</div>
+            <div style="width:34px"></div>
+          </div>
+          <div id="edge-list"></div>
+        </div>
+
+        <!-- H2H -->
+        <div class="ipanel" id="panel-h2h">
+          <div class="h2h-sel-row">
+            <select class="h2h-sel" id="h2h-a" onchange="calcH2H()">
+              <option>Schauffele, Xander</option><option>Young, Cameron</option>
+              <option>Aberg, Ludvig</option><option>Henley, Russell</option>
+              <option>Hovland, Viktor</option><option>Thomas, Justin</option>
+              <option>Straka, Sepp</option><option>McNealy, Maverick</option>
+            </select>
+            <div class="h2h-vs">VS</div>
+            <select class="h2h-sel" id="h2h-b" onchange="calcH2H()">
+              <option>Young, Cameron</option><option>Schauffele, Xander</option>
+              <option>Hovland, Viktor</option><option>Aberg, Ludvig</option>
+              <option>Henley, Russell</option><option>Thomas, Justin</option>
+              <option>Straka, Sepp</option><option>McNealy, Maverick</option>
+            </select>
+          </div>
+          <div class="h2h-result" id="h2h-result"></div>
+        </div>
+
+        <!-- CUT LINE -->
+        <div class="ipanel" id="panel-cut">
+          <div class="cut-hero">
+            <div>
+              <div class="cut-big" id="cut-num">–1</div>
+              <div class="cut-lbl">Projected Cut</div>
+            </div>
+            <div>
+              <div class="cut-band" id="cut-band">Range: E to –2</div>
+              <div class="cut-progress"><div class="cut-fill" style="width:72%"></div></div>
+              <div class="cut-ci">72% confidence interval</div>
+            </div>
+          </div>
+          <div id="cut-list"></div>
+        </div>
+
+        <!-- COURSE FIT -->
+        <div class="ipanel" id="panel-fit">
+          <div class="section-label">
+            <span class="sl-text">DISTANCE · ACCURACY · IRON PLAY · SHORT GAME · PUTTING → COMPOSITE FIT SCORE</span>
+          </div>
+          <div id="fit-list"></div>
+        </div>
+      </div>
+
+      <!-- Hole Stats -->
+      <div class="card">
+        <div class="card-head chead" onclick="toggleC(this)">
+          <span class="card-title">Live Hole Stats (R2)</span><span class="cico">▼</span>
+        </div>
+        <div class="cbody" style="overflow-x:auto"><table class="htbl" id="htbl"></table></div>
+      </div>
+
+      <!-- Prob Table -->
+      <div class="card">
+        <div class="card-head chead" onclick="toggleC(this)">
+          <span class="card-title">Hole-by-Hole Scoring Probabilities</span><span class="cico">▼</span>
+        </div>
+        <div class="cbody" style="overflow-x:auto"><table class="htbl" id="ptbl"></table></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     HOOPS VIEW — REBUILT
+══════════════════════════════ -->
+<div class="view on" id="view-hoops">
+
+  <div class="bb-banner">
+    <div class="bb-banner-inner">
+      <div>
+        <div class="bb-eyebrow">🏀 College Basketball · 2025–26</div>
+        <div class="bb-title">March Madness Hub</div>
+        <div class="bb-sub">Lines, models &amp; analytics for every bettor</div>
+        <div class="bb-stats-row">
+          <div class="bb-stat"><div class="bb-stat-n">14</div><div class="bb-stat-l">Games Today</div></div>
+          <div class="bb-stat"><div class="bb-stat-n">68</div><div class="bb-stat-l">Teams Left</div></div>
+          <div class="bb-stat"><div class="bb-stat-n">6</div><div class="bb-stat-l">Days to Final Four</div></div>
+        </div>
+      </div>
+      <div class="bb-ball">🏀</div>
+    </div>
+  </div>
+
+  <div class="bb-tabs">
+    <button class="bb-tab on" onclick="bbTab(this,'games')">Today's Games</button>
+    <button class="bb-tab" onclick="bbTab(this,'matchup')">Matchup Analyzer</button>
+    <button class="bb-tab" onclick="bbTab(this,'bracket')">Tournament Bracket</button>
+    <button class="bb-tab" onclick="bbTab(this,'rankings')">Team Rankings</button>
+    <button class="bb-tab" onclick="bbTab(this,'ats')">ATS Trends</button>
+  </div>
+
+  <div class="bb-panel on" id="bbp-games">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink)">Today's Slate</div>
+        <div style="display:flex;align-items:center;gap:.75rem;margin-top:.2rem;flex-wrap:wrap">
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);letter-spacing:.06em" id="games-date-line">MARCH 13, 2026 · LINES FROM DRAFTKINGS</div>
+        <div id="live-data-badge" style="display:none"><div class="live-data-badge"><div class="live-dot-sm"></div><span id="live-ts">LIVE DATA</span></div></div>
+      </div>
+      </div>
+      <div style="display:flex;gap:.4rem">
+        <button class="ats-filter-btn on" onclick="filterGames('all',this)">All</button>
+        <button class="ats-filter-btn" onclick="filterGames('live',this)">🔴 Live</button>
+        <button class="ats-filter-btn" onclick="filterGames('tonight',this)">Tonight</button>
+      </div>
+    </div>
+    <!-- Mobile game picker (visible only on small screens) -->
+    <div class="mgp-wrap" id="mgp-wrap">
+      <div class="mgp-select-wrap">
+        <select class="mgp-select" id="mgp-select" onchange="selectMobileGame(this.value)">
+          <option value="">— Pick a game —</option>
+        </select>
+        <span class="mgp-arrow">▾</span>
+      </div>
+    </div>
+    <div id="mgp-detail"></div>
+
+    <div class="games-grid" id="games-grid"></div>
+  </div>
+
+  <div class="bb-panel" id="bbp-matchup">
+    <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink);margin-bottom:.2rem">Matchup Analyzer</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);margin-bottom:1.1rem;letter-spacing:.06em">HEAD-TO-HEAD EFFICIENCY · SPREAD SCENARIOS · KEY ADVANTAGES</div>
+    <div class="ma-selrow">
+      <div class="sel-grp"><select id="ma-team-a" onchange="renderMatchup()"></select><span class="sel-arrow">▾</span></div>
+      <div class="ma-vs">VS</div>
+      <div class="sel-grp"><select id="ma-team-b" onchange="renderMatchup()"></select><span class="sel-arrow">▾</span></div>
+      <button class="swap-btn" onclick="swapMatchup()">⇄ Swap</button>
+    </div>
+    <div class="ma-grid" id="ma-cards"></div>
+    <div class="ma-advantages" id="ma-advantages"></div>
+    <div class="ma-spread-box" id="ma-spreads"></div>
+  </div>
+
+  <div class="bb-panel" id="bbp-bracket">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1rem">
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink);line-height:1">2026 NCAA Tournament</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);margin-top:.25rem;letter-spacing:.06em">68 TEAMS · 6 ROUNDS · CLICK ANY TEAM TO ADVANCE · MODEL WIN PROBABILITIES</div>
+    </div>
+    <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+      <button class="brk-region-btn on" onclick="setBrkRegion('first4',this)">First Four</button>
+      <button class="brk-region-btn" onclick="setBrkRegion('east',this)">East</button>
+      <button class="brk-region-btn" onclick="setBrkRegion('west',this)">West</button>
+      <button class="brk-region-btn" onclick="setBrkRegion('south',this)">South</button>
+      <button class="brk-region-btn" onclick="setBrkRegion('midwest',this)">Midwest</button>
+      <button class="brk-region-btn" onclick="setBrkRegion('finalfour',this)">🏆 Final Four</button>
+      <button onclick="resetFullBracket()" style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);background:var(--bg4);border:1px solid var(--bdr-ink2);border-radius:6px;padding:.32rem .75rem;cursor:pointer;margin-left:.25rem">↺ Reset</button>
+    </div>
+  </div>
+  <div id="brk-container" style="overflow-x:auto;padding-bottom:.75rem"></div>
+  <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:.56rem;color:var(--ink4);margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bdr-ink)">
+    <span>Win prob: <span style="color:var(--bb);font-weight:600">● 60%+</span></span>
+    <span><span style="color:var(--yellow);font-weight:600">● 45–60%</span></span>
+    <span><span style="color:var(--ink4)">● &lt;45%</span></span>
+    <span style="margin-left:auto">⬛ = Eliminated &nbsp;|&nbsp; 🟧 = Advanced &nbsp;|&nbsp; 🏆 = Champion</span>
+  </div>
+</div>
+<div class="bb-panel" id="bbp-rankings">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink)">Efficiency Rankings</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);margin-top:.15rem;letter-spacing:.06em">ADJ. OFFENSIVE &amp; DEFENSIVE EFFICIENCY · PACE · STRENGTH OF SCHEDULE</div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4)">Click column header to sort</div>
+    </div>
+    <div class="card"><div style="overflow-x:auto">
+      <table class="rk-tbl">
+        <thead><tr>
+          <th onclick="sortRk('rk',this)">#</th>
+          <th onclick="sortRk('name',this)" style="text-align:left;cursor:pointer">Team</th>
+          <th onclick="sortRk('rec',this)" style="text-align:left;cursor:pointer">Record</th>
+          <th onclick="sortRk('adjO',this)">AdjO ↕</th>
+          <th onclick="sortRk('adjD',this)">AdjD ↕</th>
+          <th onclick="sortRk('net',this)">Net ↕</th>
+          <th onclick="sortRk('pace',this)">Pace ↕</th>
+          <th onclick="sortRk('sos',this)">SOS ↕</th>
+          <th onclick="sortRk('ats',this)">ATS ↕</th>
+          <th onclick="sortRk('ou',this)">O/U ↕</th>
+        </tr></thead>
+        <tbody id="rk-body"></tbody>
+      </table>
+    </div></div>
+  </div>
+
+  <div class="bb-panel" id="bbp-ats">
+    <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:var(--ink);margin-bottom:.2rem">ATS Situational Trends</div>
+    <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--ink4);margin-bottom:1rem;letter-spacing:.06em">AGAINST THE SPREAD · 2025–26 SEASON</div>
+    <div class="ats-filter-row">
+      <span class="ats-filter-lbl">Sort by:</span>
+      <button class="ats-filter-btn on" onclick="filterATS('overall',this)">Overall</button>
+      <button class="ats-filter-btn" onclick="filterATS('fav',this)">As Favorite</button>
+      <button class="ats-filter-btn" onclick="filterATS('dog',this)">As Underdog</button>
+      <button class="ats-filter-btn" onclick="filterATS('home',this)">Home</button>
+      <button class="ats-filter-btn" onclick="filterATS('away',this)">Away</button>
+    </div>
+    <div style="overflow-x:auto"><table class="ats-tbl" id="ats-list"></table></div>
+  </div>
+
+</div>
+
+<script>
+/* ── DATA ── */
+const LB=[
+  {p:'1',  n:'Schauffele, Xander',s:-10,t:'-',th:'F',w:23.73,t5:68.4,t10:85.6,c:100,cls:'r1'},
+  {p:'2',  n:'Young, Cameron',    s:-9, t:'-',th:'F',w:16.04,t5:58.6,t10:78.5,c:100,cls:'r2'},
+  {p:'T3', n:'Aberg, Ludvig',     s:-8, t:'-',th:'5',w:16.34,t5:54.6,t10:73.0,c:100,cls:'r3'},
+  {p:'T3', n:'Conners, Corey',    s:-8, t:'-',th:'F',w:4.35, t5:32.2,t10:55.4,c:100,cls:'r3'},
+  {p:'5',  n:'Straka, Sepp',      s:-7, t:'-',th:'F',w:3.07, t5:26.6,t10:49.1,c:100},
+  {p:'T6', n:'Bridgeman, Jacob',  s:-6, t:'-',th:'F',w:2.51, t5:21.8,t10:43.3,c:100},
+  {p:'T6', n:'Hodges, Lee',       s:-6, t:'-',th:'F',w:0.66, t5:10.0,t10:24.6,c:100},
+  {p:'T8', n:'Henley, Russell',   s:-5, t:'-',th:'4',w:5.48, t5:30.3,t10:50.0,c:98.9},
+  {p:'T8', n:'Hovland, Viktor',   s:-5, t:'-',th:'4',w:4.80, t5:27.2,t10:45.5,c:98.7},
+  {p:'T8', n:'Smotherman, Austin',s:-5, t:'-',th:'F',w:0.05, t5:1.9, t10:6.5, c:100},
+  {p:'T11',n:'McNealy, Maverick', s:-4, t:'-',th:'4',w:3.24, t5:21.0,t10:39.0,c:97.5},
+  {p:'T11',n:'Thomas, Justin',    s:-4, t:'-',th:'4',w:1.08, t5:10.3,t10:22.5,c:95.3},
+  {p:'T11',n:'Mitchell, Keith',   s:-4, t:'-',th:'F',w:0.51, t5:8.3, t10:21.4,c:100},
+  {p:'T11',n:'Hisatsune, Ryo',    s:-4, t:'-',th:'F',w:0.41, t5:6.6, t10:18.9,c:100},
+  {p:'T11',n:'Rose, Justin',      s:-4, t:'-',th:'F',w:0.40, t5:7.1, t10:19.5,c:100},
+  {p:'T11',n:'Day, Jason',        s:-4, t:'-',th:'F',w:0.39, t5:6.0, t10:17.4,c:100},
+  {p:'T11',n:'Smalley, Alex',     s:-4, t:'-',th:'F',w:0.32, t5:5.9, t10:17.0,c:100},
+  {p:'T11',n:'Rodgers, Patrick',  s:-4, t:'-',th:'F',w:0.22, t5:4.7, t10:14.4,c:100},
+  {p:'T19',n:'Fitzpatrick, Matt', s:-3, t:'-',th:'3',w:2.22, t5:17.4,t10:33.8,c:94.2},
+  {p:'T19',n:'Finau, Tony',       s:-3, t:'-',th:'6',w:0.32, t5:5.0, t10:12.3,c:90.9},
+  {p:'T19',n:'Spieth, Jordan',    s:-3, t:'-',th:'F',w:0.39, t5:6.2, t10:17.6,c:100},
+];
+const DIST=[
+  {x:'-31',p:0},{x:'-30',p:0},{x:'-29',p:0},{x:'-28',p:0},{x:'-27',p:0},
+  {x:'-26',p:0},{x:'-25',p:0},{x:'-24',p:1},{x:'-23',p:2},{x:'-22',p:5},
+  {x:'-21',p:8},{x:'-20',p:12},{x:'-19',p:15},{x:'-18',p:15},{x:'-17',p:12},
+  {x:'-16',p:8},{x:'-15',p:5},{x:'-14',p:5},{x:'-13',p:3},{x:'-12',p:2},
+  {x:'-11',p:1},{x:'-10',p:1},{x:'-9',p:1},{x:'-8',p:1},{x:'-7',p:1},
+  {x:'-6',p:1},{x:'-5',p:0},{x:'-4',p:0},{x:'-3',p:0},{x:'-2',p:0},{x:'-1',p:0},
+];
+const SG_DATA=[
+  {n:'Schauffele, Xander',tee:1.42,app:1.81,sh:0.55,pu:0.93},
+  {n:'Young, Cameron',    tee:1.18,app:1.55,sh:0.28,pu:0.62},
+  {n:'Aberg, Ludvig',     tee:0.95,app:1.62,sh:0.44,pu:0.18},
+  {n:'Conners, Corey',    tee:0.34,app:1.88,sh:-0.12,pu:-0.44},
+  {n:'Henley, Russell',   tee:0.22,app:0.95,sh:1.12,pu:0.74},
+  {n:'Hovland, Viktor',   tee:1.55,app:0.88,sh:-0.28,pu:0.33},
+  {n:'Straka, Sepp',      tee:0.42,app:0.76,sh:0.55,pu:0.42},
+  {n:'Thomas, Justin',    tee:0.88,app:0.64,sh:0.88,pu:-0.34},
+  {n:'McNealy, Maverick', tee:0.33,app:0.55,sh:0.72,pu:0.65},
+  {n:'Bridgeman, Jacob',  tee:0.18,app:0.82,sh:0.33,pu:0.15},
+];
+const MARKET=[
+  {n:'Schauffele, Xander',book:18.2},{n:'Young, Cameron',book:13.5},
+  {n:'Aberg, Ludvig',book:14.8},{n:'Conners, Corey',book:5.2},
+  {n:'Henley, Russell',book:3.8},{n:'Hovland, Viktor',book:4.2},
+  {n:'Straka, Sepp',book:3.8},{n:'Thomas, Justin',book:1.8},
+  {n:'McNealy, Maverick',book:2.1},{n:'Bridgeman, Jacob',book:1.8},
+];
+const HOLES=[
+  {h:1,par:4,thru:92,e:0,b:11,pr:53,bo:26,d:2,r:'+0.22',td:2,wk:'+0.12',wr:4},
+  {h:2,par:5,thru:92,e:6,b:39,pr:44,bo:3,d:0,r:'-0.52',td:18,wk:'-0.37',wr:17},
+  {h:3,par:3,thru:89,e:0,b:15,pr:61,bo:12,d:1,r:'-0.01',td:12,wk:'+0.06',wr:11},
+  {h:4,par:4,thru:86,e:0,b:16,pr:55,bo:13,d:2,r:'+0.01',td:11,wk:'+0.02',wr:12},
+  {h:5,par:4,thru:82,e:0,b:12,pr:48,bo:19,d:3,r:'+0.16',td:4,wk:'+0.11',wr:5},
+  {h:6,par:4,thru:80,e:0,b:16,pr:55,bo:7,d:2,r:'-0.06',td:14,wk:'-0.02',wr:14},
+  {h:7,par:4,thru:72,e:0,b:9,pr:49,bo:10,d:4,r:'+0.18',td:3,wk:'+0.08',wr:10},
+  {h:8,par:3,thru:69,e:0,b:8,pr:47,bo:12,d:2,r:'+0.13',td:5,wk:'+0.13',wr:3},
+  {h:9,par:5,thru:63,e:2,b:19,pr:31,bo:10,d:1,r:'-0.17',td:15,wk:'-0.14',wr:15},
+  {h:10,par:4,thru:93,e:0,b:16,pr:53,bo:20,d:4,r:'+0.13',td:6,wk:'+0.08',wr:9},
+  {h:11,par:5,thru:93,e:1,b:30,pr:52,bo:7,d:3,r:'-0.19',td:16,wk:'-0.17',wr:16},
+  {h:12,par:4,thru:90,e:0,b:11,pr:67,bo:10,d:2,r:'+0.03',td:10,wk:'E',wr:13},
+  {h:13,par:3,thru:85,e:0,b:11,pr:57,bo:15,d:2,r:'+0.12',td:8,wk:'+0.09',wr:8},
+  {h:14,par:4,thru:82,e:0,b:11,pr:54,bo:13,d:4,r:'+0.12',td:7,wk:'+0.23',wr:2},
+  {h:15,par:4,thru:78,e:0,b:11,pr:52,bo:15,d:0,r:'+0.05',td:9,wk:'+0.09',wr:7},
+  {h:16,par:5,thru:73,e:2,b:27,pr:38,bo:6,d:0,r:'-0.34',td:17,wk:'-0.39',wr:18},
+  {h:17,par:3,thru:69,e:0,b:9,pr:53,bo:7,d:0,r:'-0.03',td:13,wk:'+0.11',wr:6},
+  {h:18,par:4,thru:66,e:0,b:7,pr:34,bo:21,d:4,r:'+0.33',td:1,wk:'+0.32',wr:1},
+];
+const PROBS=[
+  {h:1,par:4,avg:4.12,e:0,bi:14.1,pa:61.2,bo:22.7,d:1.9},{h:2,par:5,avg:4.63,e:4.2,bi:37.1,pa:50.2,bo:8.1,d:0.4},
+  {h:3,par:3,avg:3.06,e:0,bi:12.7,pa:70.0,bo:15.7,d:1.6},{h:4,par:4,avg:4.02,e:0,bi:19.1,pa:63.1,bo:14.4,d:3.4},
+  {h:5,par:4,avg:4.11,e:0,bi:15.0,pa:62.2,bo:18.8,d:3.6},{h:6,par:4,avg:3.98,e:0,bi:21.5,pa:62.4,bo:13.6,d:2.8},
+  {h:7,par:4,avg:4.08,e:0,bi:16.7,pa:61.9,bo:18.3,d:3.0},{h:8,par:3,avg:3.13,e:0,bi:8.7,pa:71.6,bo:17.5,d:1.9},
+  {h:9,par:5,avg:4.86,e:1.6,bi:28.3,pa:52.4,bo:15.2,d:1.2},{h:10,par:4,avg:4.13,e:0,bi:13.8,pa:60.5,bo:22.8,d:2.9},
+  {h:11,par:5,avg:4.55,e:0.8,bi:33.2,pa:53.6,bo:10.4,d:2.0},{h:12,par:4,avg:4.03,e:0,bi:18.5,pa:64.2,bo:14.8,d:2.5},
+  {h:13,par:3,avg:3.18,e:0,bi:7.8,pa:68.3,bo:20.6,d:3.3},{h:14,par:4,avg:4.05,e:0,bi:17.3,pa:60.8,bo:17.7,d:4.2},
+  {h:15,par:4,avg:4.08,e:0,bi:15.6,pa:62.5,bo:18.7,d:3.2},{h:16,par:5,avg:4.48,e:2.2,bi:39.4,pa:47.3,bo:9.6,d:1.5},
+  {h:17,par:3,avg:3.21,e:0,bi:6.5,pa:65.8,bo:24.3,d:3.4},{h:18,par:4,avg:4.28,e:0,bi:10.2,pa:52.6,bo:30.8,d:6.4},
+];
+const FIT=[
+  {n:'Schauffele, Xander',score:92,badge:'elite'},{n:'Hovland, Viktor',score:88,badge:'elite'},
+  {n:'Aberg, Ludvig',score:85,badge:'elite'},{n:'Young, Cameron',score:82,badge:'good'},
+  {n:'Thomas, Justin',score:79,badge:'good'},{n:'Conners, Corey',score:74,badge:'good'},
+  {n:'McNealy, Maverick',score:71,badge:'good'},{n:'Henley, Russell',score:68,badge:'avg'},
+  {n:'Straka, Sepp',score:65,badge:'avg'},{n:'Bridgeman, Jacob',score:61,badge:'avg'},
+];
+const CUT_PLAYERS=[
+  {n:'Fitzpatrick, Matt',s:-3,st:'make'},{n:'Finau, Tony',s:-3,st:'make'},{n:'Spieth, Jordan',s:-3,st:'make'},
+  {n:'Fleetwood, Tommy',s:-2,st:'bubble'},{n:'Hatton, Tyrrell',s:-2,st:'bubble'},
+  {n:'DeChambeau, B.',s:-1,st:'miss'},{n:'Rahm, Jon',s:-1,st:'miss'},{n:'Morikawa, C.',s:0,st:'miss'},
+];
+const RECORDS={
+  'Abilene Christian':['33-24-8','6-4-0',67.8],'Air Force':['30-33-0','6-4-0',66.8],
+  'Kansas':['38-10-2','8-2-0',72.4],'Duke':['36-14-0','7-3-0',74.1],
+  'Kentucky':['29-21-5','5-5-0',68.9],'Houston':['37-13-2','8-2-0',71.5],
+  'Auburn':['35-15-1','7-3-0',70.8],'Tennessee':['33-18-4','6-4-0',69.3],
+};
+
+let lbData=[...LB],sortKey=null,sortDir=-1,currentAdj=-0.3,lbView='round';
+
+function scStr(s){return s===0?'E':s>0?`+${s}`:`${s}`}
+function scCls(s){return s<0?'sn':s>0?'sp':'se'}
+function probToAmerican(p){
+  if(!p||p<=0)return'N/A';
+  if(p>=99)return'-9999';
+  if(p>=50)return'-'+Math.round(p/(100-p)*100);
+  return'+'+Math.round((100-p)/p*100);
+}
+
+function calcAdj(adj){
+  const mx=Math.max(...LB.map(r=>r.w));
+  const a2=LB.map(r=>{const sn=Math.log1p(r.w)/Math.log1p(mx);return{...r,
+    w:Math.max(.01,r.w*Math.exp(adj*.30*(sn-.25))),
+    t5:Math.min(99.9,Math.max(.1,r.t5*Math.exp(adj*.18*(sn-.20)))),
+    t10:Math.min(100,Math.max(.1,r.t10*Math.exp(adj*.10*(sn-.15))))};});
+  const tot=a2.reduce((s,r)=>s+r.w,0);
+  return a2.map(r=>({...r,w:r.w*100/tot}));
+}
+
+function renderLB(data,forceRebuild){
+  data=data||lbData;
+  const tbody=document.getElementById('lb-body');
+  // In-place update if same view and same row count
+  if(!forceRebuild&&tbody.dataset.view===lbView&&tbody.children.length===data.length){
+    Array.from(tbody.querySelectorAll('tr')).forEach((row,i)=>{
+      const r=data[i];
+      row.className=r.cls||'';
+      const c=row.cells;
+      if(lbView==='round'){
+        c[0].textContent=r.p;c[1].textContent=r.n;
+        c[2].className=scCls(r.s);c[2].textContent=scStr(r.s);
+        c[3].textContent=r.t;c[4].textContent=r.th;
+        c[5].textContent=r.w.toFixed(2)+'%';c[6].textContent=r.t5.toFixed(1)+'%';
+        c[7].textContent=r.t10.toFixed(1)+'%';c[8].textContent=r.c.toFixed(1)+'%';
+        c[8].style.color=r.c<95?'var(--yellow)':'var(--ink3)';
+      }else{
+        c[0].textContent=r.p;c[1].textContent=r.n;
+        c[2].className=scCls(r.s);c[2].textContent=scStr(r.s);
+        const wo=probToAmerican(r.w);
+        c[3].textContent=wo;c[3].className='odds-cell'+(wo.startsWith('+')?'pos-odds':wo.startsWith('-')?' neg-odds':'');
+        c[4].textContent=probToAmerican(r.t5);
+        c[5].textContent=probToAmerican(r.t10);
+        const co=probToAmerican(r.c);
+        c[6].textContent=co;c[6].style.color=r.c<95?'var(--yellow)':'var(--ink3)';
+      }
+    });
+    return;
+  }
+  tbody.dataset.view=lbView;
+  if(lbView==='round'){
+    tbody.innerHTML=data.map((r,i)=>`
+      <tr class="${r.cls||''}" style="animation:rowIn .3s ease ${i*.015}s both">
+        <td>${r.p}</td><td>${r.n}</td>
+        <td class="${scCls(r.s)}">${scStr(r.s)}</td>
+        <td>${r.t}</td><td>${r.th}</td>
+        <td>${r.w.toFixed(2)}%</td><td>${r.t5.toFixed(1)}%</td><td>${r.t10.toFixed(1)}%</td>
+        <td style="color:${r.c<95?'var(--yellow)':'var(--ink3)'}">${r.c.toFixed(1)}%</td>
+      </tr>`).join('');
+  }else{
+    tbody.innerHTML=data.map((r,i)=>`
+      <tr class="${r.cls||''}" style="animation:rowIn .3s ease ${i*.015}s both">
+        <td>${r.p}</td><td>${r.n}</td>
+        <td class="${scCls(r.s)}">${scStr(r.s)}</td>
+        <td class="odds-cell${(w=>w.startsWith('+')?'pos-odds':w.startsWith('-')?' neg-odds':'')(probToAmerican(r.w))}">${probToAmerican(r.w)}</td>
+        <td class="odds-cell">${probToAmerican(r.t5)}</td>
+        <td class="odds-cell">${probToAmerican(r.t10)}</td>
+        <td class="odds-cell" style="color:${r.c<95?'var(--yellow)':'var(--ink3)'}">${probToAmerican(r.c)}</td>
+      </tr>`).join('');
+  }
+}
+
+function sortLb(key,th){
+  if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=-1;}
+  const m={score:'s',win:'w',top5:'t5',top10:'t10'};
+  lbData.sort((a,b)=>sortDir*(a[m[key]]-b[m[key]]));
+  document.querySelectorAll('.sortable').forEach(t=>t.classList.remove('sorted'));
+  th.classList.add('sorted');renderLB();
+}
+
+function top5At(sc,adjD){
+  const s=parseInt(sc);if(isNaN(s))return[];
+  const pl=(adjD||calcAdj(currentAdj)).slice(0,12).map(r=>{
+    const ef=Math.round(r.s*1.6);
+    return{name:r.n,raw:Math.exp(-.5*((s-ef)/5)**2)*Math.pow(Math.max(r.w,.01),.65)};
+  });
+  const tot=pl.reduce((s,p)=>s+p.raw,0);if(!tot)return[];
+  return pl.map(p=>({name:p.name,pct:p.raw/tot*100})).sort((a,b)=>b.pct-a.pct).slice(0,5);
+}
+
+function renderDist(adj){
+  adj=adj??currentAdj;
+  const sh=Math.round(adj*1.5);
+  const shifted=DIST.map((d,i)=>{const si=i-sh;return(si<0||si>=DIST.length)?{x:d.x,p:0}:{x:d.x,p:DIST[si].p};});
+  const mx=Math.max(...shifted.map(d=>d.p));
+  const wrap=document.getElementById('bars-wrap');
+  // Build skeleton once; update values in-place on subsequent calls
+  if(wrap.children.length!==shifted.length){
+    wrap.innerHTML=shifted.map(d=>`<div class="dbar" data-score="${d.x}" data-prob="0"><div class="dbar-lbl"></div><div class="dbar-f" style="height:0px;background:var(--gr-mid);opacity:0"></div></div>`).join('');
+    document.getElementById('dist-xrow').innerHTML=shifted.map((d,i)=>`<div class="dist-xl">${i%5===0?d.x:''}</div>`).join('');
+    // Tooltip via event delegation (set up once)
+    const tt=document.getElementById('tt');
+    wrap.addEventListener('mouseenter',e=>{
+      const bar=e.target.closest('.dbar');if(!bar)return;
+      const sc=bar.dataset.score,pr=bar.dataset.prob;if(!sc||pr=='0')return;
+      const t5=top5At(sc,calcAdj(currentAdj));
+      tt.innerHTML=`<div class="tt-title">Top 5 at ${sc}</div><div class="tt-sub">Win % at this score</div>`+
+        t5.map((p,i)=>`<div class="tt-row"><span class="tt-n">${i+1}.</span><span class="tt-name">${p.name}</span><span class="tt-pct ${p.pct>10?'hi':''}">${p.pct.toFixed(1)}%</span></div>`).join('');
+      posTT(e);tt.classList.add('show');
+    },true);
+    wrap.addEventListener('mousemove',e=>{if(e.target.closest('.dbar'))posTT(e);});
+    wrap.addEventListener('mouseleave',()=>document.getElementById('tt').classList.remove('show'),true);
+  }
+  // Update bar heights/colors in-place (smooth CSS transition handles animation)
+  Array.from(wrap.querySelectorAll('.dbar')).forEach((bar,i)=>{
+    const d=shifted[i];
+    const h=mx>0&&d.p>0?Math.max(3,Math.round(d.p/mx*72)):0;
+    const col=d.p>=12?'var(--gr2)':'var(--gr-mid)';
+    bar.dataset.score=d.x;bar.dataset.prob=d.p;
+    bar.querySelector('.dbar-lbl').textContent=d.p>0?d.p+'%':'';
+    const fill=bar.querySelector('.dbar-f');
+    fill.style.height=h+'px';fill.style.background=col;fill.style.opacity=d.p>0?1:0;
+  });
+}
+
+function posTT(e){
+  const tt=document.getElementById('tt'),tw=210,th=155;
+  let x=e.clientX+16,y=e.clientY-th/2;
+  if(x+tw>window.innerWidth-8)x=e.clientX-tw-16;
+  if(y<8)y=8;if(y+th>window.innerHeight-8)y=window.innerHeight-th-8;
+  tt.style.left=x+'px';tt.style.top=y+'px';
+}
+
+function renderSG(){
+  const mx=2.2;
+  document.getElementById('sg-list').innerHTML=SG_DATA.map((r,i)=>{
+    const tot=r.tee+r.app+r.sh+r.pu;
+    const cats=[{k:'TEE',v:r.tee},{k:'APP',v:r.app},{k:'SHT',v:r.sh},{k:'PUT',v:r.pu}];
+    return `<div class="sg-row">
+      <div class="sg-pos">${i+1}</div>
+      <div class="sg-nameblock">
+        <div class="sg-name">${r.n.split(',')[0]}</div>
+        <div class="sg-tot" style="color:${tot>=0?'var(--gr)':'var(--red)'}">${tot>=0?'+':''}${tot.toFixed(2)} total</div>
+      </div>
+      <div class="sg-bars">${cats.map(c=>{
+        const pct=Math.max(0,c.v/mx*100);
+        const col=c.v>=0.8?'var(--gr)':c.v>=0?'var(--gr3)':c.v>=-0.3?'var(--yellow)':'var(--red)';
+        return `<div class="sg-bar-row">
+          <div class="sg-cat">${c.k}</div>
+          <div class="sg-track"><div class="sg-fill" style="width:${pct}%;background:${col}"></div></div>
+          <div class="sg-val" style="color:${c.v>=0?'var(--ink3)':'var(--red)'}">${c.v>=0?'+':''}${c.v.toFixed(2)}</div>
+        </div>`;
+      }).join('')}</div></div>`;
+  }).join('');
+}
+
+function renderEdge(adj){
+  adj=adj??currentAdj;
+  const adjD=calcAdj(adj);
+  const list=document.getElementById('edge-list');
+  if(list.children.length!==MARKET.length){
+    // First render
+    list.innerHTML=MARKET.map(m=>{
+      const model=adjD.find(r=>r.n===m.n);if(!model)return'';
+      const mp=model.w,bp=m.book,edge=mp-bp,isBet=edge>1.5;
+      return `<div class="edge-row ${isBet?'positive':''}">
+        <div class="edge-name">${m.n.split(',')[0]}</div>
+        <div class="edge-model">${mp.toFixed(1)}%</div>
+        <div class="edge-book">${bp.toFixed(1)}%</div>
+        <div class="edge-ev ${edge>0?'ev-pos':'ev-neg'}">${edge>=0?'+':''}${edge.toFixed(1)}%</div>
+        <div style="width:34px;display:flex;justify-content:flex-end"><span class="edge-pill ${isBet?'ep-bet':'ep-pass'}">${isBet?'BET':'PASS'}</span></div>
+      </div>`;
+    }).join('');
+    return;
+  }
+  // In-place update — only numeric values change
+  Array.from(list.querySelectorAll('.edge-row')).forEach((row,i)=>{
+    const m=MARKET[i];const model=adjD.find(r=>r.n===m.n);if(!model)return;
+    const mp=model.w,bp=m.book,edge=mp-bp,isBet=edge>1.5;
+    row.className='edge-row'+(isBet?' positive':'');
+    row.querySelector('.edge-model').textContent=mp.toFixed(1)+'%';
+    const evEl=row.querySelector('.edge-ev');
+    evEl.textContent=(edge>=0?'+':'')+edge.toFixed(1)+'%';
+    evEl.className='edge-ev '+(edge>0?'ev-pos':'ev-neg');
+    const pill=row.querySelector('.edge-pill');
+    pill.className='edge-pill '+(isBet?'ep-bet':'ep-pass');
+    pill.textContent=isBet?'BET':'PASS';
+  });
+}
+
+function calcH2H(){
+  const an=document.getElementById('h2h-a').value,bn=document.getElementById('h2h-b').value;
+  const adj=calcAdj(currentAdj);
+  const a=adj.find(r=>r.n===an)||{w:5},b=adj.find(r=>r.n===bn)||{w:5};
+  const ap=a.w/(a.w+b.w)*100,bp=100-ap;
+  const aml=Math.round(ap>50?-(ap/(100-ap))*100:((100-ap)/ap)*100);
+  const bml=Math.round(bp>50?-(bp/(100-bp))*100:((100-bp)/bp)*100);
+  document.getElementById('h2h-result').innerHTML=`
+    <div class="h2h-names">
+      <div class="h2h-player" style="color:var(--gr)">${an.split(',')[0]}</div>
+      <div class="h2h-player" style="color:var(--red)">${bn.split(',')[0]}</div>
+    </div>
+    <div class="h2h-pct-row">
+      <div class="h2h-pct-a" style="flex:${ap}">${ap.toFixed(0)}%</div>
+      <div class="h2h-pct-b" style="flex:${bp}">${bp.toFixed(0)}%</div>
+    </div>
+    <div class="h2h-odds">
+      <span>${aml>0?'+':''}${aml} ML</span>
+      <span style="color:var(--ink4)">Head-to-Head Win Probability</span>
+      <span>${bml>0?'+':''}${bml} ML</span>
+    </div>`;
+}
+
+function renderCut(adj){
+  adj=adj??currentAdj;
+  const sh=Math.round(adj*.5),cn=-1+sh;
+  const cs=cn===0?'E':cn<0?`${cn}`:`+${cn}`;
+  document.getElementById('cut-num').textContent=cs;
+  document.getElementById('cut-num').style.color=cn<=0?'var(--gr)':'var(--red)';
+  document.getElementById('cut-band').textContent=`Range: ${cn+1>0?'+':''}${cn+1} to ${cn-1}`;
+  document.getElementById('cut-list').innerHTML=CUT_PLAYERS.map(p=>{
+    const sc=p.s===0?'E':p.s<0?`${p.s}`:`+${p.s}`;
+    const cls=p.st==='make'?'on-cut':p.st==='bubble'?'bubble':'miss';
+    const scls=p.st==='make'?'bs-make':p.st==='bubble'?'bs-bubble':'bs-miss';
+    const lbl=p.st==='make'?'Make Cut':p.st==='bubble'?'Bubble':'Miss Cut';
+    return `<div class="bubble-row ${cls}">
+      <div class="bubble-name">${p.n}</div>
+      <div class="bubble-score ${p.s<0?'vp':p.s>0?'vn':'se'}">${sc}</div>
+      <div class="bubble-status ${scls}">${lbl}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderFit(){
+  document.getElementById('fit-list').innerHTML=FIT.map((r,i)=>`
+    <div class="fit-row">
+      <div class="fit-rank">${i+1}</div>
+      <div class="fit-name">${r.n}</div>
+      <div class="fit-score-wrap">
+        <div class="fit-bar-bg"><div class="fit-bar-fill" style="width:${r.score}%"></div></div>
+        <div class="fit-val">${r.score}</div>
+        <span class="fit-badge ${r.badge==='elite'?'fb-elite':r.badge==='good'?'fb-good':'fb-avg'}">${r.badge.charAt(0).toUpperCase()+r.badge.slice(1)}</span>
+      </div>
+    </div>`).join('');
+}
+
+function vc(v){const n=parseFloat(v);if(isNaN(n)||v==='E')return'';return n<0?'vp':n>0?'vn':'';}
+function renderHoles(){
+  const ths=['Hole','Par','Thru','Eagle','Birdie','Par','Bogey','Dbl+','$Rnd','#Today','$Week','#Week'].map(h=>`<th>${h}</th>`).join('');
+  const rows=HOLES.map(h=>`<tr><td>${h.h}</td><td>${h.par}</td><td>${h.thru}</td><td>${h.e}</td>
+    <td class="bhi">${h.b}</td><td>${h.pr}</td><td class="blo">${h.bo}</td><td class="blo">${h.d}</td>
+    <td class="${vc(h.r)}">${h.r}</td><td>${h.td}</td><td class="${vc(h.wk)}">${h.wk}</td><td>${h.wr}</td></tr>`).join('');
+  document.getElementById('htbl').innerHTML=`<thead><tr>${ths}</tr></thead><tbody>${rows}</tbody>
+    <tfoot><tr><td colspan="8" style="text-align:right;font-family:var(--fu);color:var(--ink4)">Total</td>
+    <td class="vp">+0.15</td><td></td><td class="vp">+0.36</td><td></td></tr></tfoot>`;
+}
+function renderProbs(){
+  const ths=['Hole','Par','Avg','Eagle%','Birdie%','Par%','Bogey%','Dbl+%'].map(h=>`<th>${h}</th>`).join('');
+  const rows=PROBS.map(h=>`<tr><td>${h.h}</td><td>${h.par}</td>
+    <td style="color:${h.avg<h.par?'var(--gr)':h.avg>h.par?'var(--red)':'var(--ink3)'};font-weight:500">${h.avg.toFixed(2)}</td>
+    <td>${h.e.toFixed(1)}%</td><td class="bhi">${h.bi.toFixed(1)}%</td>
+    <td>${h.pa.toFixed(1)}%</td><td class="blo">${h.bo.toFixed(1)}%</td><td class="blo">${h.d.toFixed(1)}%</td></tr>`).join('');
+  document.getElementById('ptbl').innerHTML=`<thead><tr>${ths}</tr></thead><tbody>${rows}</tbody>`;
+}
+
+function onSlider(el){
+  const v=parseFloat(el.value);currentAdj=v;
+  const lbl=v<0?`Easier (${v.toFixed(1)})`:v>0?`Harder (+${v.toFixed(1)})`:'Neutral (0.0)';
+  document.getElementById('slval').textContent=lbl;
+  document.getElementById('slval').style.color=v<0?'var(--gr)':v>0?'var(--red)':'var(--yellow)';
+  const adj=calcAdj(v);
+  if(sortKey){const m={score:'s',win:'w',top5:'t5',top10:'t10'};adj.sort((a,b)=>sortDir*(a[m[sortKey]]-b[m[sortKey]]));}
+  renderLB(adj);renderDist(v);renderEdge(v);renderCut(v);calcH2H();
+}
+
+function toggleC(head){head.closest('.card').classList.toggle('collapsed')}
+function setLbV(btn){
+  btn.closest('.tg').querySelectorAll('.tgb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  lbView=btn.textContent.trim().toLowerCase().includes('odds')?'odds':'round';
+  const thead=document.querySelector('.lb thead tr');
+  if(lbView==='odds'){
+    thead.innerHTML='<th>POS</th><th>PLAYER</th><th>SCORE</th><th>WIN ODDS</th><th>TOP 5</th><th>TOP 10</th><th>CUT ODDS</th>';
+  }else{
+    thead.innerHTML='<th>POS</th><th>PLAYER</th><th class="sortable" onclick="sortLb(\'score\',this)">SCORE ↕</th><th>TODAY</th><th>THRU</th><th class="sortable" onclick="sortLb(\'win\',this)">WIN%</th><th class="sortable" onclick="sortLb(\'top5\',this)">TOP 5</th><th class="sortable" onclick="sortLb(\'top10\',this)">TOP 10</th><th>CUT%</th>';
+  }
+  renderLB(lbData,true);
+}
+function showTab(btn,id){
+  btn.closest('.card').querySelectorAll('.itab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  btn.closest('.card').querySelectorAll('.ipanel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+}
+function switchView(s){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.sport-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('view-'+s).classList.add('on');
+  document.getElementById('stab-'+s).classList.add('on');
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    const oc=b.getAttribute('onclick')||'';
+    if(oc.includes("'"+s+"'"))b.classList.add('on');
+  });
+}
+function switchTab(s,btn){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');switchView(s);
+}
+
+/* ══════════════════════════════════════
+   BASKETBALL ENGINE
+══════════════════════════════════════ */
+const BB_TEAMS={
+  Kansas:    {seed:1,rec:'28-6', adjO:123.4,adjD:91.2,pace:71.2,sos:12.4,ats:'18-10-2',ou:'16-12'},
+  Duke:      {seed:2,rec:'27-7', adjO:121.8,adjD:93.5,pace:70.1,sos:11.8,ats:'17-11-2',ou:'14-14'},
+  Houston:   {seed:1,rec:'29-5', adjO:119.2,adjD:89.8,pace:65.4,sos:10.9,ats:'20-8-2', ou:'12-18'},
+  Auburn:    {seed:2,rec:'26-8', adjO:120.5,adjD:92.4,pace:72.8,sos:13.2,ats:'16-12-2',ou:'17-13'},
+  Tennessee: {seed:3,rec:'25-9', adjO:118.7,adjD:90.1,pace:68.3,sos:14.1,ats:'15-13-2',ou:'13-17'},
+  Kentucky:  {seed:4,rec:'24-10',adjO:117.3,adjD:93.8,pace:69.5,sos:12.8,ats:'14-14-2',ou:'15-15'},
+  Gonzaga:   {seed:3,rec:'26-8', adjO:122.1,adjD:95.2,pace:74.1,sos:8.4, ats:'19-9-2', ou:'19-11'},
+  UConn:     {seed:1,rec:'27-7', adjO:120.8,adjD:90.5,pace:66.9,sos:11.5,ats:'18-10-2',ou:'11-19'},
+  Purdue:    {seed:2,rec:'26-8', adjO:119.5,adjD:91.8,pace:67.4,sos:10.2,ats:'17-11-2',ou:'16-12'},
+  Marquette: {seed:3,rec:'25-9', adjO:118.2,adjD:92.7,pace:70.8,sos:9.8, ats:'16-12-2',ou:'18-10'},
+};
+
+const BB_STATS={
+  Kansas:    {adjO:123.4,adjD:91.2,pace:71.2,sos:12.4,threeP:38.2,ftr:0.38,to:14.1,reb:52.3},
+  Duke:      {adjO:121.8,adjD:93.5,pace:70.1,sos:11.8,threeP:37.5,ftr:0.36,to:13.8,reb:50.8},
+  Houston:   {adjO:119.2,adjD:89.8,pace:65.4,sos:10.9,threeP:34.1,ftr:0.42,to:12.9,reb:53.1},
+  Auburn:    {adjO:120.5,adjD:92.4,pace:72.8,sos:13.2,threeP:36.8,ftr:0.39,to:14.5,reb:51.2},
+  Tennessee: {adjO:118.7,adjD:90.1,pace:68.3,sos:14.1,threeP:35.4,ftr:0.44,to:13.2,reb:54.0},
+  Kentucky:  {adjO:117.3,adjD:93.8,pace:69.5,sos:12.8,threeP:36.2,ftr:0.37,to:15.1,reb:49.5},
+  Gonzaga:   {adjO:122.1,adjD:95.2,pace:74.1,sos:8.4, threeP:39.1,ftr:0.35,to:13.4,reb:51.8},
+  UConn:     {adjO:120.8,adjD:90.5,pace:66.9,sos:11.5,threeP:35.8,ftr:0.41,to:12.5,reb:53.5},
+  Purdue:    {adjO:119.5,adjD:91.8,pace:67.4,sos:10.2,threeP:37.2,ftr:0.40,to:13.7,reb:55.2},
+  Marquette: {adjO:118.2,adjD:92.7,pace:70.8,sos:9.8, threeP:36.5,ftr:0.38,to:14.8,reb:50.1},
+};
+
+const GAMES_DATA=[
+  {id:1,away:{name:'Kansas',seed:1,rec:'28-6'},home:{name:'Duke',seed:2,rec:'27-7'},
+   status:'live',liveTime:'2H 14:22',network:'CBS',awayScore:42,homeScore:38,
+   spread:{line:-3.5,open:-2.5,fav:'away'},ml:{away:-185,home:+155},ou:{line:152.5,open:148.5},
+   model:{pick:'Kansas',score:'78-74',edge:+4.8,ouPick:'over',ouEdge:+2.1}},
+  {id:2,away:{name:'Houston',seed:1,rec:'29-5'},home:{name:'Tennessee',seed:3,rec:'25-9'},
+   status:'live',liveTime:'1H 08:44',network:'TBS',awayScore:31,homeScore:28,
+   spread:{line:-5.5,open:-6.5,fav:'away'},ml:{away:-220,home:+185},ou:{line:135.5,open:137.0},
+   model:{pick:'Houston',score:'68-62',edge:+1.2,ouPick:'under',ouEdge:-3.4}},
+  {id:3,away:{name:'Gonzaga',seed:3,rec:'26-8'},home:{name:'Kentucky',seed:4,rec:'24-10'},
+   status:'tonight',liveTime:'7:00 PM ET',network:'ESPN',awayScore:null,homeScore:null,
+   spread:{line:-2.0,open:-1.5,fav:'away'},ml:{away:-120,home:+102},ou:{line:155.5,open:154.0},
+   model:{pick:'Gonzaga',score:'82-80',edge:+3.5,ouPick:'over',ouEdge:+4.2}},
+  {id:4,away:{name:'Auburn',seed:2,rec:'26-8'},home:{name:'UConn',seed:1,rec:'27-7'},
+   status:'tonight',liveTime:'9:30 PM ET',network:'TBS',awayScore:null,homeScore:null,
+   spread:{line:+2.5,open:+1.5,fav:'home'},ml:{away:+112,home:-132},ou:{line:146.5,open:145.0},
+   model:{pick:'UConn',score:'74-71',edge:+2.8,ouPick:'under',ouEdge:-1.8}},
+  {id:5,away:{name:'Purdue',seed:2,rec:'26-8'},home:{name:'Marquette',seed:3,rec:'25-9'},
+   status:'tonight',liveTime:'7:30 PM ET',network:'ESPN2',awayScore:null,homeScore:null,
+   spread:{line:-1.5,open:-2.5,fav:'away'},ml:{away:-108,home:-110},ou:{line:148.5,open:147.0},
+   model:{pick:'Marquette',score:'78-75',edge:+3.2,ouPick:'over',ouEdge:+2.9}},
+  {id:6,away:{name:'Tennessee',seed:3,rec:'25-9'},home:{name:'Kansas',seed:1,rec:'28-6'},
+   status:'upcoming',liveTime:'Tomorrow 6 PM',network:'CBS',awayScore:null,homeScore:null,
+   spread:{line:-7.0,open:-6.5,fav:'home'},ml:{away:+240,home:-280},ou:{line:140.5,open:141.0},
+   model:{pick:'Kansas',score:'72-64',edge:+0.5,ouPick:'under',ouEdge:-2.1}},
+];
+
+const ATS_DATA={
+  Houston:      {overall:'20-8-2', home:'11-3-1',away:'9-5-1', asFav:'16-6-2', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  Gonzaga:      {overall:'19-9-2', home:'10-4-1',away:'9-5-1', asFav:'15-7-2', asDog:'4-2-0',last5:'W-W-W-W-W',streak:'W5'},
+  Kansas:       {overall:'18-10-2',home:'10-4-1',away:'8-6-1', asFav:'14-8-2', asDog:'4-2-0',last5:'W-W-W-L-W',streak:'W3'},
+  UConn:        {overall:'18-10-2',home:'10-4-1',away:'8-6-1', asFav:'14-8-2', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  Duke:         {overall:'17-11-2',home:'9-5-1', away:'8-6-1', asFav:'12-9-2', asDog:'5-2-0',last5:'W-L-W-W-L',streak:'L1'},
+  Purdue:       {overall:'17-11-2',home:'9-5-1', away:'8-6-1', asFav:'13-9-2', asDog:'4-2-0',last5:'L-W-W-W-L',streak:'L1'},
+  Auburn:       {overall:'16-12-2',home:'8-6-1', away:'8-6-1', asFav:'11-8-2', asDog:'5-4-0',last5:'L-W-W-L-W',streak:'W1'},
+  Marquette:    {overall:'16-12-2',home:'8-6-1', away:'8-6-1', asFav:'12-9-2', asDog:'4-3-0',last5:'W-W-W-L-W',streak:'W3'},
+  Tennessee:    {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'10-9-2', asDog:'5-4-0',last5:'W-L-L-W-W',streak:'W2'},
+  Kentucky:     {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-L-W-L-W',streak:'W1'},
+  Alabama:      {overall:'19-9-1', home:'11-3-1',away:'8-6-0', asFav:'15-7-1', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  'Iowa St.':   {overall:'18-10-2',home:'10-4-1',away:'8-6-1', asFav:'14-8-2', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  Wisconsin:    {overall:'17-11-1',home:'9-5-1', away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'L-W-W-W-W',streak:'W4'},
+  'Michigan St.':{overall:'17-11-2',home:'9-5-1',away:'8-6-1',asFav:'12-8-2', asDog:'5-3-0',last5:'W-W-L-W-L',streak:'L1'},
+  'Texas A&M':  {overall:'16-12-1',home:'9-5-0', away:'7-7-1', asFav:'12-9-1', asDog:'4-3-0',last5:'W-L-W-W-L',streak:'L1'},
+  Maryland:     {overall:'16-12-2',home:'9-5-1', away:'7-7-1', asFav:'11-8-2', asDog:'5-4-0',last5:'L-W-L-W-W',streak:'W2'},
+  Arizona:      {overall:'15-13-1',home:'8-6-1', away:'7-7-0', asFav:'10-9-1', asDog:'5-4-0',last5:'W-W-W-L-L',streak:'L2'},
+  UCLA:         {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'10-9-2', asDog:'5-4-0',last5:'L-W-W-W-L',streak:'L1'},
+  "St. John's": {overall:'18-10-1',home:'10-4-1',away:'8-6-0', asFav:'14-8-1', asDog:'4-2-0',last5:'W-W-W-L-W',streak:'W3'},
+  BYU:          {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'11-8-2', asDog:'4-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  Creighton:    {overall:'14-14-2',home:'8-6-1', away:'6-8-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-W-L-W-L',streak:'L1'},
+  Oregon:       {overall:'15-13-1',home:'8-6-0', away:'7-7-1', asFav:'10-9-1', asDog:'5-4-0',last5:'W-W-L-W-W',streak:'W2'},
+  'Ole Miss':   {overall:'16-12-1',home:'9-5-1', away:'7-7-0', asFav:'12-9-1', asDog:'4-3-0',last5:'L-W-W-W-L',streak:'L1'},
+  Illinois:     {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-L-W-W',streak:'W2'},
+  Michigan:     {overall:'15-13-1',home:'8-6-1', away:'7-7-0', asFav:'10-9-1', asDog:'5-4-0',last5:'L-L-W-W-W',streak:'W3'},
+  Texas:        {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'W-L-W-L-L',streak:'L2'},
+  Indiana:      {overall:'14-14-1',home:'8-6-0', away:'6-8-1', asFav:'9-9-1',  asDog:'5-5-0',last5:'W-W-L-L-W',streak:'W1'},
+  Clemson:      {overall:'16-12-2',home:'9-5-1', away:'7-7-1', asFav:'11-8-2', asDog:'5-4-0',last5:'W-L-W-W-W',streak:'W3'},
+  Vanderbilt:   {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'7-9-2',  asDog:'6-6-0',last5:'L-W-L-W-L',streak:'L1'},
+  Georgia:      {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'6-9-2',  asDog:'6-7-0',last5:'L-L-W-L-W',streak:'W1'},
+  'Colorado St.':{overall:'17-11-1',home:'9-5-1',away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  'San Diego St.':{overall:'15-13-1',home:'8-6-0',away:'7-7-1',asFav:'10-9-1', asDog:'5-4-0',last5:'L-W-W-W-W',streak:'W4'},
+  Missouri:     {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  Penn:         {overall:'18-10-0',home:'10-4-0',away:'8-6-0', asFav:'14-8-0', asDog:'4-2-0',last5:'W-W-W-W-L',streak:'L1'},
+  Drake:        {overall:'17-11-1',home:'9-5-1', away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  VCU:          {overall:'16-12-1',home:'9-5-0', away:'7-7-1', asFav:'11-8-1', asDog:'5-4-0',last5:'W-L-W-W-L',streak:'L1'},
+  Xavier:       {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-10-2', asDog:'5-5-0',last5:'L-W-L-L-W',streak:'W1'},
+  Oklahoma:     {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'L-L-W-W-L',streak:'L1'},
+  Louisville:   {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'W-W-L-W-L',streak:'L1'},
+  'Boise St.':  {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'11-8-2', asDog:'4-5-0',last5:'L-W-W-L-W',streak:'W1'},
+  'New Mexico':  {overall:'16-12-1',home:'9-5-1',away:'7-7-0', asFav:'12-9-1', asDog:'4-3-0',last5:'W-W-L-W-W',streak:'W2'},
+  Utah:         {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'L-W-W-L-L',streak:'L2'},
+  Memphis:      {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-L-W-W',streak:'W2'},
+  'Penn St.':   {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'L-W-L-L-W',streak:'W1'},
+  'Utah St.':   {overall:'15-13-1',home:'8-6-1', away:'7-7-0', asFav:'11-8-1', asDog:'4-5-0',last5:'W-W-W-L-W',streak:'W3'},
+  Akron:        {overall:'17-11-1',home:'9-5-1', away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-L-W-W',streak:'W2'},
+  Yale:         {overall:'16-12-0',home:'9-5-0', away:'7-7-0', asFav:'12-9-0', asDog:'4-3-0',last5:'L-W-W-W-L',streak:'L1'},
+  Colgate:      {overall:'18-10-1',home:'10-4-1',away:'8-6-0', asFav:'14-8-1', asDog:'4-2-0',last5:'W-W-W-W-W',streak:'W5'},
+  'Grand Canyon':{overall:'17-11-1',home:'9-5-1',away:'8-6-0', asFav:'13-9-1', asDog:'4-2-0',last5:'W-W-L-W-L',streak:'L1'},
+  'High Point': {overall:'16-12-0',home:'9-5-0', away:'7-7-0', asFav:'12-9-0', asDog:'4-3-0',last5:'W-L-W-W-W',streak:'W3'},
+  Troy:         {overall:'15-13-1',home:'8-6-0', away:'7-7-1', asFav:'11-8-1', asDog:'4-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  Montana:      {overall:'17-11-0',home:'10-4-0',away:'7-7-0', asFav:'13-9-0', asDog:'4-2-0',last5:'W-L-W-W-W',streak:'W3'},
+  Winthrop:     {overall:'16-12-1',home:'9-5-1', away:'7-7-0', asFav:'12-9-1', asDog:'4-3-0',last5:'W-W-W-L-W',streak:'W3'},
+  Lipscomb:     {overall:'17-11-0',home:'9-5-0', away:'8-6-0', asFav:'13-9-0', asDog:'4-2-0',last5:'L-W-W-W-W',streak:'W4'},
+  Howard:       {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  Omaha:        {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-10-1', asDog:'5-5-0',last5:'L-L-W-W-L',streak:'L1'},
+  'UC San Diego':{overall:'16-12-1',home:'9-5-0',away:'7-7-1', asFav:'12-9-1', asDog:'4-3-0',last5:'W-W-L-L-W',streak:'W1'},
+  'Robert Morris':{overall:'15-13-1',home:'8-6-1',away:'7-7-0',asFav:'11-8-1', asDog:'4-5-0',last5:'W-L-W-W-L',streak:'L1'},
+  'Norfolk St.': {overall:'14-14-1',home:'7-7-1',away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  'Mississippi St.':{overall:'15-13-1',home:'8-6-0',away:'7-7-1',asFav:'10-9-1',asDog:'5-4-0',last5:'W-W-L-W-L',streak:'L1'},
+  'Ohio St.':   {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-L-W-W-W',streak:'W3'},
+  Northwestern: {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  Rutgers:      {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'L-W-L-L-L',streak:'L3'},
+  Nebraska:     {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'W-W-L-W-L',streak:'L1'},
+  Minnesota:    {overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'L-L-W-L-W',streak:'W1'},
+  'Iowa':       {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-W-L-W-W',streak:'W2'},
+  'Wake Forest':{overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'L-W-L-L-W',streak:'W1'},
+  'NC State':   {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-W-W-L',streak:'L1'},
+  'Florida St.':{overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'L-W-L-W-W',streak:'W2'},
+  Virginia:     {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  Miami:        {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-W-W-L-W',streak:'W1'},
+  Syracuse:     {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-10-2', asDog:'5-5-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Notre Dame': {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  Georgia:      {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'6-9-2',  asDog:'6-7-0',last5:'L-L-W-L-W',streak:'W1'},
+  'Mississippi':{overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  LSU:          {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-W-L-L-W',streak:'W1'},
+  Arkansas:     {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'L-W-W-L-L',streak:'L2'},
+  'South Carolina':{overall:'12-16-1',home:'6-8-0',away:'6-8-1',asFav:'7-9-1', asDog:'5-7-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Missouri':   {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'W-L-W-L-W',streak:'W1'},
+  'TCU':        {overall:'15-13-2',home:'8-6-1', away:'7-7-1', asFav:'10-9-2', asDog:'5-4-0',last5:'W-W-W-L-L',streak:'L2'},
+  Baylor:       {overall:'14-14-2',home:'7-7-1', away:'7-7-1', asFav:'9-9-2',  asDog:'5-5-0',last5:'L-W-L-W-W',streak:'W2'},
+  'Kansas St.': {overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  'Oklahoma St.':{overall:'12-16-2',home:'6-8-1',away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'L-L-W-L-W',streak:'W1'},
+  'West Virginia':{overall:'13-15-1',home:'7-7-0',away:'6-8-1',asFav:'8-9-1',  asDog:'5-6-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Cincinnati': {overall:'14-14-1',home:'7-7-1', away:'7-7-0', asFav:'9-9-1',  asDog:'5-5-0',last5:'L-W-W-L-W',streak:'W1'},
+  'UCF':        {overall:'12-16-2',home:'6-8-1', away:'6-8-1', asFav:'7-10-2', asDog:'5-6-0',last5:'W-L-L-W-L',streak:'L1'},
+  'Utah':       {overall:'13-15-2',home:'7-7-1', away:'6-8-1', asFav:'8-9-2',  asDog:'5-6-0',last5:'L-W-W-L-L',streak:'L2'},
+  'Washington St.':{overall:'15-13-1',home:'8-6-0',away:'7-7-1',asFav:'11-8-1',asDog:'4-5-0',last5:'W-W-L-W-W',streak:'W2'},
+  California:   {overall:'11-17-2',home:'5-9-1', away:'6-8-1', asFav:'6-10-2', asDog:'5-7-0',last5:'L-L-W-L-L',streak:'L3'},
+  Stanford:     {overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'W-L-W-L-L',streak:'L2'},
+  'Washington': {overall:'11-17-2',home:'5-9-1', away:'6-8-1', asFav:'6-10-2', asDog:'5-7-0',last5:'L-W-L-L-W',streak:'W1'},
+  'Oregon St.': {overall:'12-16-1',home:'6-8-0', away:'6-8-1', asFav:'7-9-1',  asDog:'5-7-0',last5:'L-L-W-W-L',streak:'L1'},
+  'Colorado':   {overall:'11-17-2',home:'5-9-1', away:'6-8-1', asFav:'6-10-2', asDog:'5-7-0',last5:'W-L-L-W-L',streak:'L1'},
+  'Arizona St.':{overall:'13-15-1',home:'7-7-0', away:'6-8-1', asFav:'8-9-1',  asDog:'5-6-0',last5:'L-W-W-L-W',streak:'W1'},
+};
+
+/* ─── FULL 68-TEAM BRACKET ─────────────────────────────────────────── */
+
+// Seed-based win probability (simple model: higher seed = better)
+function seedWinProb(s1, s2) {
+  const ratings = {1:100,2:92,3:85,4:79,5:73,6:68,7:63,8:58,9:53,10:49,11:45,12:42,13:36,14:28,15:20,16:12};
+  const r1=ratings[s1]||50, r2=ratings[s2]||50;
+  return Math.round(r1/(r1+r2)*100);
+}
+
+const REGIONS_DATA = {
+  east: {
+    name:'East', color:'#1d4ed8',
+    teams:[
+      {s:1,n:'Duke',          r:'29-5'},
+      {s:2,n:'Alabama',       r:'27-7'},
+      {s:3,n:'Wisconsin',     r:'26-8'},
+      {s:4,n:'Arizona',       r:'25-9'},
+      {s:5,n:"St. John's",    r:'27-7'},
+      {s:6,n:'BYU',           r:'24-10'},
+      {s:7,n:'Mississippi St',r:'23-11'},
+      {s:8,n:'Louisville',    r:'22-12'},
+      {s:9,n:'Creighton',     r:'22-12'},
+      {s:10,n:'New Mexico',   r:'21-13'},
+      {s:11,n:'Xavier',       r:'21-13',ff:'east_ff1'},
+      {s:12,n:'Colorado St.', r:'25-9'},
+      {s:13,n:'Grand Canyon', r:'26-8'},
+      {s:14,n:'Montana',      r:'27-7'},
+      {s:15,n:'Lipscomb',     r:'25-9'},
+      {s:16,n:'Omaha',        r:'22-12',ff:'east_ff2'},
+    ]
+  },
+  west: {
+    name:'West', color:'#15803d',
+    teams:[
+      {s:1,n:'Kansas',        r:'28-6'},
+      {s:2,n:'Michigan St.',  r:'27-7'},
+      {s:3,n:'Texas A&M',     r:'26-8'},
+      {s:4,n:'Maryland',      r:'25-9'},
+      {s:5,n:'Oregon',        r:'23-11'},
+      {s:6,n:'Ole Miss',      r:'24-10'},
+      {s:7,n:'Marquette',     r:'25-9'},
+      {s:8,n:'Oklahoma',      r:'22-12'},
+      {s:9,n:'Boise St.',     r:'22-12'},
+      {s:10,n:'VCU',          r:'21-13'},
+      {s:11,n:'San Diego St.',r:'22-12'},
+      {s:12,n:'Yale',         r:'24-10'},
+      {s:13,n:'High Point',   r:'26-8'},
+      {s:14,n:'Troy',         r:'25-9'},
+      {s:15,n:'Winthrop',     r:'26-8'},
+      {s:16,n:'Howard',       r:'20-14',ff:'west_ff1'},
+    ]
+  },
+  south: {
+    name:'South', color:'#b91c1c',
+    teams:[
+      {s:1,n:'Auburn',        r:'27-7'},
+      {s:2,n:'Tennessee',     r:'26-8'},
+      {s:3,n:'Iowa St.',      r:'27-7'},
+      {s:4,n:'UCLA',          r:'24-10'},
+      {s:5,n:'Michigan',      r:'23-11'},
+      {s:6,n:'Illinois',      r:'22-12'},
+      {s:7,n:'Texas',         r:'21-13'},
+      {s:8,n:'Utah St.',      r:'22-12'},
+      {s:9,n:'Vanderbilt',    r:'21-13'},
+      {s:10,n:'Utah',         r:'20-14'},
+      {s:11,n:'Drake',        r:'23-11',ff:'south_ff1'},
+      {s:12,n:'UC San Diego', r:'24-10'},
+      {s:13,n:'Akron',        r:'25-9'},
+      {s:14,n:'Colgate',      r:'26-8'},
+      {s:15,n:'Robert Morris',r:'24-10'},
+      {s:16,n:'Norfolk St.',  r:'23-11'},
+    ]
+  },
+  midwest: {
+    name:'Midwest', color:'#7c3aed',
+    teams:[
+      {s:1,n:'Houston',       r:'29-5'},
+      {s:2,n:'Purdue',        r:'27-7'},
+      {s:3,n:'Kentucky',      r:'26-8'},
+      {s:4,n:'Gonzaga',       r:'26-8'},
+      {s:5,n:'Clemson',       r:'24-10'},
+      {s:6,n:'Indiana',       r:'23-11'},
+      {s:7,n:'UConn',         r:'25-9'},
+      {s:8,n:'Georgia',       r:'21-13'},
+      {s:9,n:'Memphis',       r:'21-13'},
+      {s:10,n:'Penn St.',     r:'21-13'},
+      {s:11,n:'Missouri',     r:'22-12',ff:'midwest_ff1'},
+      {s:12,n:'Liberty',      r:'26-8'},
+      {s:13,n:'Samford',      r:'25-9'},
+      {s:14,n:'Morehead St.', r:'24-10'},
+      {s:15,n:'Southern Utah',r:'23-11'},
+      {s:16,n:'Wagner',       r:'21-13',ff:'midwest_ff2'},
+    ]
+  }
+};
+
+// First Four matchups
+const FIRST_FOUR = [
+  {id:'east_ff1', region:'east', seed:11, teamA:{n:'Xavier',r:'21-13'},      teamB:{n:'Penn',r:'19-15'},       winner:null},
+  {id:'east_ff2', region:'east', seed:16, teamA:{n:'Omaha',r:'22-12'},       teamB:{n:'SFA',r:'21-13'},        winner:null},
+  {id:'south_ff1',region:'south',seed:11, teamA:{n:'Drake',r:'23-11'},       teamB:{n:'W. Michigan',r:'21-13'},winner:null},
+  {id:'west_ff1', region:'west', seed:16, teamA:{n:'Howard',r:'20-14'},      teamB:{n:'SIUE',r:'19-15'},       winner:null},
+  {id:'midwest_ff1',region:'midwest',seed:11,teamA:{n:'Missouri',r:'22-12'},teamB:{n:'N. Colorado',r:'20-14'},winner:null},
+  {id:'midwest_ff2',region:'midwest',seed:16,teamA:{n:'Wagner',r:'21-13'}, teamB:{n:'St. Francis',r:'20-14'},winner:null},
+];
+
+// Standard R64 matchup order per region
+const R64_PAIRS = [[1,16],[8,9],[5,12],[4,13],[6,11],[3,14],[7,10],[2,15]];
+
+// Bracket state: for each region, track winners of each round
+// brkState[region][round] = array of winner names (null = TBD)
+// rounds: 0=R64(8games), 1=R32(4), 2=S16(2), 3=E8(1)
+let brkState = {};
+let ffState = {};
+let ffWinners = {}; // ffId -> winner name
+
+function initBrkState() {
+  ['east','west','south','midwest'].forEach(r => {
+    brkState[r] = {
+      r64:  Array(8).fill(null),
+      r32:  Array(4).fill(null),
+      s16:  Array(2).fill(null),
+      e8:   Array(1).fill(null),
+    };
+  });
+  FIRST_FOUR.forEach(ff => { ffWinners[ff.id] = null; });
+  brkState.finalfour = { sf: [null, null], champ: null };
+  // Pre-populate Final Four bracket spots from E8 winners
+}
+
+initBrkState();
+
+function getTeam(region, seed) {
+  const rData = REGIONS_DATA[region];
+  const t = rData.teams.find(x => x.s === seed);
+  if (!t) return {s:seed,n:'TBD',r:''};
+  // If this team needs a first-four win, check ffWinners
+  if (t.ff) {
+    const fw = ffWinners[t.ff];
+    if (fw) return {...t, n:fw};
+    return {...t, n:`FF Winner (${seed})`};
+  }
+  return t;
+}
+
+function getR64Teams(region) {
+  return R64_PAIRS.map(([s1,s2]) => [getTeam(region, s1), getTeam(region, s2)]);
+}
+
+function winProb(t1, t2) {
+  return seedWinProb(t1.s, t2.s);
+}
+
+let brkRegion = 'first4';
+
+function setBrkRegion(r, btn) {
+  brkRegion = r;
+  document.querySelectorAll('.brk-region-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderBracketView();
+}
+
+function resetFullBracket() {
+  initBrkState();
+  renderBracketView();
+}
+
+/* ── SLOT HTML ── */
+function slotHtml(team, prob, state, onClick, isSmall) {
+  // state: 'tbd' | 'active' | 'winner' | 'eliminated' | 'champ'
+  const sz = isSmall ? 'font-size:.62rem' : 'font-size:.7rem';
+  const h  = isSmall ? 'min-height:36px' : 'min-height:42px';
+  let bg='background:var(--bg3)';
+  let bd='border:1px solid var(--bdr-ink2)';
+  let nameColor='color:var(--ink)';
+  if (state==='winner')  { bg='background:linear-gradient(90deg,rgba(232,98,26,.08),var(--bg3))'; bd='border:1px solid rgba(232,98,26,.35)'; }
+  if (state==='eliminated') { bg='background:var(--bg2)'; nameColor='color:var(--ink5)'; }
+  if (state==='champ')   { bg='background:linear-gradient(135deg,#fef3c7,#fff9ee)'; bd='border:2px solid var(--gold2)'; }
+  if (state==='tbd')     { nameColor='color:var(--ink4)'; }
+
+  const cursor = (onClick && state==='active') ? 'cursor:pointer' : 'cursor:default';
+  const hov = (state==='active') ? 'onmouseover="this.style.borderColor=\'rgba(232,98,26,.5)\'" onmouseout="this.style.borderColor=\'rgba(26,26,22,.14)\'"' : '';
+  const click = onClick ? `onclick="${onClick}"` : '';
+  const strikeStyle = state==='eliminated' ? 'text-decoration:line-through;opacity:.5' : '';
+
+  const probHtml = (prob != null && state !== 'tbd' && state !== 'eliminated')
+    ? `<div style="font-family:'DM Mono',monospace;font-size:.45rem;margin-top:2px;color:${prob>=60?'var(--bb)':prob>=45?'var(--yellow)':'var(--ink4)'}">${prob}%</div>`
+    : '';
+
+  const champStar = state==='champ' ? '🏆 ' : '';
+
+  return `<div ${click} ${hov} style="${bg};${bd};border-radius:6px;padding:.32rem .55rem;${h};${cursor};display:flex;flex-direction:column;justify-content:center;transition:border-color .12s;min-width:130px;max-width:150px;">
+    <div style="display:flex;align-items:center;gap:.28rem">
+      ${team.s?`<span style="font-family:'DM Mono',monospace;font-size:.42rem;color:var(--ink5);flex-shrink:0;width:10px">${team.s}</span>`:''}
+      <span style="font-family:'DM Sans',sans-serif;font-weight:600;${sz};${nameColor};${strikeStyle};line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${champStar}${team.n||'TBD'}</span>
+    </div>
+    ${probHtml}
+  </div>`;
+}
+
+/* ── CONNECTOR ── */
+function connectorHtml(n) {
+  // n = number of game-pair connectors needed
+  let html = '<div style="display:flex;flex-direction:column;justify-content:space-around;align-self:stretch;padding:0 2px;flex-shrink:0">';
+  for (let i=0; i<n; i++) {
+    html += '<div style="width:12px;height:2px;background:var(--bdr-ink2);align-self:center;flex-shrink:0"></div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ── RENDER A REGION COLUMN ── */
+function renderRegionBracket(region) {
+  const rData = REGIONS_DATA[region];
+  const st = brkState[region];
+  const pairs = getR64Teams(region);
+  const rounds = ['r64','r32','s16','e8'];
+  const roundLabels = ['Round of 64','Round of 32','Sweet 16','Elite Eight'];
+  const gamesPerRound = [8,4,2,1];
+
+  // Build round columns
+  let cols = [];
+
+  // ── R64 column ──
+  let r64col = `<div style="display:flex;flex-direction:column">
+    <div style="font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.12em;color:var(--ink4);text-align:center;padding:.25rem .5rem .5rem;text-transform:uppercase">Round of 64</div>
+    <div style="display:flex;flex-direction:column;gap:6px">`;
+
+  pairs.forEach((pair, gi) => {
+    const [t1, t2] = pair;
+    const winner = st.r64[gi];
+    const p1 = winner ? (winner===t1.n?100:0) : winProb(t1,t2);
+    const p2 = winner ? (winner===t2.n?100:0) : 100-p1;
+
+    const s1 = winner ? (winner===t1.n?'winner':'eliminated') : 'active';
+    const s2 = winner ? (winner===t2.n?'winner':'eliminated') : 'active';
+
+    const cb1 = !winner ? `advanceBrk('${region}','r64',${gi},'${t1.n.replace(/'/g,"\\'")}')` : null;
+    const cb2 = !winner ? `advanceBrk('${region}','r64',${gi},'${t2.n.replace(/'/g,"\\'")}')` : null;
+
+    r64col += `<div style="display:flex;flex-direction:column;gap:2px;border-left:2px solid ${rData.color};padding-left:4px;margin-bottom:2px">
+      ${slotHtml(t1, p1, s1, cb1, true)}
+      ${slotHtml(t2, p2, s2, cb2, true)}
+    </div>`;
+  });
+  r64col += '</div></div>';
+  cols.push(r64col);
+
+  // ── Later rounds ──
+  let prevRound = 'r64';
+  [['r32',4],['s16',2],['e8',1]].forEach(([rnd, ng], ri) => {
+    const label = roundLabels[ri+1];
+    const spacingPx = [16,44,100][ri];
+    let col = `<div style="display:flex;flex-direction:column">
+      <div style="font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.12em;color:var(--ink4);text-align:center;padding:.25rem .5rem .5rem;text-transform:uppercase">${label}</div>
+      <div style="display:flex;flex-direction:column;justify-content:space-around;gap:0;padding-top:${spacingPx}px">`;
+
+    for (let gi=0; gi<ng; gi++) {
+      // Determine which two teams feed into this slot
+      const prevGi1 = gi*2, prevGi2 = gi*2+1;
+      const prevW = st[prevRound];
+      const t1n = prevW[prevGi1], t2n = prevW[prevGi2];
+
+      const t1 = t1n ? {n:t1n, s: findSeed(region, t1n)} : {n:'TBD',s:null};
+      const t2 = t2n ? {n:t2n, s: findSeed(region, t2n)} : {n:'TBD',s:null};
+
+      const winner = st[rnd][gi];
+      const isTbd = !t1n || !t2n;
+
+      const s1 = isTbd?'tbd': winner?(winner===t1n?'winner':'eliminated'):'active';
+      const s2 = isTbd?'tbd': winner?(winner===t2n?'winner':'eliminated'):'active';
+
+      const p1 = isTbd||!t1.s||!t2.s ? null : (winner?(winner===t1n?100:0):winProb(t1,t2));
+      const p2 = isTbd||!t1.s||!t2.s ? null : (winner?(winner===t2n?100:0):(p1!=null?100-p1:null));
+
+      const cb1 = (!winner && !isTbd) ? `advanceBrk('${region}','${rnd}',${gi},'${(t1n||'').replace(/'/g,"\\'")}')` : null;
+      const cb2 = (!winner && !isTbd) ? `advanceBrk('${region}','${rnd}',${gi},'${(t2n||'').replace(/'/g,"\\'")}')` : null;
+
+      const marginBot = ri===0?'10px':ri===1?'28px':'0px';
+      col += `<div style="display:flex;flex-direction:column;gap:2px;margin-bottom:${marginBot}">
+        ${slotHtml(t1, p1, s1, cb1, false)}
+        ${slotHtml(t2, p2, s2, cb2, false)}
+      </div>`;
+    }
+    col += '</div></div>';
+    cols.push(connectorHtml(ng));
+    cols.push(col);
+    prevRound = rnd;
+  });
+
+  // Winner display
+  const champName = st.e8[0];
+  if (champName) {
+    const champTeam = {n:champName, s:findSeed(region, champName)};
+    cols.push(connectorHtml(1));
+    cols.push(`<div style="display:flex;flex-direction:column;justify-content:center">
+      <div style="font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.12em;color:var(--ink4);text-align:center;padding:.25rem .5rem .5rem;text-transform:uppercase">Region Winner</div>
+      ${slotHtml(champTeam,null,'champ',null,false)}
+      <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:var(--gold);text-align:center;margin-top:.3rem">Advances to Final Four</div>
+    </div>`);
+  }
+
+  return `<div style="display:flex;align-items:flex-start;gap:0;padding:.5rem 0;min-width:max-content">
+    <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;writing-mode:vertical-rl;transform:rotate(180deg);color:${rData.color};opacity:.2;padding:.5rem .25rem;flex-shrink:0;align-self:center">${rData.name.toUpperCase()}</div>
+    ${cols.join('')}
+  </div>`;
+}
+
+function findSeed(region, name) {
+  const t = REGIONS_DATA[region].teams.find(x=>x.n===name);
+  return t ? t.s : null;
+}
+
+/* ── ADVANCE FUNCTION ── */
+function advanceBrk(region, round, gameIdx, winner) {
+  brkState[region][round][gameIdx] = winner;
+
+  // Cascade: if this fills both slots of the next round's game, allow it
+  // No need to auto-advance — user clicks
+
+  // If e8 winner set, update Final Four
+  if (round === 'e8') {
+    updateFinalFour();
+  }
+  renderBracketView();
+}
+
+function advanceFF(gameIdx, winner) {
+  brkState.finalfour.sf[gameIdx] = winner;
+  if (brkState.finalfour.sf[0] && brkState.finalfour.sf[1]) {
+    // both semis decided, enable championship
+  }
+  if (gameIdx === 2) {
+    brkState.finalfour.champ = winner;
+  }
+  renderBracketView();
+}
+
+function updateFinalFour() {
+  // East + West winners go to one side, South + Midwest to other
+  const e = brkState.east.e8[0];
+  const w = brkState.west.e8[0];
+  const s = brkState.south.e8[0];
+  const m = brkState.midwest.e8[0];
+  // SF1: East vs West, SF2: South vs Midwest
+  if (!brkState.finalfour.sf[0] && e && w) {} // will be set by user click
+}
+
+/* ── FIRST FOUR ── */
+function renderFirstFour() {
+  let html = `<div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;color:var(--ink);margin-bottom:.75rem">First Four <span style="font-size:.75rem;font-weight:400;font-family:'DM Sans',sans-serif;color:var(--ink3)">— Play-In Games · Dayton, OH</span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.9rem">`;
+
+  FIRST_FOUR.forEach(ff => {
+    const won = ffWinners[ff.id];
+    const reg = REGIONS_DATA[ff.region];
+    const s1 = won?(won===ff.teamA.n?'winner':'eliminated'):'active';
+    const s2 = won?(won===ff.teamB.n?'winner':'eliminated'):'active';
+    const p1 = won?0:50;
+    const cb1 = !won?`winFF('${ff.id}','${ff.teamA.n.replace(/'/g,"\\'")}')`:null;
+    const cb2 = !won?`winFF('${ff.id}','${ff.teamB.n.replace(/'/g,"\\'")}')`:null;
+
+    html += `<div style="background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow-sm)">
+      <div style="padding:.55rem .85rem;background:linear-gradient(135deg,${reg.color}18,var(--bg2));border-bottom:1px solid var(--bdr-ink);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.1em;color:${reg.color};text-transform:uppercase">${reg.name} · Seed ${ff.seed} Play-In</span>
+        <span style="font-family:'DM Sans',sans-serif;font-size:.6rem;color:var(--ink4)">Winner enters Round of 64</span>
+      </div>
+      <div style="padding:.65rem .85rem;display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">
+          ${slotHtml({n:ff.teamA.n,s:ff.seed}, won?null:50, s1, cb1, false)}
+          <span style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--ink4);flex-shrink:0">vs</span>
+          ${slotHtml({n:ff.teamB.n,s:ff.seed}, won?null:50, s2, cb2, false)}
+        </div>
+        ${won?`<div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--gr);text-align:center;padding:.3rem 0">✓ ${won} advances as #${ff.seed} seed in ${reg.name}</div>`
+             :`<div style="font-family:'DM Sans',sans-serif;font-size:.6rem;color:var(--ink4);text-align:center;padding:.25rem 0">Click a team to advance them</div>`}
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function winFF(ffId, winner) {
+  ffWinners[ffId] = winner;
+  // Update the team name in the region data
+  const ff = FIRST_FOUR.find(f=>f.id===ffId);
+  if (ff) {
+    const t = REGIONS_DATA[ff.region].teams.find(x=>x.ff===ffId);
+    if (t) t.n = winner;
+  }
+  renderBracketView();
+}
+
+/* ── FINAL FOUR ── */
+function renderFinalFour() {
+  const e = brkState.east.e8[0];
+  const w = brkState.west.e8[0];
+  const s = brkState.south.e8[0];
+  const m = brkState.midwest.e8[0];
+  const ff = brkState.finalfour;
+
+  function ffSlot(team, seed, state, onClick) {
+    const t = team ? {n:team, s:seed||null} : {n:'TBD', s:null};
+    return slotHtml(t, null, state, onClick, false);
+  }
+
+  // SF1: East vs West | SF2: South vs Midwest
+  const sf1Done = ff.sf[0];
+  const sf2Done = ff.sf[1];
+
+  const s1 = e&&w ? (sf1Done?(sf1Done===e?'winner':'eliminated'):'active') : 'tbd';
+  const s2 = e&&w ? (sf1Done?(sf1Done===w?'winner':'eliminated'):'active') : 'tbd';
+  const s3 = s&&m ? (sf2Done?(sf2Done===s?'winner':'eliminated'):'active') : 'tbd';
+  const s4 = s&&m ? (sf2Done?(sf2Done===m?'winner':'eliminated'):'active') : 'tbd';
+
+  const finA = ff.sf[0], finB = ff.sf[1];
+  const champDone = ff.champ;
+  const fc1 = finA&&finB ? (champDone?(champDone===finA?'winner':'eliminated'):'active') : 'tbd';
+  const fc2 = finA&&finB ? (champDone?(champDone===finB?'winner':'eliminated'):'active') : 'tbd';
+
+  return `<div style="max-width:700px">
+    <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;color:var(--ink);margin-bottom:.75rem">Final Four <span style="font-size:.75rem;font-weight:400;font-family:'DM Sans',sans-serif;color:var(--ink3)">— San Antonio, TX</span></div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:start;margin-bottom:1.5rem">
+
+      <div style="background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow-sm)">
+        <div style="padding:.5rem .85rem;background:var(--bg2);border-bottom:1px solid var(--bdr-ink);font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.1em;color:#1d4ed8">EAST vs WEST</div>
+        <div style="padding:.65rem .85rem;display:flex;flex-direction:column;gap:4px">
+          ${ffSlot(e,findSeed('east',e||''),s1,(!sf1Done&&e&&w)?`advanceFF(0,'${(e||'').replace(/'/g,"\\'")}')`:null)}
+          <div style="text-align:center;font-family:'DM Mono',monospace;font-size:.55rem;color:var(--ink5);padding:.1rem">vs</div>
+          ${ffSlot(w,findSeed('west',w||''),s2,(!sf1Done&&e&&w)?`advanceFF(0,'${(w||'').replace(/'/g,"\\'")}')`:null)}
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:center;padding-top:2.5rem">
+        <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.8rem;color:var(--ink4)">→</div>
+      </div>
+
+      <div style="background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow-sm)">
+        <div style="padding:.5rem .85rem;background:var(--bg2);border-bottom:1px solid var(--bdr-ink);font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.1em;color:#b91c1c">SOUTH vs MIDWEST</div>
+        <div style="padding:.65rem .85rem;display:flex;flex-direction:column;gap:4px">
+          ${ffSlot(s,findSeed('south',s||''),s3,(!sf2Done&&s&&m)?`advanceFF(1,'${(s||'').replace(/'/g,"\\'")}')`:null)}
+          <div style="text-align:center;font-family:'DM Mono',monospace;font-size:.55rem;color:var(--ink5);padding:.1rem">vs</div>
+          ${ffSlot(m,findSeed('midwest',m||''),s4,(!sf2Done&&s&&m)?`advanceFF(1,'${(m||'').replace(/'/g,"\\'")}')`:null)}
+        </div>
+      </div>
+    </div>
+
+    <div style="font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;color:var(--ink);margin-bottom:.75rem">Championship Game</div>
+    <div style="background:${champDone?'linear-gradient(135deg,#fef3c7,#fff9ee)':'var(--bg3)'};border:${champDone?'2px solid var(--gold2)':'1px solid var(--bdr-ink2)'};border-radius:var(--r2);box-shadow:${champDone?'0 0 24px rgba(184,137,42,.2),var(--shadow)':'var(--shadow-sm)'};overflow:hidden;max-width:400px">
+      <div style="padding:.5rem .85rem;background:${champDone?'rgba(184,137,42,.1)':'var(--bg2)'};border-bottom:1px solid ${champDone?'rgba(184,137,42,.2)':'var(--bdr-ink)'};font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.1em;color:${champDone?'var(--gold)':'var(--ink4)'}">${champDone?'🏆 CHAMPION':'NATIONAL CHAMPIONSHIP'}</div>
+      <div style="padding:.65rem .85rem;display:flex;flex-direction:column;gap:4px">
+        ${ffSlot(finA,null,fc1,(!champDone&&finA&&finB)?`advanceFF(2,'${(finA||'').replace(/'/g,"\\'")}')`:null)}
+        <div style="text-align:center;font-family:'DM Mono',monospace;font-size:.55rem;color:var(--ink5);padding:.1rem">vs</div>
+        ${ffSlot(finB,null,fc2,(!champDone&&finA&&finB)?`advanceFF(2,'${(finB||'').replace(/'/g,"\\'")}')`:null)}
+        ${champDone?`<div style="text-align:center;font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:var(--gold);padding:.5rem 0">${champDone} 🏆</div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── MAIN RENDER ── */
+function renderBracketView() {
+  const c = document.getElementById('brk-container');
+  if (!c) return;
+
+  if (brkRegion === 'first4') {
+    c.innerHTML = renderFirstFour();
+  } else if (brkRegion === 'finalfour') {
+    c.innerHTML = renderFinalFour();
+  } else {
+    c.innerHTML = renderRegionBracket(brkRegion);
+  }
+}
+
+/* ─── RANKINGS */
+/* ─── RANKINGS ─── */
+const RK_DATA=Object.entries(BB_TEAMS).map(([name,t],i)=>({
+  rk:i+1, name, rec:t.rec,
+  adjO:t.adjO, adjD:t.adjD,
+  net:parseFloat((t.adjO-t.adjD).toFixed(1)),
+  pace:t.pace, sos:t.sos, ats:t.ats, ou:t.ou,
+})).sort((a,b)=>b.net-a.net).map((r,i)=>({...r,rk:i+1}));
+
+let rkData=[...RK_DATA];
+let rkSort='rk', rkDir=-1;
+let atsFilter='overall';
+let gamesFilter='all';
+
+/* ══════════════════════════════════════
+   BASKETBALL TAB SWITCHER
+══════════════════════════════════════ */
+function bbTab(btn,tab){
+  document.querySelectorAll('.bb-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.bb-panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('bbp-'+tab).classList.add('on');
+}
+
+/* ══════════════════════════════════════
+   TODAY'S GAMES
+══════════════════════════════════════ */
+function filterGames(f,btn){
+  gamesFilter=f;
+  document.querySelectorAll('#bbp-games .ats-filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderGames();
+}
+
+function renderGames(){
+  const c=document.getElementById('games-grid');
+  if(!c)return;
+  const statusOrder={live:0,tonight:1,upcoming:2,final:3};
+  const filtered=(gamesFilter==='all'?GAMES_DATA:GAMES_DATA.filter(g=>g.status===gamesFilter))
+    .slice().sort((a,b)=>(statusOrder[a.status]??99)-(statusOrder[b.status]??99));
+  if(!filtered.length){
+    c.innerHTML='<div style="padding:2rem;text-align:center;color:var(--ink4);font-family:var(--fm);grid-column:1/-1">No games match this filter.</div>';
+    return;
+  }
+  populateMatchupSelects();
+  populateMobilePicker();
+  c.innerHTML=filtered.map(g=>{
+    const isLive=g.status==='live';
+    const awayFav=g.spread.fav==='away';
+    const spreadLine=g.spread.line>0?`+${g.spread.line}`:g.spread.line;
+    const spreadOpen=g.spread.open>0?`+${g.spread.open}`:g.spread.open;
+    const spreadMov=g.spread.line!==g.spread.open?(awayFav&&g.spread.line<g.spread.open?'move-dn':'move-up'):'move-flat';
+    const awayML=g.ml.away>0?`+${g.ml.away}`:g.ml.away;
+    const homeML=g.ml.home>0?`+${g.ml.home}`:g.ml.home;
+    const ouMov=g.ou.line>g.ou.open?'move-up':g.ou.line<g.ou.open?'move-dn':'move-flat';
+    const edge=g.model.edge;
+    const edgeCls=edge>2?'gc-edge-pos':edge<0?'gc-edge-neg':'gc-edge-neu';
+    const edgeSign=edge>0?'+':'';
+    const awayWin=isLive&&g.awayScore>g.homeScore;
+    const homeWin=isLive&&g.homeScore>g.awayScore;
+    return `<div class="game-card${isLive?' live-game':''}">
+      <div class="gc-top">
+        ${isLive
+          ?`<div class="gc-live-badge"><div class="gc-live-dot"></div>LIVE · ${g.liveTime}</div>`
+          :`<div class="gc-time">${g.liveTime}</div>`}
+        <div class="gc-network">${g.network}</div>
+      </div>
+      <div class="gc-matchup">
+        <div class="gc-team-row${awayWin?' winner':''}">
+          <div class="gc-seed-name">
+            <span class="gc-seed">${g.away.seed}</span>
+            <span class="gc-team-name">${g.away.name}</span>
+            <span class="gc-team-rec">${g.away.rec}</span>
+          </div>
+          <div class="gc-score-ml">
+            ${isLive?`<span class="gc-score">${g.awayScore}</span>`:''}
+            <span class="gc-ml${awayFav?' fav':''}">${awayML}</span>
+          </div>
+        </div>
+        <div class="gc-divider"></div>
+        <div class="gc-team-row${homeWin?' winner':''}">
+          <div class="gc-seed-name">
+            <span class="gc-seed">${g.home.seed}</span>
+            <span class="gc-team-name">${g.home.name}</span>
+            <span class="gc-team-rec">${g.home.rec}</span>
+          </div>
+          <div class="gc-score-ml">
+            ${isLive?`<span class="gc-score">${g.homeScore}</span>`:''}
+            <span class="gc-ml${!awayFav?' fav':''}">${homeML}</span>
+          </div>
+        </div>
+      </div>
+      <div class="gc-odds">
+        <div class="gc-odd-item">
+          <div class="gc-odd-lbl">Spread</div>
+          <div class="gc-odd-val">${spreadLine}</div>
+          <div class="gc-odd-move ${spreadMov}">Open ${spreadOpen}</div>
+        </div>
+        <div class="gc-odds-sep"></div>
+        <div class="gc-odd-item">
+          <div class="gc-odd-lbl">Total</div>
+          <div class="gc-odd-val">${g.ou.line}</div>
+          <div class="gc-odd-move ${ouMov}">Open ${g.ou.open}</div>
+        </div>
+        <div class="gc-odds-sep"></div>
+        <div class="gc-odd-item">
+          <div class="gc-odd-lbl">O/U Pick</div>
+          <div class="gc-ou-chip ${g.model.ouPick==='over'?'gc-ou-over':'gc-ou-under'}">${g.model.ouPick.toUpperCase()}</div>
+          <div class="gc-odd-move ${g.model.ouEdge>0?'move-dn':'move-up'}">${g.model.ouEdge>0?'+':''}${g.model.ouEdge.toFixed(1)}</div>
+        </div>
+      </div>
+      <div class="gc-model">
+        <span class="gc-model-lbl">Model Pick</span>
+        <span class="gc-model-pick">${g.model.pick} · ${g.model.score}</span>
+        <span class="gc-edge-pill ${edgeCls}">${edgeSign}${edge.toFixed(1)} pts edge</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════
+   MATCHUP ANALYZER
+══════════════════════════════════════ */
+function populateMatchupSelects(){
+  const todayGames=GAMES_DATA.filter(g=>g.status==='live'||g.status==='tonight');
+  const pairs=todayGames.length?todayGames:GAMES_DATA;
+  const teams=[];
+  pairs.forEach(g=>{if(!teams.includes(g.away.name))teams.push(g.away.name);if(!teams.includes(g.home.name))teams.push(g.home.name);});
+  ['ma-team-a','ma-team-b'].forEach((id,idx)=>{
+    const sel=document.getElementById(id);
+    if(!sel)return;
+    const prev=sel.value;
+    sel.innerHTML=teams.map((t,i)=>`<option${t===prev?' selected':''}>${t}</option>`).join('');
+    if(idx===1&&sel.value===document.getElementById('ma-team-a').value&&teams.length>1)sel.value=teams[1];
+  });
+}
+
+/* ─── MOBILE GAME PICKER ─────────────────────────────────────── */
+function populateMobilePicker(){
+  const sel=document.getElementById('mgp-select');
+  if(!sel)return;
+  const statusOrder={live:0,tonight:1,upcoming:2,final:3};
+  const games=GAMES_DATA.slice().sort((a,b)=>(statusOrder[a.status]??99)-(statusOrder[b.status]??99));
+  const prev=sel.value;
+  sel.innerHTML='<option value="">— Pick a game —</option>'+
+    games.map(g=>{
+      const label=g.status==='live'
+        ?`🔴 LIVE · ${g.away.name} vs ${g.home.name}`
+        :`${g.liveTime} · ${g.away.name} vs ${g.home.name}`;
+      return`<option value="${g.id}"${String(g.id)===prev?' selected':''}>${label}</option>`;
+    }).join('');
+  if(!prev&&games.length){
+    const first=games.find(g=>g.status==='live')||games[0];
+    sel.value=first.id;
+    renderMobileGameDetail(first);
+  }
+}
+
+function selectMobileGame(idStr){
+  const game=GAMES_DATA.find(g=>g.id===parseInt(idStr));
+  const det=document.getElementById('mgp-detail');
+  if(!det)return;
+  if(!game){det.innerHTML='';return;}
+  renderMobileGameDetail(game);
+}
+
+function renderMobileGameDetail(g){
+  const det=document.getElementById('mgp-detail');
+  if(!det)return;
+  const isLive=g.status==='live';
+  const awayFav=g.spread.fav==='away';
+  const awayWin=isLive&&g.awayScore>g.homeScore;
+  const homeWin=isLive&&g.homeScore>g.awayScore;
+  const spreadLine=g.spread.line>0?`+${g.spread.line}`:g.spread.line;
+  const spreadOpen=g.spread.open>0?`+${g.spread.open}`:g.spread.open;
+  const spreadMov=g.spread.line!==g.spread.open?(g.spread.line<g.spread.open?'move-dn':'move-up'):'move-flat';
+  const ouMov=g.ou.line>g.ou.open?'move-up':g.ou.line<g.ou.open?'move-dn':'move-flat';
+  const awayML=g.ml.away>0?`+${g.ml.away}`:g.ml.away;
+  const homeML=g.ml.home>0?`+${g.ml.home}`:g.ml.home;
+  const edge=g.model.edge;
+  const edgeSign=edge>0?'+':'';
+
+  const awayATS=ATS_DATA[g.away.name]||{};
+  const homeATS=ATS_DATA[g.home.name]||{};
+  const awayAtsRole=awayFav?awayATS.asFav:awayATS.asDog;
+  const homeAtsRole=!awayFav?homeATS.asFav:homeATS.asDog;
+
+  const aS=BB_STATS[g.away.name]||{};
+  const bS=BB_STATS[g.home.name]||{};
+
+  const statRows=[
+    {label:'Adj. Off.',aV:aS.adjO,bV:bS.adjO,max:130,hi:true,fmt:v=>v!=null?v.toFixed(1):'—'},
+    {label:'Adj. Def.',aV:aS.adjD,bV:bS.adjD,max:100,hi:false,fmt:v=>v!=null?v.toFixed(1):'—'},
+    {label:'Pace',     aV:aS.pace,bV:bS.pace,max:80, hi:true, fmt:v=>v!=null?v.toFixed(1):'—'},
+    {label:'3P%',      aV:aS.threeP,bV:bS.threeP,max:45,hi:true,fmt:v=>v!=null?v.toFixed(1)+'%':'—'},
+    {label:'Reb%',     aV:aS.reb,bV:bS.reb,max:60,  hi:true, fmt:v=>v!=null?v.toFixed(1)+'%':'—'},
+  ];
+
+  const netA=(aS.adjO||0)-(aS.adjD||0);
+  const netB=(bS.adjO||0)-(bS.adjD||0);
+  const neutral=-((netA-netB)*0.4);
+  function fmtScen(v){
+    const n=parseFloat(v.toFixed(1));
+    if(Math.abs(n)<0.5)return'PK';
+    return n<0?`${g.away.name} ${n}`:`${g.away.name} +${n}`;
+  }
+
+  function dots(str){
+    if(!str)return'';
+    return str.split('-').map(r=>`<span class="ats-dot ${r==='W'?'ats-dot-w':'ats-dot-l'}">${r}</span>`).join('');
+  }
+
+  det.innerHTML=`
+    <!-- GAME HEADER + ODDS -->
+    <div class="mgd-section${isLive?' live-game':''}">
+      <div class="mgd-head">
+        ${isLive
+          ?`<div class="gc-live-badge"><div class="gc-live-dot"></div>LIVE · ${g.liveTime}</div>`
+          :`<div class="gc-time">${g.liveTime}</div>`}
+        <div class="gc-network">${g.network}</div>
+      </div>
+      <div class="mgd-team-row${awayWin?' mgd-winner':''}">
+        <div class="mgd-seed-name">
+          <span class="mgd-seed">${g.away.seed}</span>
+          <span class="mgd-tname">${g.away.name}</span>
+          <span class="mgd-trec">${g.away.rec}</span>
+        </div>
+        <div class="mgd-score-ml">
+          ${isLive?`<span class="mgd-score">${g.awayScore}</span>`:''}
+          <span class="mgd-ml${awayFav?' fav':''}">${awayML}</span>
+        </div>
+      </div>
+      <div class="mgd-divider"></div>
+      <div class="mgd-team-row${homeWin?' mgd-winner':''}">
+        <div class="mgd-seed-name">
+          <span class="mgd-seed">${g.home.seed}</span>
+          <span class="mgd-tname">${g.home.name}</span>
+          <span class="mgd-trec">${g.home.rec}</span>
+        </div>
+        <div class="mgd-score-ml">
+          ${isLive?`<span class="mgd-score">${g.homeScore}</span>`:''}
+          <span class="mgd-ml${!awayFav?' fav':''}">${homeML}</span>
+        </div>
+      </div>
+      <div class="mgd-odds">
+        <div class="mgd-odd-item">
+          <div class="mgd-odd-lbl">Spread</div>
+          <div class="mgd-odd-val">${spreadLine}</div>
+          <div class="mgd-odd-move ${spreadMov}">Open ${spreadOpen}</div>
+        </div>
+        <div class="mgd-odds-sep"></div>
+        <div class="mgd-odd-item">
+          <div class="mgd-odd-lbl">Total</div>
+          <div class="mgd-odd-val">${g.ou.line}</div>
+          <div class="mgd-odd-move ${ouMov}">Open ${g.ou.open}</div>
+        </div>
+        <div class="mgd-odds-sep"></div>
+        <div class="mgd-odd-item">
+          <div class="mgd-odd-lbl">O/U Pick</div>
+          <div class="gc-ou-chip ${g.model.ouPick==='over'?'gc-ou-over':'gc-ou-under'}" style="margin:.25rem auto 0">${g.model.ouPick.toUpperCase()}</div>
+          <div class="mgd-odd-move ${g.model.ouEdge>0?'move-dn':'move-up'}">${g.model.ouEdge>0?'+':''}${g.model.ouEdge.toFixed(1)}</div>
+        </div>
+      </div>
+      <div class="mgd-model">
+        <div class="mgd-model-label">★ Model Recommendation</div>
+        <div class="mgd-model-pick">${g.model.pick}</div>
+        <div class="mgd-model-sub">Projected score: ${g.model.score}</div>
+        <div class="mgd-model-chips">
+          <span class="mgd-chip mgd-chip-edge">${edgeSign}${edge.toFixed(1)} pts edge</span>
+          <span class="mgd-chip mgd-chip-ou">${g.model.ouPick.toUpperCase()} ${Math.abs(g.model.ouEdge).toFixed(1)} pts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEAD-TO-HEAD STATS -->
+    <div class="mgd-section">
+      <div class="mgd-stats-head">
+        <span class="mgd-stats-away">${g.away.name}</span>
+        <span>Head-to-Head</span>
+        <span class="mgd-stats-home">${g.home.name}</span>
+      </div>
+      ${statRows.map(r=>{
+        const aW=r.max>0?Math.min(100,(r.aV||0)/r.max*100):50;
+        const bW=r.max>0?Math.min(100,(r.bV||0)/r.max*100):50;
+        const aWins=r.hi?(r.aV||0)>(r.bV||0):(r.aV||0)<(r.bV||0);
+        const bWins=!aWins;
+        return`<div class="mgd-stat-row">
+          <div class="mgd-stat-lbl">${r.label}</div>
+          <div class="mgd-stat-bars">
+            <div class="mgd-bar-row">
+              <div class="mgd-bar-team">${g.away.name}</div>
+              <div class="mgd-bar-wrap"><div class="mgd-bar-fill-a" style="width:${aW}%"></div></div>
+              <div class="mgd-stat-val"${aWins?' style="color:var(--gr)"':''}>${r.fmt(r.aV)}</div>
+            </div>
+            <div class="mgd-bar-row">
+              <div class="mgd-bar-team">${g.home.name}</div>
+              <div class="mgd-bar-wrap"><div class="mgd-bar-fill-b" style="width:${bW}%"></div></div>
+              <div class="mgd-stat-val"${bWins?' style="color:var(--gold)"':''}>${r.fmt(r.bV)}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- ATS RECORDS -->
+    <div class="mgd-section">
+      <div class="mgd-section-title">ATS Records</div>
+      <div class="mgd-ats-grid">
+        <div class="mgd-ats-team">
+          <div class="mgd-ats-tname">${g.away.name}</div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Overall</span><span class="mgd-ats-val">${awayATS.overall||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">${awayFav?'As Fav':'As Dog'}</span><span class="mgd-ats-val">${awayAtsRole||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Streak</span><span class="mgd-ats-val" style="color:${awayATS.streak&&awayATS.streak[0]==='W'?'var(--gr)':'var(--red)'}">${awayATS.streak||'—'}</span></div>
+          <div class="mgd-ats-dots">${dots(awayATS.last5)}</div>
+        </div>
+        <div class="mgd-ats-sep"></div>
+        <div class="mgd-ats-team mgd-ats-r">
+          <div class="mgd-ats-tname">${g.home.name}</div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Overall</span><span class="mgd-ats-val">${homeATS.overall||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">${!awayFav?'As Fav':'As Dog'}</span><span class="mgd-ats-val">${homeAtsRole||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Streak</span><span class="mgd-ats-val" style="color:${homeATS.streak&&homeATS.streak[0]==='W'?'var(--gr)':'var(--red)'}">${homeATS.streak||'—'}</span></div>
+          <div class="mgd-ats-dots">${dots(homeATS.last5)}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPREAD SCENARIOS -->
+    <div class="mgd-section">
+      <div class="mgd-section-title">Spread Scenarios</div>
+      <div class="mgd-scen-grid">
+        <div class="mgd-scen">
+          <div class="mgd-scen-loc">${g.away.name} Home</div>
+          <div class="mgd-scen-line">${fmtScen(neutral-3.5)}</div>
+          <div class="mgd-scen-note">+3.5 home edge</div>
+        </div>
+        <div class="mgd-scen best">
+          <div class="mgd-scen-loc">Neutral</div>
+          <div class="mgd-scen-line">${fmtScen(neutral)}</div>
+          <div class="mgd-scen-note">Model line</div>
+        </div>
+        <div class="mgd-scen">
+          <div class="mgd-scen-loc">${g.home.name} Home</div>
+          <div class="mgd-scen-line">${fmtScen(neutral+3.5)}</div>
+          <div class="mgd-scen-note">+3.5 home edge</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function swapMatchup(){
+  const a=document.getElementById('ma-team-a');
+  const b=document.getElementById('ma-team-b');
+  const tmp=a.value;a.value=b.value;b.value=tmp;
+  renderMatchup();
+}
+
+function renderMatchup(){
+  const aName=document.getElementById('ma-team-a').value;
+  const bName=document.getElementById('ma-team-b').value;
+  const aS=BB_STATS[aName]||{};
+  const bS=BB_STATS[bName]||{};
+  const aT=BB_TEAMS[aName]||{};
+  const bT=BB_TEAMS[bName]||{};
+
+  const statRows=[
+    {label:'Adj. Off.',  aV:aS.adjO, bV:bS.adjO, max:130, higherBetter:true,  fmt:v=>v.toFixed(1)},
+    {label:'Adj. Def.',  aV:aS.adjD, bV:bS.adjD, max:100, higherBetter:false, fmt:v=>v.toFixed(1)},
+    {label:'Pace',       aV:aS.pace, bV:bS.pace, max:80,  higherBetter:true,  fmt:v=>v.toFixed(1)},
+    {label:'3P%',        aV:aS.threeP,bV:bS.threeP,max:45,higherBetter:true, fmt:v=>v.toFixed(1)+'%'},
+    {label:'FT Rate',    aV:aS.ftr,  bV:bS.ftr,  max:0.5, higherBetter:true,  fmt:v=>v.toFixed(2)},
+    {label:'TO%',        aV:aS.to,   bV:bS.to,   max:20,  higherBetter:false, fmt:v=>v.toFixed(1)+'%'},
+    {label:'Reb%',       aV:aS.reb,  bV:bS.reb,  max:60,  higherBetter:true,  fmt:v=>v.toFixed(1)+'%'},
+  ];
+
+  function teamCard(name,stats,team,accentColor){
+    return `<div class="ma-card">
+      <div class="ma-card-head">
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <span class="ma-seed-badge">${team.seed||'?'}</span>
+          <div>
+            <div class="ma-team-name">${name}</div>
+            <div class="ma-record">${team.rec||''} · SOS ${stats.sos||'—'}</div>
+          </div>
+        </div>
+      </div>
+      ${statRows.map(r=>{
+        const pct=r.max>0?Math.min(100,(r.aV===stats.adjO&&r.label==='Adj. Off.'||r.label==='Adj. Off.'?
+          (name===aName?r.aV:r.bV):
+          name===aName?r.aV:r.bV)/r.max*100):50;
+        const val=name===aName?r.aV:r.bV;
+        const barW=r.max>0?Math.min(100,val/r.max*100):50;
+        return `<div class="ma-stat-row">
+          <div class="ma-stat-label">${r.label}</div>
+          <div class="ma-bar-wrap"><div class="ma-bar-fill" style="width:${barW}%;background:${accentColor}"></div></div>
+          <div class="ma-stat-val">${val!=null?r.fmt(val):'—'}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  document.getElementById('ma-cards').innerHTML=
+    teamCard(aName,aS,aT,'var(--bb)')+
+    teamCard(bName,bS,bT,'var(--gr2)');
+
+  const advantages=statRows.map(r=>{
+    const aV=r.aV||0, bV=r.bV||0;
+    const aWins=r.higherBetter?aV>bV:aV<bV;
+    return{cat:r.label,winner:aWins?aName:bName,isA:aWins,margin:Math.abs(aV-bV).toFixed(1),fmt:r.fmt};
+  });
+
+  document.getElementById('ma-advantages').innerHTML=`
+    <div class="ma-adv-head">Key Advantages</div>
+    ${advantages.map(av=>`<div class="ma-adv-row">
+      <div class="ma-adv-cat">${av.cat}</div>
+      <div class="ma-adv-winner ${av.isA?'ma-adv-win-a':'ma-adv-win-b'}">${av.winner}<span class="ma-adv-margin"> (+${av.margin})</span></div>
+    </div>`).join('')}`;
+
+  const netA=(aS.adjO||0)-(aS.adjD||0);
+  const netB=(bS.adjO||0)-(bS.adjD||0);
+  const diff=netA-netB;
+  const neutral=-(diff*0.4);
+  const homeLine=(neutral-3.5);
+  const awayLine=(neutral+3.5);
+
+  function fmtLine(v,favName,dogName){
+    const n=parseFloat(v.toFixed(1));
+    if(n===0)return'PK';
+    return n<0?`${aName} -${Math.abs(n)}`:`${aName} +${Math.abs(n)}`;
+  }
+
+  document.getElementById('ma-spreads').innerHTML=`
+    <div class="ma-spread-title">Spread Scenarios</div>
+    <div class="ma-spread-scenarios">
+      <div class="ma-scen">
+        <div class="ma-scen-loc">${aName} Home</div>
+        <div class="ma-scen-spread">${fmtLine(homeLine)}</div>
+        <div class="ma-scen-note">+3.5 home edge</div>
+      </div>
+      <div class="ma-scen best">
+        <div class="ma-scen-loc">Neutral Site</div>
+        <div class="ma-scen-spread">${fmtLine(neutral)}</div>
+        <div class="ma-scen-note">Model projection</div>
+      </div>
+      <div class="ma-scen">
+        <div class="ma-scen-loc">${bName} Home</div>
+        <div class="ma-scen-spread">${fmtLine(awayLine)}</div>
+        <div class="ma-scen-note">+3.5 home edge</div>
+      </div>
+    </div>`;
+}
+
+function sortRk(key,th){
+  if(rkSort===key)rkDir*=-1;else{rkSort=key;rkDir=key==='adjD'?1:-1;}
+  const isStr=['name','rec','ats','ou'].includes(key);
+  rkData.sort((a,b)=>{
+    if(isStr)return rkDir*(String(a[key]).localeCompare(String(b[key])));
+    return rkDir*(a[key]-b[key]);
+  });
+  document.querySelectorAll('.rk-tbl thead th').forEach(t=>t.classList.remove('sorted'));
+  if(th)th.classList.add('sorted');
+  renderRankings();
+}
+
+function rankBadge(rk){
+  if(rk<=5)return`<span class="rk-badge rb-t5">T5</span>`;
+  if(rk<=10)return`<span class="rk-badge rb-t10">T10</span>`;
+  if(rk<=25)return`<span class="rk-badge rb-t25">T25</span>`;
+  return'';
+}
+
+function renderRankings(){
+  const topNet=Math.max(...rkData.map(r=>r.net));
+  document.getElementById('rk-body').innerHTML=rkData.map((r,i)=>{
+    const netCls=r.net>=28?'rk-val-pos':r.net>=22?'':'rk-val-neg';
+    const [atsW,atsL]=r.ats.split('-').map(Number);
+    const atsCls=atsW>atsL?'rk-val-pos':atsW<atsL?'rk-val-neg':'';
+    const [ouO,ouU]=r.ou.split('-').map(Number);
+    const ouCls=ouO>ouU?'move-up':ouO<ouU?'move-dn':'move-flat';
+    const ouTxt=ouO>ouU?'O '+r.ou:'U '+r.ou;
+    return `<tr style="animation:rowIn .28s ease ${i*.04}s both">
+      <td>${r.rk}${rankBadge(r.rk)}</td>
+      <td>${r.name}</td>
+      <td style="text-align:left;font-size:.68rem">${r.rec}</td>
+      <td style="color:var(--bb);font-weight:500">${r.adjO.toFixed(1)}</td>
+      <td style="color:var(--gr);font-weight:500">${r.adjD.toFixed(1)}</td>
+      <td class="${netCls}" style="font-weight:600">${r.net>0?'+':''}${r.net}</td>
+      <td>${r.pace.toFixed(1)}</td>
+      <td style="color:var(--ink2)">${r.sos.toFixed(1)}</td>
+      <td class="${atsCls}">${r.ats}</td>
+      <td class="${ouCls}">${ouTxt}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ─── ATS TRENDS ─── */
+function filterATS(f,btn){
+  atsFilter=f;
+  document.querySelectorAll('#bbp-ats .ats-filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderATS();
+}
+
+function atsBar(rec){
+  const parts=rec.split('-').map(Number);
+  const [w,l,p]=parts.length===3?parts:[parts[0],parts[1],0];
+  const tot=w+l+p||1;
+  const wPct=w/tot*100,lPct=l/tot*100,pPct=p/tot*100;
+  const cls=w>l?'ats-wins':w<l?'rk-val-neg':'';
+  return {bar:`
+    <div class="ats-rec-bar">
+      <div class="ats-rec-win" style="width:${wPct}%"></div>
+      <div class="ats-rec-push" style="width:${pPct}%"></div>
+      <div class="ats-rec-loss" style="width:${lPct}%"></div>
+    </div>
+  `,txt:rec,cls};
+}
+
+function atsPct(rec){
+  const[w,l,p]=(rec||'0-0-0').split('-').map(Number);
+  const tot=w+(l||0)+(p||0)||1;
+  return Math.round(w/tot*100);
+}
+
+function atsWinCls(rec){
+  const[w,l]=(rec||'0-0').split('-').map(Number);
+  return w>l?'rk-val-pos':w<l?'rk-val-neg':'';
+}
+
+function renderATS(){
+  const recKey={overall:'overall',fav:'asFav',dog:'asDog',home:'home',away:'away'};
+  const sortField=recKey[atsFilter]||'overall';
+  const teams=Object.entries(ATS_DATA)
+    .sort((a,b)=>{
+      const[aw,al,ap]=(a[1][sortField]||'0-0-0').split('-').map(Number);
+      const[bw,bl,bp]=(b[1][sortField]||'0-0-0').split('-').map(Number);
+      const at=aw+(al||0)+(ap||0)||1,bt=bw+(bl||0)+(bp||0)||1;
+      return(bw/bt)-(aw/at);
+    });
+
+  const colLabel={overall:'Overall',fav:'As Fav',dog:'As Dog',home:'Home',away:'Away'};
+  const tbl=document.getElementById('ats-list');
+  tbl.innerHTML=`<thead><tr>
+    <th style="text-align:left;width:2rem">#</th>
+    <th style="text-align:left">Team</th>
+    <th class="${atsFilter==='overall'?'ats-col-active':''}">Overall</th>
+    <th class="${atsFilter==='fav'?'ats-col-active':''}">As Fav</th>
+    <th class="${atsFilter==='dog'?'ats-col-active':''}">As Dog</th>
+    <th class="${atsFilter==='home'?'ats-col-active':''}">Home</th>
+    <th class="${atsFilter==='away'?'ats-col-active':''}">Away</th>
+    <th>Last 5</th>
+    <th>Streak</th>
+  </tr></thead><tbody>${teams.map(([name,d],i)=>{
+    const last5=d.last5.split('-').map(r=>`<span class="ats-dot ${r==='W'?'ats-dot-w':'ats-dot-l'}">${r}</span>`).join('');
+    const strCls=d.streak.startsWith('W')?'ats-streak-w':'ats-streak-l';
+    return `<tr style="animation:rowIn .2s ease ${Math.min(i,.3)*i*.015}s both">
+      <td style="color:var(--ink4);font-size:.62rem">${i+1}</td>
+      <td style="font-weight:600;white-space:nowrap">${name}</td>
+      <td class="${atsFilter==='overall'?'ats-col-active':''} ${atsWinCls(d.overall)}">${d.overall}<span class="ats-pct">${atsPct(d.overall)}%</span></td>
+      <td class="${atsFilter==='fav'?'ats-col-active':''} ${atsWinCls(d.asFav)}">${d.asFav}<span class="ats-pct">${atsPct(d.asFav)}%</span></td>
+      <td class="${atsFilter==='dog'?'ats-col-active':''} ${atsWinCls(d.asDog)}">${d.asDog}<span class="ats-pct">${atsPct(d.asDog)}%</span></td>
+      <td class="${atsFilter==='home'?'ats-col-active':''} ${atsWinCls(d.home)}">${d.home}<span class="ats-pct">${atsPct(d.home)}%</span></td>
+      <td class="${atsFilter==='away'?'ats-col-active':''} ${atsWinCls(d.away)}">${d.away}<span class="ats-pct">${atsPct(d.away)}%</span></td>
+      <td><div style="display:flex;gap:2px;align-items:center">${last5}</div></td>
+      <td><span class="ats-streak ${strCls}">${d.streak}</span></td>
+    </tr>`;
+  }).join('')}</tbody>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIVE DATA — ESPN (unofficial) + The Odds API
+═══════════════════════════════════════════════════════════ */
+const ODDS_KEY='c82571e250953ecf9e751140cbe3abbb';
+let liveRefreshTimer=null;
+
+// Normalize team name for fuzzy matching across data sources
+function normTeam(s){
+  return(s||'').toLowerCase()
+    .replace(/\b(blue devils?|jayhawks?|crimson tide|tar heels?|huskies?|hoosiers?|wildcats?|bulldogs?|wolverines?|hurricanes?|seminoles?|buckeyes?|boilermakers?|longhorns?|bearcats?|cavaliers?|cardinals?|tigers?|bears?|panthers?|hawks?|eagles?|rams?|knights?|cougars?|mustangs?|gators?|ducks?|beavers?|trojans?|bruins?|aggies?|badgers?|cyclones?|mountaineers?|aztecs?|horned frogs?|scarlet knights?|golden eagles?|owls?|anteaters?|mavericks?|rockets?|lakers?|grizzlies?|warriors?|wizards?|celtics?|magic|nets?|pelicans?|suns?|nuggets?|bucks?|pacers?|pistons?|thunder|jazz|clippers?|kings?|wolves?|blazers?|hornets?)\b/gi,'')
+    .replace(/\b(university|college|state|tech|a&m|at)\b/gi,'')
+    .replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim();
+}
+
+function teamsMatch(a,b){
+  const na=normTeam(a),nb=normTeam(b);
+  if(!na||!nb)return false;
+  return na.includes(nb)||nb.includes(na)||(na.split(' ')[0]===nb.split(' ')[0]&&na.split(' ')[0].length>3);
+}
+
+async function fetchESPNGames(){
+  const r=await fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard');
+  if(!r.ok)throw new Error('ESPN '+r.status);
+  return r.json();
+}
+
+async function fetchLiveOdds(){
+  const url=`https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/?apiKey=${ODDS_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american&bookmakers=draftkings,fanduel,betmgm`;
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('Odds API '+r.status);
+  return r.json();
+}
+
+function findOddsForGame(oddsData,awayName,homeName){
+  return(oddsData||[]).find(g=>teamsMatch(g.away_team,awayName)&&teamsMatch(g.home_team,homeName));
+}
+
+function extractOddsMarkets(oddsGame){
+  if(!oddsGame?.bookmakers?.length)return{};
+  const bk=oddsGame.bookmakers[0];
+  const out={};
+  for(const mkt of(bk.markets||[])){
+    if(mkt.key==='spreads'){
+      const o0=mkt.outcomes[0],o1=mkt.outcomes[1];
+      out.spreadAway=teamsMatch(o0.name,oddsGame.away_team)?o0.point:o1.point;
+      out.spreadHome=teamsMatch(o0.name,oddsGame.home_team)?o0.point:o1.point;
+    }
+    if(mkt.key==='totals'){out.total=mkt.outcomes[0]?.point||null;}
+    if(mkt.key==='h2h'){
+      for(const o of mkt.outcomes){
+        if(teamsMatch(o.name,oddsGame.away_team))out.mlAway=o.price;
+        if(teamsMatch(o.name,oddsGame.home_team))out.mlHome=o.price;
+      }
+    }
+  }
+  return out;
+}
+
+async function loadLiveData(){
+  try{
+    const[espnData,oddsData]=await Promise.allSettled([fetchESPNGames(),fetchLiveOdds()]);
+    const events=(espnData.status==='fulfilled'?espnData.value?.events:null)||[];
+    const odds=(oddsData.status==='fulfilled'?oddsData.value:null)||[];
+    if(!events.length&&!odds.length)return;
+
+    const liveGames=[];
+    for(const ev of events){
+      const comp=ev.competitions?.[0];if(!comp)continue;
+      const awayC=comp.competitors?.find(c=>c.homeAway==='away');
+      const homeC=comp.competitors?.find(c=>c.homeAway==='home');
+      if(!awayC||!homeC)continue;
+
+      const awayN=awayC.team.shortDisplayName||awayC.team.displayName||'';
+      const homeN=homeC.team.shortDisplayName||homeC.team.displayName||'';
+      const statusName=comp.status?.type?.name||'';
+      const isLive=statusName.includes('IN_PROGRESS');
+      const isFinal=statusName.includes('FINAL');
+      const period=comp.status?.period||1;
+      const clock=comp.status?.displayClock||'';
+      const network=(comp.broadcasts?.[0]?.names?.[0])||'ESPN';
+      const awayRec=awayC.records?.[0]?.summary||'';
+      const homeRec=homeC.records?.[0]?.summary||'';
+      const awaySeed=awayC.curatedRank?.current||null;
+      const homeSeed=homeC.curatedRank?.current||null;
+      const statusStr=isFinal?'final':isLive?'live':'tonight';
+      const timeStr=isLive?`${period}H ${clock}`:comp.status?.type?.shortDetail||ev.date||'';
+
+      const og=findOddsForGame(odds,awayN,homeN);
+      const mk=extractOddsMarkets(og);
+
+      // Fallback to ESPN embedded odds, then to existing static GAMES_DATA
+      const espnOdds=comp.odds?.[0]||{};
+      const existing=GAMES_DATA.find(g=>teamsMatch(g.away.name,awayN)&&teamsMatch(g.home.name,homeN));
+      const spreadLine=mk.spreadAway??(parseFloat(espnOdds.spread||'0')||existing?.spread?.line||0);
+      const ouLine=mk.total??espnOdds.overUnder??existing?.ou?.line??0;
+      const awayML=mk.mlAway??existing?.ml?.away??0;
+      const homeML=mk.mlHome??existing?.ml?.home??0;
+      const spreadFav=spreadLine<0?'away':'home';
+
+      liveGames.push({
+        id:ev.id,
+        away:{name:awayN,seed:awaySeed||'?',rec:awayRec},
+        home:{name:homeN,seed:homeSeed||'?',rec:homeRec},
+        status:statusStr,liveTime:timeStr,network,
+        awayScore:(isLive||isFinal)?parseInt(awayC.score)||0:null,
+        homeScore:(isLive||isFinal)?parseInt(homeC.score)||0:null,
+        spread:{line:spreadLine,open:existing?.spread?.open??spreadLine,fav:spreadFav},
+        ml:{away:awayML,home:homeML},
+        ou:{line:ouLine,open:existing?.ou?.open??ouLine},
+        model:existing?.model||{pick:spreadLine<0?awayN:homeN,score:'—',edge:0,ouPick:'over',ouEdge:0}
+      });
+    }
+
+    // Also pull any odds-only games not in ESPN yet
+    for(const og of odds){
+      const already=liveGames.find(g=>teamsMatch(g.away.name,og.away_team)&&teamsMatch(g.home.name,og.home_team));
+      if(already)continue;
+      const mk=extractOddsMarkets(og);
+      const spreadLine=mk.spreadAway??0;
+      liveGames.push({
+        id:og.id,
+        away:{name:og.away_team,seed:'?',rec:''},
+        home:{name:og.home_team,seed:'?',rec:''},
+        status:'tonight',liveTime:new Date(og.commence_time).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+'ET',
+        network:'ESPN',awayScore:null,homeScore:null,
+        spread:{line:spreadLine,open:spreadLine,fav:spreadLine<0?'away':'home'},
+        ml:{away:mk.mlAway??0,home:mk.mlHome??0},
+        ou:{line:mk.total??0,open:mk.total??0},
+        model:{pick:spreadLine<0?og.away_team:og.home_team,score:'—',edge:0,ouPick:'over',ouEdge:0}
+      });
+    }
+
+    if(liveGames.length>0){
+      GAMES_DATA.length=0;liveGames.forEach(g=>GAMES_DATA.push(g));
+      renderGames();
+      const badge=document.getElementById('live-data-badge');
+      if(badge){badge.style.display='inline-flex';}
+      const tsEl=document.getElementById('live-ts');
+      if(tsEl)tsEl.textContent='LIVE · '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+      const dl=document.getElementById('games-date-line');
+      if(dl){const today=new Date();dl.textContent=today.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}).toUpperCase()+' · LINES FROM DRAFTKINGS/FANDUEL';}
+    }
+  }catch(e){console.warn('[CaddieLines] Live data failed:',e);}
+}
+
+/* ─── GOLF TOURNAMENT LIVE DATA ─── */
+async function fetchGolfTournament(dateStr){
+  const base='https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard';
+  const url=dateStr?`${base}?dates=${dateStr}`:base;
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('ESPN Golf '+r.status);
+  return r.json();
+}
+
+async function fetchGolfOdds(){
+  // The Odds API – try the PGA Tour weekly event winner market
+  const url=`https://api.the-odds-api.com/v4/sports/golf_pga_tour_winner/odds/?apiKey=${ODDS_KEY}&regions=us&markets=outrights&oddsFormat=american&bookmakers=draftkings,fanduel`;
+  const r=await fetch(url);
+  if(!r.ok)return[];
+  return r.json();
+}
+
+function fmtOdds(ml){
+  if(!ml)return'';
+  return ml>0?'+'+ml:''+ml;
+}
+
+function updateGolfHero(ev,oddsData){
+  if(!ev)return;
+  const comp=ev.competitions?.[0];
+  const statusName=comp?.status?.type?.name||'';
+  const isLive=statusName.includes('IN_PROGRESS');
+  const isFinal=statusName.includes('FINAL');
+  const isUpcoming=!isLive&&!isFinal;
+
+  const tournName=(ev.name||'PGA Tour Event').toUpperCase();
+  const venue=comp?.venue?.fullName||ev.venue?.fullName||'';
+  const round=comp?.status?.period||1;
+  const roundDetail=comp?.status?.type?.shortDetail||`Round ${round}`;
+
+  const nameEl=document.getElementById('tourn-name');
+  if(nameEl)nameEl.textContent=tournName;
+
+  const eyebrowEl=document.getElementById('tourn-eyebrow');
+  if(eyebrowEl){
+    const yr=ev.season?.year||new Date().getFullYear();
+    eyebrowEl.textContent=`PGA Tour · ${yr-1}–${String(yr).slice(2)} Season`;
+  }
+
+  const metaEl=document.getElementById('tourn-meta');
+  if(metaEl){
+    const dot='<span class="tmeta-dot">◆</span>';
+    if(isLive){
+      metaEl.innerHTML=`${roundDetail}${venue?dot+venue:''}`;
+    } else if(ev.date){
+      const d=new Date(ev.date);
+      const ds=d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      metaEl.innerHTML=venue?`${ds}${dot}${venue}`:ds;
+    } else {
+      metaEl.textContent=venue||'';
+    }
+  }
+
+  const badgesEl=document.getElementById('tourn-badges');
+  if(badgesEl){
+    if(isLive){
+      badgesEl.innerHTML=`<div class="live-badge"><div class="live-dot-white"></div>LIVE</div><div class="round-badge">R${round} In Progress</div>`;
+    } else if(isUpcoming){
+      let dateLabel='UPCOMING';
+      if(ev.date){const d=new Date(ev.date);dateLabel=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+      badgesEl.innerHTML=`<div class="round-badge">UPCOMING</div><div class="round-badge">${dateLabel}</div>`;
+    } else {
+      badgesEl.innerHTML=`<div class="round-badge">FINAL</div>`;
+    }
+  }
+
+  const competitors=comp?.competitors||[];
+  if(isLive&&competitors.length){
+    // Sort by score (lowest = leading)
+    const sorted=[...competitors].sort((a,b)=>(parseFloat(a.score)||999)-(parseFloat(b.score)||999));
+    const leader=sorted[0];
+    const leaderLbl=document.getElementById('ts-leader-label');
+    const leaderEl=document.getElementById('ts-leader');
+    const leaderSub=document.getElementById('ts-leader-sub');
+    if(leaderLbl)leaderLbl.textContent='Leader';
+    if(leaderEl&&leader?.athlete){
+      const nm=leader.athlete.displayName||'';
+      leaderEl.textContent=nm.split(' ').pop();
+    }
+    if(leaderSub&&leader){
+      const sc=leader.score;
+      const scFmt=sc==='0'||sc===0?'E':(parseFloat(sc)>0?'+'+sc:sc);
+      const thru=leader.status?.type?.shortDetail||'F';
+      leaderSub.textContent=`${scFmt} thru ${thru}`;
+    }
+    const fieldEl=document.getElementById('ts-field');
+    if(fieldEl)fieldEl.textContent=competitors.length;
+    const fieldSub=document.getElementById('ts-field-sub');
+    if(fieldSub)fieldSub.textContent='Players';
+    const cutLbl=document.getElementById('ts-cut-label');
+    if(cutLbl)cutLbl.textContent='Projected Cut';
+  } else if(isUpcoming){
+    // Show odds favorites if available, otherwise dates
+    const leaderLbl=document.getElementById('ts-leader-label');
+    const leaderEl=document.getElementById('ts-leader');
+    const leaderSub=document.getElementById('ts-leader-sub');
+    const cutLbl=document.getElementById('ts-cut-label');
+    const cutEl=document.getElementById('ts-cut');
+    const cutSub=document.getElementById('ts-cut-sub');
+
+    // Try to get top 2 favorites from odds
+    const events=Array.isArray(oddsData)?oddsData:[];
+    const matchEv=events.find(o=>o.sport_key==='golf_pga_tour_winner')||events[0];
+    const outcomes=matchEv?.bookmakers?.[0]?.markets?.[0]?.outcomes||[];
+    const sorted=[...outcomes].sort((a,b)=>a.price-b.price);
+    if(sorted.length>=2){
+      if(leaderLbl)leaderLbl.textContent='Favorite';
+      if(leaderEl)leaderEl.textContent=sorted[0].name.split(' ').pop();
+      if(leaderSub)leaderSub.textContent=fmtOdds(sorted[0].price);
+      if(cutLbl)cutLbl.textContent='2nd Fav';
+      if(cutEl)cutEl.textContent=sorted[1].name.split(' ').pop();
+      if(cutSub)cutSub.textContent=fmtOdds(sorted[1].price);
+    } else {
+      if(leaderLbl)leaderLbl.textContent='Starts';
+      if(leaderEl&&ev.date){
+        const d=new Date(ev.date);
+        leaderEl.textContent=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+      }
+      if(leaderSub)leaderSub.textContent=venue||'TBD';
+      if(cutLbl)cutLbl.textContent='Venue';
+      if(cutEl)cutEl.textContent=venue||'TBD';
+      if(cutSub)cutSub.textContent='';
+    }
+    const fieldEl=document.getElementById('ts-field');
+    if(fieldEl&&competitors.length)fieldEl.textContent=competitors.length;
+  }
+}
+
+async function loadGolfData(){
+  try{
+    let data=await fetchGolfTournament();
+    let ev=data?.events?.[0];
+    const status=ev?.competitions?.[0]?.status?.type?.name||'';
+    // If most recent tournament is final, look ahead for next event
+    if(!ev||(status.includes('FINAL')&&!status.includes('IN_PROGRESS'))){
+      for(let daysAhead=1;daysAhead<=28;daysAhead+=7){
+        const d=new Date();d.setDate(d.getDate()+daysAhead);
+        const ds=d.toISOString().slice(0,10).replace(/-/g,'');
+        try{
+          const next=await fetchGolfTournament(ds);
+          const nextEv=next?.events?.[0];
+          const nextStatus=nextEv?.competitions?.[0]?.status?.type?.name||'';
+          if(nextEv&&!nextStatus.includes('FINAL')){ev=nextEv;break;}
+        }catch(e){}
+      }
+    }
+    // Fetch odds in parallel (non-blocking)
+    let oddsData=[];
+    try{oddsData=await fetchGolfOdds();}catch(e){}
+    updateGolfHero(ev,oddsData);
+  }catch(e){console.warn('[CaddieLines] Golf data failed:',e);}
+}
+
+function startLiveRefresh(){
+  loadLiveData();
+  loadGolfData();
+  liveRefreshTimer=setInterval(loadLiveData,45000); // refresh every 45s
+  setInterval(loadGolfData,300000); // refresh golf every 5 min
+}
+
+/* ─── INIT ALL ─── */
+lbData=calcAdj(currentAdj);
+renderLB(lbData);renderDist(currentAdj);renderSG();renderEdge(currentAdj);
+calcH2H();renderCut(currentAdj);renderFit();renderHoles();renderProbs();
+renderGames();renderMatchup();renderBracketView();renderRankings();renderATS();
+// Load live data after static render so page is usable immediately
+setTimeout(startLiveRefresh,500);
+</script>
+</body>
+</html>

@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/", "destination": "/caddie-lines.html" }]
+  "rewrites": [
+    { "source": "/", "destination": "/caddie-lines.html" },
+    { "source": "/hoops", "destination": "/hoops.html" }
+  ]
 }
