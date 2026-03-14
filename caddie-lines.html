@@ -2528,7 +2528,7 @@ async function loadLiveData(){
 
       // Fallback to ESPN embedded odds
       const espnOdds=comp.odds?.[0]||{};
-      const spreadLine=mk.spreadAway??parseFloat(espnOdds.spread||'0')||0;
+      const spreadLine=mk.spreadAway??(parseFloat(espnOdds.spread||'0')||0);
       const ouLine=mk.total??espnOdds.overUnder??0;
       const awayML=mk.mlAway??0;
       const homeML=mk.mlHome??0;
