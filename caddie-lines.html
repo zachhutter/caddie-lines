@@ -798,6 +798,94 @@ nav{
 .gc-ou-chip{display:inline-block;padding:.15rem .55rem;border-radius:100px;font-family:var(--fm);font-weight:700;font-size:.82rem;letter-spacing:.04em}
 .gc-ou-over{background:var(--gr-light);color:var(--gr);border:1px solid var(--gr-mid)}
 .gc-ou-under{background:var(--red-lt);color:var(--red);border:1px solid rgba(192,57,43,.2)}
+
+/* ─── MOBILE GAME PICKER ────────────────────────────────────── */
+.mgp-wrap{display:none}
+#mgp-detail{display:none}
+@media(max-width:680px){
+  .games-grid{display:none!important}
+  .mgp-wrap{display:block;margin-bottom:.9rem}
+  #mgp-detail{display:block}
+
+  /* Dropdown */
+  .mgp-select-wrap{position:relative;background:var(--bg3);border:1.5px solid var(--bdr-ink2);border-radius:var(--r2);box-shadow:var(--shadow)}
+  .mgp-select{width:100%;appearance:none;-webkit-appearance:none;background:transparent;border:none;padding:.9rem 2.8rem .9rem 1rem;font-family:var(--fu);font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer}
+  .mgp-select:focus{outline:2px solid var(--gr);outline-offset:-2px;border-radius:var(--r2)}
+  .mgp-arrow{position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:var(--gr);font-size:1.1rem;pointer-events:none;font-weight:700}
+
+  /* Detail cards */
+  .mgd-section{background:var(--bg3);border:1px solid var(--bdr-ink2);border-radius:var(--r3);box-shadow:var(--shadow);overflow:hidden;margin-bottom:.75rem}
+  .mgd-section.live-game{border-color:rgba(45,106,63,.35);box-shadow:0 0 0 1px rgba(45,106,63,.12),var(--shadow)}
+
+  /* Game header */
+  .mgd-head{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:var(--bg2);border-bottom:1px solid var(--bdr-ink)}
+  .mgd-team-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem}
+  .mgd-divider{height:1px;background:var(--bdr-ink);margin:0 1rem}
+  .mgd-seed-name{display:flex;align-items:center;gap:.45rem}
+  .mgd-seed{font-family:var(--fm);font-size:.68rem;color:var(--ink4);font-weight:600;width:14px;text-align:right;flex-shrink:0}
+  .mgd-tname{font-family:var(--fu);font-weight:700;font-size:1.1rem;color:var(--ink)}
+  .mgd-trec{font-family:var(--fm);font-size:.6rem;color:var(--ink4);margin-left:.25rem}
+  .mgd-score-ml{display:flex;align-items:center;gap:.65rem}
+  .mgd-score{font-family:var(--fd);font-weight:800;font-size:1.5rem;color:var(--ink)}
+  .mgd-ml{font-family:var(--fm);font-size:.82rem;color:var(--ink3);font-weight:500}
+  .mgd-ml.fav{color:var(--gr);font-weight:700;font-size:.9rem}
+  .mgd-winner .mgd-tname{font-weight:800;color:var(--ink)}
+
+  /* Odds strip */
+  .mgd-odds{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;padding:.75rem 0;border-top:1px solid var(--bdr-ink)}
+  .mgd-odds-sep{background:var(--bdr-ink2)}
+  .mgd-odd-item{text-align:center;padding:.25rem .5rem}
+  .mgd-odd-lbl{font-family:var(--fm);font-size:.58rem;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin-bottom:.3rem;font-weight:500}
+  .mgd-odd-val{font-family:var(--fd);font-weight:700;font-size:1.4rem;color:var(--ink);line-height:1}
+  .mgd-odd-move{font-family:var(--fm);font-size:.58rem;margin-top:.25rem;font-weight:500}
+
+  /* Model recommendation */
+  .mgd-model{background:var(--gr-light);border-top:2px solid var(--gr-mid);padding:1rem 1rem .9rem}
+  .mgd-model-label{font-family:var(--fm);font-size:.58rem;letter-spacing:.12em;color:var(--gr2);text-transform:uppercase;font-weight:600;margin-bottom:.4rem}
+  .mgd-model-pick{font-family:var(--fd);font-weight:900;font-size:1.45rem;color:var(--gr);line-height:1;margin-bottom:.25rem}
+  .mgd-model-sub{font-family:var(--fu);font-size:.78rem;color:var(--ink3);margin-bottom:.65rem}
+  .mgd-model-chips{display:flex;gap:.5rem;flex-wrap:wrap}
+  .mgd-chip{font-family:var(--fm);font-size:.65rem;font-weight:600;padding:.3rem .8rem;border-radius:100px;border:1.5px solid}
+  .mgd-chip-edge{background:var(--gr-light);color:var(--gr);border-color:var(--gr-mid)}
+  .mgd-chip-ou{background:var(--gold-lt);color:var(--gold);border-color:rgba(184,137,42,.28)}
+
+  /* Section title */
+  .mgd-section-title{font-family:var(--fu);font-weight:600;font-size:.62rem;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;padding:.75rem 1rem .5rem;border-bottom:1px solid var(--bdr-ink)}
+
+  /* Stats comparison */
+  .mgd-stats-head{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem .5rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;border-bottom:1px solid var(--bdr-ink)}
+  .mgd-stats-away{color:var(--gr);font-weight:700}
+  .mgd-stats-home{color:var(--gold);font-weight:700}
+  .mgd-stat-row{display:flex;align-items:center;padding:.5rem 1rem;gap:.5rem;border-bottom:1px solid rgba(26,26,22,.04)}
+  .mgd-stat-lbl{font-family:var(--fm);font-size:.6rem;color:var(--ink4);width:60px;flex-shrink:0}
+  .mgd-stat-bars{flex:1;display:flex;flex-direction:column;gap:4px}
+  .mgd-bar-row{display:flex;align-items:center;gap:.4rem}
+  .mgd-bar-team{font-family:var(--fm);font-size:.55rem;color:var(--ink4);width:54px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+  .mgd-bar-wrap{flex:1;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden}
+  .mgd-bar-fill-a{height:100%;border-radius:3px;background:var(--gr);transition:width .7s cubic-bezier(.16,1,.3,1)}
+  .mgd-bar-fill-b{height:100%;border-radius:3px;background:var(--gold);transition:width .7s cubic-bezier(.16,1,.3,1)}
+  .mgd-stat-val{font-family:var(--fm);font-size:.62rem;font-weight:600;width:34px;text-align:right;color:var(--ink2)}
+
+  /* ATS records */
+  .mgd-ats-grid{display:grid;grid-template-columns:1fr 1px 1fr;padding:.75rem 1rem}
+  .mgd-ats-sep{background:var(--bdr-ink2);margin:0 .25rem}
+  .mgd-ats-team{padding:.2rem 0}
+  .mgd-ats-tname{font-family:var(--fu);font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:.35rem}
+  .mgd-ats-row{display:flex;align-items:center;gap:.3rem;margin-bottom:.2rem}
+  .mgd-ats-lbl{font-family:var(--fm);font-size:.56rem;color:var(--ink4);width:44px;flex-shrink:0}
+  .mgd-ats-val{font-family:var(--fm);font-size:.62rem;font-weight:600;color:var(--ink2)}
+  .mgd-ats-dots{display:flex;gap:3px;margin-top:.45rem}
+  .mgd-ats-r{padding-left:.6rem}
+
+  /* Spread scenarios */
+  .mgd-scen-grid{display:grid;grid-template-columns:1fr 1fr 1fr;padding:.75rem 1rem}
+  .mgd-scen{text-align:center}
+  .mgd-scen-loc{font-family:var(--fm);font-size:.52rem;letter-spacing:.08em;color:var(--ink4);text-transform:uppercase;margin-bottom:.3rem}
+  .mgd-scen-line{font-family:var(--fd);font-weight:700;font-size:.95rem;color:var(--ink)}
+  .mgd-scen-note{font-family:var(--fm);font-size:.5rem;color:var(--ink4);margin-top:.15rem}
+  .mgd-scen.best .mgd-scen-line{color:var(--gr)}
+  .mgd-scen.best .mgd-scen-note{color:var(--gr2)}
+}
 </style>
 </head>
 <body>
@@ -1069,6 +1157,17 @@ nav{
         <button class="ats-filter-btn" onclick="filterGames('tonight',this)">Tonight</button>
       </div>
     </div>
+    <!-- Mobile game picker (visible only on small screens) -->
+    <div class="mgp-wrap" id="mgp-wrap">
+      <div class="mgp-select-wrap">
+        <select class="mgp-select" id="mgp-select" onchange="selectMobileGame(this.value)">
+          <option value="">— Pick a game —</option>
+        </select>
+        <span class="mgp-arrow">▾</span>
+      </div>
+    </div>
+    <div id="mgp-detail"></div>
+
     <div class="games-grid" id="games-grid"></div>
   </div>
 
@@ -2236,6 +2335,7 @@ function renderGames(){
     return;
   }
   populateMatchupSelects();
+  populateMobilePicker();
   c.innerHTML=filtered.map(g=>{
     const isLive=g.status==='live';
     const awayFav=g.spread.fav==='away';
@@ -2325,6 +2425,218 @@ function populateMatchupSelects(){
     sel.innerHTML=teams.map((t,i)=>`<option${t===prev?' selected':''}>${t}</option>`).join('');
     if(idx===1&&sel.value===document.getElementById('ma-team-a').value&&teams.length>1)sel.value=teams[1];
   });
+}
+
+/* ─── MOBILE GAME PICKER ─────────────────────────────────────── */
+function populateMobilePicker(){
+  const sel=document.getElementById('mgp-select');
+  if(!sel)return;
+  const statusOrder={live:0,tonight:1,upcoming:2,final:3};
+  const games=GAMES_DATA.slice().sort((a,b)=>(statusOrder[a.status]??99)-(statusOrder[b.status]??99));
+  const prev=sel.value;
+  sel.innerHTML='<option value="">— Pick a game —</option>'+
+    games.map(g=>{
+      const label=g.status==='live'
+        ?`🔴 LIVE · ${g.away.name} vs ${g.home.name}`
+        :`${g.liveTime} · ${g.away.name} vs ${g.home.name}`;
+      return`<option value="${g.id}"${String(g.id)===prev?' selected':''}>${label}</option>`;
+    }).join('');
+  if(!prev&&games.length){
+    const first=games.find(g=>g.status==='live')||games[0];
+    sel.value=first.id;
+    renderMobileGameDetail(first);
+  }
+}
+
+function selectMobileGame(idStr){
+  const game=GAMES_DATA.find(g=>g.id===parseInt(idStr));
+  const det=document.getElementById('mgp-detail');
+  if(!det)return;
+  if(!game){det.innerHTML='';return;}
+  renderMobileGameDetail(game);
+}
+
+function renderMobileGameDetail(g){
+  const det=document.getElementById('mgp-detail');
+  if(!det)return;
+  const isLive=g.status==='live';
+  const awayFav=g.spread.fav==='away';
+  const awayWin=isLive&&g.awayScore>g.homeScore;
+  const homeWin=isLive&&g.homeScore>g.awayScore;
+  const spreadLine=g.spread.line>0?`+${g.spread.line}`:g.spread.line;
+  const spreadOpen=g.spread.open>0?`+${g.spread.open}`:g.spread.open;
+  const spreadMov=g.spread.line!==g.spread.open?(g.spread.line<g.spread.open?'move-dn':'move-up'):'move-flat';
+  const ouMov=g.ou.line>g.ou.open?'move-up':g.ou.line<g.ou.open?'move-dn':'move-flat';
+  const awayML=g.ml.away>0?`+${g.ml.away}`:g.ml.away;
+  const homeML=g.ml.home>0?`+${g.ml.home}`:g.ml.home;
+  const edge=g.model.edge;
+  const edgeSign=edge>0?'+':'';
+
+  const awayATS=ATS_DATA[g.away.name]||{};
+  const homeATS=ATS_DATA[g.home.name]||{};
+  const awayAtsRole=awayFav?awayATS.asFav:awayATS.asDog;
+  const homeAtsRole=!awayFav?homeATS.asFav:homeATS.asDog;
+
+  const aS=BB_STATS[g.away.name]||{};
+  const bS=BB_STATS[g.home.name]||{};
+
+  const statRows=[
+    {label:'Adj. Off.',aV:aS.adjO,bV:bS.adjO,max:130,hi:true,fmt:v=>v!=null?v.toFixed(1):'—'},
+    {label:'Adj. Def.',aV:aS.adjD,bV:bS.adjD,max:100,hi:false,fmt:v=>v!=null?v.toFixed(1):'—'},
+    {label:'Pace',     aV:aS.pace,bV:bS.pace,max:80, hi:true, fmt:v=>v!=null?v.toFixed(1):'—'},
+    {label:'3P%',      aV:aS.threeP,bV:bS.threeP,max:45,hi:true,fmt:v=>v!=null?v.toFixed(1)+'%':'—'},
+    {label:'Reb%',     aV:aS.reb,bV:bS.reb,max:60,  hi:true, fmt:v=>v!=null?v.toFixed(1)+'%':'—'},
+  ];
+
+  const netA=(aS.adjO||0)-(aS.adjD||0);
+  const netB=(bS.adjO||0)-(bS.adjD||0);
+  const neutral=-((netA-netB)*0.4);
+  function fmtScen(v){
+    const n=parseFloat(v.toFixed(1));
+    if(Math.abs(n)<0.5)return'PK';
+    return n<0?`${g.away.name} ${n}`:`${g.away.name} +${n}`;
+  }
+
+  function dots(str){
+    if(!str)return'';
+    return str.split('-').map(r=>`<span class="ats-dot ${r==='W'?'ats-dot-w':'ats-dot-l'}">${r}</span>`).join('');
+  }
+
+  det.innerHTML=`
+    <!-- GAME HEADER + ODDS -->
+    <div class="mgd-section${isLive?' live-game':''}">
+      <div class="mgd-head">
+        ${isLive
+          ?`<div class="gc-live-badge"><div class="gc-live-dot"></div>LIVE · ${g.liveTime}</div>`
+          :`<div class="gc-time">${g.liveTime}</div>`}
+        <div class="gc-network">${g.network}</div>
+      </div>
+      <div class="mgd-team-row${awayWin?' mgd-winner':''}">
+        <div class="mgd-seed-name">
+          <span class="mgd-seed">${g.away.seed}</span>
+          <span class="mgd-tname">${g.away.name}</span>
+          <span class="mgd-trec">${g.away.rec}</span>
+        </div>
+        <div class="mgd-score-ml">
+          ${isLive?`<span class="mgd-score">${g.awayScore}</span>`:''}
+          <span class="mgd-ml${awayFav?' fav':''}">${awayML}</span>
+        </div>
+      </div>
+      <div class="mgd-divider"></div>
+      <div class="mgd-team-row${homeWin?' mgd-winner':''}">
+        <div class="mgd-seed-name">
+          <span class="mgd-seed">${g.home.seed}</span>
+          <span class="mgd-tname">${g.home.name}</span>
+          <span class="mgd-trec">${g.home.rec}</span>
+        </div>
+        <div class="mgd-score-ml">
+          ${isLive?`<span class="mgd-score">${g.homeScore}</span>`:''}
+          <span class="mgd-ml${!awayFav?' fav':''}">${homeML}</span>
+        </div>
+      </div>
+      <div class="mgd-odds">
+        <div class="mgd-odd-item">
+          <div class="mgd-odd-lbl">Spread</div>
+          <div class="mgd-odd-val">${spreadLine}</div>
+          <div class="mgd-odd-move ${spreadMov}">Open ${spreadOpen}</div>
+        </div>
+        <div class="mgd-odds-sep"></div>
+        <div class="mgd-odd-item">
+          <div class="mgd-odd-lbl">Total</div>
+          <div class="mgd-odd-val">${g.ou.line}</div>
+          <div class="mgd-odd-move ${ouMov}">Open ${g.ou.open}</div>
+        </div>
+        <div class="mgd-odds-sep"></div>
+        <div class="mgd-odd-item">
+          <div class="mgd-odd-lbl">O/U Pick</div>
+          <div class="gc-ou-chip ${g.model.ouPick==='over'?'gc-ou-over':'gc-ou-under'}" style="margin:.25rem auto 0">${g.model.ouPick.toUpperCase()}</div>
+          <div class="mgd-odd-move ${g.model.ouEdge>0?'move-dn':'move-up'}">${g.model.ouEdge>0?'+':''}${g.model.ouEdge.toFixed(1)}</div>
+        </div>
+      </div>
+      <div class="mgd-model">
+        <div class="mgd-model-label">★ Model Recommendation</div>
+        <div class="mgd-model-pick">${g.model.pick}</div>
+        <div class="mgd-model-sub">Projected score: ${g.model.score}</div>
+        <div class="mgd-model-chips">
+          <span class="mgd-chip mgd-chip-edge">${edgeSign}${edge.toFixed(1)} pts edge</span>
+          <span class="mgd-chip mgd-chip-ou">${g.model.ouPick.toUpperCase()} ${Math.abs(g.model.ouEdge).toFixed(1)} pts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEAD-TO-HEAD STATS -->
+    <div class="mgd-section">
+      <div class="mgd-stats-head">
+        <span class="mgd-stats-away">${g.away.name}</span>
+        <span>Head-to-Head</span>
+        <span class="mgd-stats-home">${g.home.name}</span>
+      </div>
+      ${statRows.map(r=>{
+        const aW=r.max>0?Math.min(100,(r.aV||0)/r.max*100):50;
+        const bW=r.max>0?Math.min(100,(r.bV||0)/r.max*100):50;
+        const aWins=r.hi?(r.aV||0)>(r.bV||0):(r.aV||0)<(r.bV||0);
+        const bWins=!aWins;
+        return`<div class="mgd-stat-row">
+          <div class="mgd-stat-lbl">${r.label}</div>
+          <div class="mgd-stat-bars">
+            <div class="mgd-bar-row">
+              <div class="mgd-bar-team">${g.away.name}</div>
+              <div class="mgd-bar-wrap"><div class="mgd-bar-fill-a" style="width:${aW}%"></div></div>
+              <div class="mgd-stat-val"${aWins?' style="color:var(--gr)"':''}>${r.fmt(r.aV)}</div>
+            </div>
+            <div class="mgd-bar-row">
+              <div class="mgd-bar-team">${g.home.name}</div>
+              <div class="mgd-bar-wrap"><div class="mgd-bar-fill-b" style="width:${bW}%"></div></div>
+              <div class="mgd-stat-val"${bWins?' style="color:var(--gold)"':''}>${r.fmt(r.bV)}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- ATS RECORDS -->
+    <div class="mgd-section">
+      <div class="mgd-section-title">ATS Records</div>
+      <div class="mgd-ats-grid">
+        <div class="mgd-ats-team">
+          <div class="mgd-ats-tname">${g.away.name}</div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Overall</span><span class="mgd-ats-val">${awayATS.overall||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">${awayFav?'As Fav':'As Dog'}</span><span class="mgd-ats-val">${awayAtsRole||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Streak</span><span class="mgd-ats-val" style="color:${awayATS.streak&&awayATS.streak[0]==='W'?'var(--gr)':'var(--red)'}">${awayATS.streak||'—'}</span></div>
+          <div class="mgd-ats-dots">${dots(awayATS.last5)}</div>
+        </div>
+        <div class="mgd-ats-sep"></div>
+        <div class="mgd-ats-team mgd-ats-r">
+          <div class="mgd-ats-tname">${g.home.name}</div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Overall</span><span class="mgd-ats-val">${homeATS.overall||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">${!awayFav?'As Fav':'As Dog'}</span><span class="mgd-ats-val">${homeAtsRole||'—'}</span></div>
+          <div class="mgd-ats-row"><span class="mgd-ats-lbl">Streak</span><span class="mgd-ats-val" style="color:${homeATS.streak&&homeATS.streak[0]==='W'?'var(--gr)':'var(--red)'}">${homeATS.streak||'—'}</span></div>
+          <div class="mgd-ats-dots">${dots(homeATS.last5)}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPREAD SCENARIOS -->
+    <div class="mgd-section">
+      <div class="mgd-section-title">Spread Scenarios</div>
+      <div class="mgd-scen-grid">
+        <div class="mgd-scen">
+          <div class="mgd-scen-loc">${g.away.name} Home</div>
+          <div class="mgd-scen-line">${fmtScen(neutral-3.5)}</div>
+          <div class="mgd-scen-note">+3.5 home edge</div>
+        </div>
+        <div class="mgd-scen best">
+          <div class="mgd-scen-loc">Neutral</div>
+          <div class="mgd-scen-line">${fmtScen(neutral)}</div>
+          <div class="mgd-scen-note">Model line</div>
+        </div>
+        <div class="mgd-scen">
+          <div class="mgd-scen-loc">${g.home.name} Home</div>
+          <div class="mgd-scen-line">${fmtScen(neutral+3.5)}</div>
+          <div class="mgd-scen-note">+3.5 home edge</div>
+        </div>
+      </div>
+    </div>`;
 }
 
 function swapMatchup(){
