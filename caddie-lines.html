@@ -4256,13 +4256,20 @@ async function fetchLiveGolfScores() {
         const comp = ev.competitions?.[0];
         if (!comp) return;
 
-        // Update round
-        const round = comp.status?.period || simulationData.current_round;
+        const competitors = comp.competitors || [];
+
+        // Determine round: ESPN period + cross-check via linescores count
+        // linescores are per-round for golf (1 entry per completed/active round)
+        let round = comp.status?.period || simulationData.current_round;
+        if (competitors.length > 0) {
+            const lsCounts = competitors.map(c => (c.linescores || []).length).filter(n => n >= 1 && n <= 4);
+            if (lsCounts.length > 0) round = Math.max(round, Math.max(...lsCounts));
+        }
+        round = Math.max(1, Math.min(4, round)); // clamp 1–4
         simulationData.current_round = round;
 
-        const roundDetail = comp.status?.type?.shortDetail || `Round ${round} of 4`;
         const detailEl = document.getElementById('eventDetails');
-        if (detailEl) detailEl.textContent = roundDetail;
+        if (detailEl) detailEl.textContent = `Round ${round} of 4`;
 
         // Update Round Leader button
         const rlBtn = document.getElementById('roundLeaderBtn');
@@ -4273,7 +4280,6 @@ async function fetchLiveGolfScores() {
         }
 
         // Build name lookup: "Last, First" → competitor
-        const competitors = comp.competitors || [];
         const espnLookup = {};
         competitors.forEach(c => {
             espnLookup[_espnNameToLastFirst(c.athlete?.displayName || '')] = c;
@@ -4285,24 +4291,23 @@ async function fetchLiveGolfScores() {
             if (!c) return;
             player.current_score = _espnScoreToNum(c.score);
 
-            // Thru holes
-            const thruRaw = c.status?.type?.shortDetail || '';
+            // Thru — keep as string to preserve "*" for back-9 starters
+            const thruRaw = (c.status?.type?.shortDetail || '').trim();
             if (thruRaw === 'F' || thruRaw.toLowerCase() === 'final') {
                 player.thru = 'F';
-            } else if (/^\d+/.test(thruRaw)) {
-                player.thru = parseInt(thruRaw);
+            } else if (/^\d+\*?$/.test(thruRaw)) {
+                player.thru = thruRaw; // keep string e.g. "14" or "14*"
             }
 
             // Today's score — try statistics array first, then derive from linescores
             const stats = c.statistics || [];
-            const todayStat = stats.find(s => s.name === 'score' || s.name === 'roundScore' || s.abbreviation === 'R' + round);
+            const todayStat = stats.find(s => s.name === 'score' || s.name === 'roundScore');
             if (todayStat) {
                 player.today = _espnScoreToNum(todayStat.displayValue);
             } else {
                 const ls = c.linescores || [];
-                if (ls.length >= round) {
-                    const todayStrokes = typeof ls[round - 1]?.value === 'number' ? ls[round - 1].value : null;
-                    if (todayStrokes) player.today = todayStrokes - 72; // TPC Sawgrass par 72
+                if (ls.length >= round && typeof ls[round - 1]?.value === 'number') {
+                    player.today = ls[round - 1].value - 72; // TPC Sawgrass par 72
                 }
             }
         });
@@ -4311,6 +4316,7 @@ async function fetchLiveGolfScores() {
 
         const ft = document.getElementById('footerTime');
         if (ft) ft.textContent = 'ESPN live · ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        console.log(`[CaddieLines] ESPN golf updated — Round ${round}, ${competitors.length} players`);
     } catch (e) {
         console.warn('[CaddieLines] ESPN golf fetch failed:', e);
     }
