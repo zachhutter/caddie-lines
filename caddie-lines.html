@@ -4230,6 +4230,92 @@ function closeAllTooltips() {
     setInterval(silentRefresh, 15000);
 })();
 
+// ============================================
+// LIVE ESPN GOLF SCORES
+// ============================================
+
+function _espnScoreToNum(s) {
+    if (!s || s === 'E' || s === 'Even' || s === '0') return 0;
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+}
+
+function _espnNameToLastFirst(displayName) {
+    const parts = (displayName || '').trim().split(/\s+/);
+    if (parts.length < 2) return displayName;
+    return `${parts[parts.length - 1]}, ${parts.slice(0, -1).join(' ')}`;
+}
+
+async function fetchLiveGolfScores() {
+    try {
+        const r = await fetch('https://site.api.espn.com/apis/site/v2/sports/golf/pga/scoreboard');
+        if (!r.ok) return;
+        const data = await r.json();
+        const ev = data.events?.[0];
+        if (!ev) return;
+        const comp = ev.competitions?.[0];
+        if (!comp) return;
+
+        // Update round
+        const round = comp.status?.period || simulationData.current_round;
+        simulationData.current_round = round;
+
+        const roundDetail = comp.status?.type?.shortDetail || `Round ${round} of 4`;
+        const detailEl = document.getElementById('eventDetails');
+        if (detailEl) detailEl.textContent = roundDetail;
+
+        // Update Round Leader button
+        const rlBtn = document.getElementById('roundLeaderBtn');
+        if (rlBtn) {
+            const ord = getRoundOrdinal(round);
+            if (round <= 3) { rlBtn.textContent = `${ord} Round Leader`; rlBtn.disabled = false; }
+            else { rlBtn.textContent = 'Round Leader'; rlBtn.disabled = true; }
+        }
+
+        // Build name lookup: "Last, First" → competitor
+        const competitors = comp.competitors || [];
+        const espnLookup = {};
+        competitors.forEach(c => {
+            espnLookup[_espnNameToLastFirst(c.athlete?.displayName || '')] = c;
+        });
+
+        // Update scores in currentResults
+        currentResults.forEach(player => {
+            const c = espnLookup[player.player_name];
+            if (!c) return;
+            player.current_score = _espnScoreToNum(c.score);
+
+            // Thru holes
+            const thruRaw = c.status?.type?.shortDetail || '';
+            if (thruRaw === 'F' || thruRaw.toLowerCase() === 'final') {
+                player.thru = 'F';
+            } else if (/^\d+/.test(thruRaw)) {
+                player.thru = parseInt(thruRaw);
+            }
+
+            // Today's score — try statistics array first, then derive from linescores
+            const stats = c.statistics || [];
+            const todayStat = stats.find(s => s.name === 'score' || s.name === 'roundScore' || s.abbreviation === 'R' + round);
+            if (todayStat) {
+                player.today = _espnScoreToNum(todayStat.displayValue);
+            } else {
+                const ls = c.linescores || [];
+                if (ls.length >= round) {
+                    const todayStrokes = typeof ls[round - 1]?.value === 'number' ? ls[round - 1].value : null;
+                    if (todayStrokes) player.today = todayStrokes - 72; // TPC Sawgrass par 72
+                }
+            }
+        });
+
+        renderLeaderboardFromData();
+
+        const ft = document.getElementById('footerTime');
+        if (ft) ft.textContent = 'ESPN live · ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+        console.warn('[CaddieLines] ESPN golf fetch failed:', e);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('eventName').textContent = simulationData.event_name;
     document.getElementById('eventDetails').textContent = `Round ${simulationData.current_round} of 4`;
@@ -4271,6 +4357,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // Sort clicks are wired via inline onclick in the dynamically-built thead
     betsInit(); // load bets from betsData JS file
+
+    // Fetch live scores from ESPN and refresh every 60s
+    fetchLiveGolfScores();
+    setInterval(fetchLiveGolfScores, 60000);
 });
 
 // ============================================

@@ -2449,7 +2449,7 @@ function populateMobilePicker(){
 }
 
 function selectMobileGame(idStr){
-  const game=GAMES_DATA.find(g=>g.id===parseInt(idStr));
+  const game=GAMES_DATA.find(g=>String(g.id)===String(idStr));
   const det=document.getElementById('mgp-detail');
   if(!det)return;
   if(!game){det.innerHTML='';return;}
